@@ -1,0 +1,31 @@
+.guessOption {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-self: flex-start;
+  gap: 1rem;
+  width: 100%;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  border: 0.2rem solid black;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.guessOption:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.guessOption > .songTitle {
+  flex: 8;
+}
+
+.guessOption > img {
+  flex: 4;
+  /* TODO: Fix me since we have a border within a border */
+  border-radius: 1rem;
+}
+
+.guessOption > .chevron {
+  flex: 1;
+}

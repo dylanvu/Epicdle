@@ -17,12 +17,12 @@ importers:
       '@mantine/hooks':
         specifier: ^8.2.8
         version: 8.2.8(react@19.1.0)
-      '@mantine/modals':
-        specifier: ^8.2.8
-        version: 8.2.8(@mantine/core@8.2.8(@mantine/hooks@8.2.8(react@19.1.0))(@types/react@19.1.12)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@mantine/hooks@8.2.8(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@mantine/spotlight':
         specifier: ^8.2.8
         version: 8.2.8(@mantine/core@8.2.8(@mantine/hooks@8.2.8(react@19.1.0))(@types/react@19.1.12)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@mantine/hooks@8.2.8(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@tabler/icons-react':
+        specifier: ^3.34.1
+        version: 3.34.1(react@19.1.0)
       next:
         specifier: 15.5.2
         version: 15.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -245,14 +245,6 @@ packages:
     peerDependencies:
       react: ^18.x || ^19.x
 
-  '@mantine/modals@8.2.8':
-    resolution: {integrity: sha512-+RzHK4uy/Gsk6RspunD8An9WYF921If8S2pDeveMwxVhUeNMZXeh9FpQWESlqVV+SHSPDDP4QeTkwhJm9DWf2g==}
-    peerDependencies:
-      '@mantine/core': 8.2.8
-      '@mantine/hooks': 8.2.8
-      react: ^18.x || ^19.x
-      react-dom: ^18.x || ^19.x
-
   '@mantine/spotlight@8.2.8':
     resolution: {integrity: sha512-wZ4TMKC6LldI31DFOB89iat+4eyM29URN1uwklWUeigqR9/vywqXcKdzaSjpmbDxYelHFEp4AjgHzeG/8C915A==}
     peerDependencies:
@@ -322,6 +314,14 @@ packages:
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
+
+  '@tabler/icons-react@3.34.1':
+    resolution: {integrity: sha512-Ld6g0NqOO05kyyHsfU8h787PdHBm7cFmOycQSIrGp45XcXYDuOK2Bs0VC4T2FWSKZ6bx5g04imfzazf/nqtk1A==}
+    peerDependencies:
+      react: '>= 16'
+
+  '@tabler/icons@3.34.1':
+    resolution: {integrity: sha512-9gTnUvd7Fd/DmQgr3MKY+oJLa1RfNsQo8c/ir3TJAWghOuZXodbtbVp0QBY2DxWuuvrSZFys0HEbv1CoiI5y6A==}
 
   '@types/node@20.19.12':
     resolution: {integrity: sha512-lSOjyS6vdO2G2g2CWrETTV3Jz2zlCXHpu1rcubLKpz9oj+z/1CceHlj+yq53W+9zgb98nSov/wjEKYDNauD+Hw==}
@@ -778,13 +778,6 @@ snapshots:
     dependencies:
       react: 19.1.0
 
-  '@mantine/modals@8.2.8(@mantine/core@8.2.8(@mantine/hooks@8.2.8(react@19.1.0))(@types/react@19.1.12)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@mantine/hooks@8.2.8(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
-    dependencies:
-      '@mantine/core': 8.2.8(@mantine/hooks@8.2.8(react@19.1.0))(@types/react@19.1.12)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@mantine/hooks': 8.2.8(react@19.1.0)
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-
   '@mantine/spotlight@8.2.8(@mantine/core@8.2.8(@mantine/hooks@8.2.8(react@19.1.0))(@types/react@19.1.12)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@mantine/hooks@8.2.8(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@mantine/core': 8.2.8(@mantine/hooks@8.2.8(react@19.1.0))(@types/react@19.1.12)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -828,6 +821,13 @@ snapshots:
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
+
+  '@tabler/icons-react@3.34.1(react@19.1.0)':
+    dependencies:
+      '@tabler/icons': 3.34.1
+      react: 19.1.0
+
+  '@tabler/icons@3.34.1': {}
 
   '@types/node@20.19.12':
     dependencies:

@@ -1,0 +1,47 @@
+.gamePage {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.gameplayArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  margin: auto;
+}
+
+.modal {
+  color: black;
+}
+
+.songTitle {
+  text-align: left;
+  align-self: flex-start;
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+.albumCover {
+  position: relative;
+}
+
+.albumCover > img {
+  /* make image unselectable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  opacity: 0.5;
+  border-radius: 1rem;
+}
+
+.buttonArea {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
