@@ -18,8 +18,8 @@ export default function TutorialModal({
       className={styles.game}
     >
       <Text>You have a challenge, a test of skill</Text>
-      <Text>A song to guess that will test your own will</Text>
-      <Text>You have {MAX_GUESSES.toString()} tries to reach the thrill</Text>
+      <Text>A song to name that will contest your will</Text>
+      <Text>You have {MAX_GUESSES.toString()} tries to reach win's thrill</Text>
       <Text>Each guess brings you close as the music spills</Text>
       <Button onClick={modalHandler.close} mt="md" w="100%">
         Let's Go!
