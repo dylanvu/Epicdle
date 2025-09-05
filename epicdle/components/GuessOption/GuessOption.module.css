@@ -5,19 +5,39 @@
   justify-self: flex-start;
   gap: 1rem;
   width: 100%;
-  cursor: pointer;
   padding: 0.5rem;
   border-radius: 1rem;
   border: 0.2rem solid black;
   transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .guessOption:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+.guessOption.disabled {
+  cursor: default;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.guessOption.disabled:hover {
+  cursor: default;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* disable the hover effect if disabled class is present */
+.guessOption.disabled:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
 .guessOption > .songTitle {
   flex: 8;
+}
+
+.titleDisabled {
+  text-decoration: line-through;
 }
 
 .guessOption > img {

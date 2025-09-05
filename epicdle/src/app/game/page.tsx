@@ -53,6 +53,7 @@ export default function Game() {
         openState={openedSearchModal}
         modalHandler={searchModalHandler}
         setSelectedSong={setSelectedSong}
+        guesses={guesses}
       />
       <div className={styles.gameplayArea}>
         <div className={styles.albumCover}>

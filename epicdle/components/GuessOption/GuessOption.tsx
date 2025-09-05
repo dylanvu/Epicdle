@@ -10,18 +10,29 @@ export default function GuessOption({
   song,
   setSelectedSong,
   closeModal,
+  isDisabled,
 }: {
   song: Song;
   setSelectedSong: Dispatch<SetStateAction<Song | undefined>>;
   closeModal: () => void;
+  isDisabled?: boolean;
 }) {
   function handleGuessOptionClick() {
     setSelectedSong(song);
     closeModal();
   }
   return (
-    <div className={styles.guessOption} onClick={handleGuessOptionClick}>
-      <Text className={styles.songTitle}>{song.name}</Text>
+    <div
+      className={`${styles.guessOption} ${isDisabled ? styles.disabled : null}`}
+      onClick={isDisabled ? undefined : handleGuessOptionClick}
+    >
+      <Text
+        className={`${styles.songTitle} ${
+          isDisabled ? styles.titleDisabled : null
+        }`}
+      >
+        {song.name}
+      </Text>
       <Image
         src={ALBUM_NAME_TO_COVER_MAP[song.album]}
         alt={song.album}

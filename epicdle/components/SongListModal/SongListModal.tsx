@@ -10,10 +10,12 @@ export default function SongListModal({
   openState,
   modalHandler,
   setSelectedSong,
+  guesses,
 }: {
   openState: boolean;
   modalHandler: UseDisclosureHandlers;
   setSelectedSong: Dispatch<SetStateAction<Song | undefined>>;
+  guesses: Song[];
 }) {
   return (
     <Modal
@@ -23,14 +25,19 @@ export default function SongListModal({
       className={styles.game}
     >
       <div className={styles.songList}>
-        {SONG_LIST.map((song) => (
-          <GuessOption
-            key={`song-list-${song.name}`}
-            song={song}
-            setSelectedSong={setSelectedSong}
-            closeModal={modalHandler.close}
-          />
-        ))}
+        {SONG_LIST.map((song) => {
+          // if song name is in the guess list, disable the option
+          const isDisabled = guesses.some((guess) => guess.name === song.name);
+          return (
+            <GuessOption
+              key={`song-list-${song.name}`}
+              song={song}
+              setSelectedSong={setSelectedSong}
+              closeModal={modalHandler.close}
+              isDisabled={isDisabled}
+            />
+          );
+        })}
       </div>
       <Button onClick={modalHandler.close} mt="md" w="100%">
         Close
