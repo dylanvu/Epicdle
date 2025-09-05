@@ -20,7 +20,7 @@ export default function TutorialModal({
       <Text>You have a challenge, a test of skill</Text>
       <Text>A song to guess that will test your own will</Text>
       <Text>You have {MAX_GUESSES.toString()} tries to reach the thrill</Text>
-      <Text>Each guess brings you closer to the song's will</Text>
+      <Text>Each guess brings you closer as music spill</Text>
       <Button onClick={modalHandler.close} mt="md" w="100%">
         Let's Go!
       </Button>
