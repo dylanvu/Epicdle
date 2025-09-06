@@ -19,10 +19,15 @@ import PlayAudioButton from "../../../components/PlayAudioButton/PlayAudioButton
 import TutorialModal from "../../../components/TutorialModal/TutorialModal";
 import SongListModal from "../../../components/SongListModal/SongListModal";
 import { PRIMARY_COLOR } from "../../../theme";
+import WinModal from "../../../components/WinModal/WinModal";
+import LoseModal from "../../../components/LoseModal/LoseModal";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
   const [openedSearchModal, searchModalHandler] = useDisclosure(false);
+  const [openedWinModal, winModalHandler] = useDisclosure(false);
+  const [openedLoseModal, loseModalHandler] = useDisclosure(false);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [guesses, setGuesses] = useState<Song[]>([]);
@@ -111,17 +116,23 @@ export default function Game() {
 
   function handleSubmit() {
     let newGuesses = [...guesses, selectedSong!];
-    if (newGuesses.length > MAX_GUESSES - 1) {
-      newGuesses = [];
-    }
+
     setGuesses(newGuesses);
     setSelectedSong(undefined);
-    // TODO: make sure to reset the audio
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
     }
     setAudioProgress(0);
     lastProgressRef.current = 0;
+
+    // TODO: make this a real function
+    if (selectedSong?.name === "Warrior of the Mind") {
+      winModalHandler.open();
+      return;
+    }
+    if (newGuesses.length > MAX_GUESSES - 1) {
+      loseModalHandler.open();
+    }
   }
 
   return (
@@ -133,6 +144,12 @@ export default function Game() {
         setSelectedSong={setSelectedSong}
         guesses={guesses}
       />
+      <WinModal
+        openState={openedWinModal}
+        modalHandler={winModalHandler}
+        guessesUsed={guesses.length}
+      />
+      <LoseModal openState={openedLoseModal} modalHandler={loseModalHandler} />
       <div className={styles.gameplayArea}>
         <div className={styles.albumCover}>
           <Image
