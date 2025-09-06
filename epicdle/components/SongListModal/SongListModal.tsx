@@ -5,6 +5,7 @@ import { SONG_LIST } from "../../constants";
 import GuessOption from "../GuessOption/GuessOption";
 import { Dispatch, SetStateAction } from "react";
 import { Song } from "../../interfaces/interfaces";
+import { PRIMARY_COLOR } from "../../theme";
 
 export default function SongListModal({
   openState,
@@ -39,7 +40,12 @@ export default function SongListModal({
           );
         })}
       </div>
-      <Button onClick={modalHandler.close} mt="md" w="100%">
+      <Button
+        onClick={modalHandler.close}
+        mt="md"
+        w="100%"
+        color={PRIMARY_COLOR}
+      >
         Close
       </Button>
     </Modal>

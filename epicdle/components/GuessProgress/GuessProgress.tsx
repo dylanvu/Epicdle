@@ -1,5 +1,4 @@
 import { Progress } from "@mantine/core";
-import { Song } from "../../interfaces/interfaces";
 import React from "react";
 
 /**
@@ -15,7 +14,7 @@ function GuessProgress({
 }: {
   guessIndex: number;
   guessesCount: number;
-  color: "red" | "cyan";
+  color: string;
 }) {
   return (
     <Progress

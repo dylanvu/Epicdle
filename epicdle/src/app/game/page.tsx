@@ -18,6 +18,7 @@ import GuessHistoryOverlay from "../../../components/GuessHistoryOverlay/GuessHi
 import PlayAudioButton from "../../../components/PlayAudioButton/PlayAudioButton";
 import TutorialModal from "../../../components/TutorialModal/TutorialModal";
 import SongListModal from "../../../components/SongListModal/SongListModal";
+import { PRIMARY_COLOR } from "../../../theme";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -162,7 +163,7 @@ export default function Game() {
               key={`guess-progress-${index}`}
               guessIndex={index}
               guessesCount={guesses.length}
-              color={index === guesses.length ? "cyan" : "red"}
+              color={index === guesses.length ? PRIMARY_COLOR : "red"}
             />
           ))}
         </Group>

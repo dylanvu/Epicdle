@@ -3,6 +3,7 @@ import {
   IconPlayerPlayFilled,
   IconPlayerPauseFilled,
 } from "@tabler/icons-react";
+import { PRIMARY_COLOR } from "../../theme";
 
 export default function PlayAudioButton({
   playing,
@@ -24,6 +25,7 @@ export default function PlayAudioButton({
         size={56}
         radius="lg"
         onClick={handlePlay}
+        color={PRIMARY_COLOR}
       >
         {playing ? (
           <IconPlayerPauseFilled

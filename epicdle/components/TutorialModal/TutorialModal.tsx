@@ -2,6 +2,7 @@ import { Button, Modal, Text } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./TutorialModal.module.css";
 import { MAX_GUESSES } from "../../constants";
+import { PRIMARY_COLOR } from "../../theme";
 
 export default function TutorialModal({
   openState,
@@ -23,7 +24,12 @@ export default function TutorialModal({
         There are {MAX_GUESSES.toString()} tries to reach win's thrill
       </Text>
       <Text>Each guess brings you close as the music spills</Text>
-      <Button onClick={modalHandler.close} mt="md" w="100%">
+      <Button
+        onClick={modalHandler.close}
+        mt="md"
+        w="100%"
+        color={PRIMARY_COLOR}
+      >
         Let's Go!
       </Button>
     </Modal>

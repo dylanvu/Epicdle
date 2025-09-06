@@ -1,5 +1,6 @@
 "use client";
 import { Progress } from "@mantine/core";
+import { PRIMARY_COLOR } from "../../theme";
 
 export default function AudioSlider({
   availableGuesses,
@@ -10,7 +11,7 @@ export default function AudioSlider({
 }) {
   return (
     <Progress
-      color="cyan"
+      color={PRIMARY_COLOR}
       defaultValue={0}
       value={(currentSongTime / availableGuesses) * 100}
       w="100%"
