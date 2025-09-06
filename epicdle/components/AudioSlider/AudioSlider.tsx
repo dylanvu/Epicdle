@@ -16,6 +16,7 @@ export default function AudioSlider({
       w="100%"
       mt="md"
       size="md"
+      transitionDuration={100}
     />
   );
 }

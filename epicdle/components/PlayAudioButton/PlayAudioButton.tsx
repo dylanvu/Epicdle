@@ -1,38 +1,19 @@
-"use client";
 import { ActionIcon } from "@mantine/core";
 import {
   IconPlayerPlayFilled,
   IconPlayerPauseFilled,
 } from "@tabler/icons-react";
-import { RefObject, useEffect } from "react";
 
 export default function PlayAudioButton({
-  audioRef,
   playing,
   setPlaying,
 }: {
-  audioRef: RefObject<HTMLAudioElement | null>;
   playing: boolean;
   setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-    };
-  }, []);
-
   function handlePlay() {
     const next = !playing;
     setPlaying(next);
-    if (!audioRef.current) return;
-    if (next) {
-      audioRef.current.play().catch(() => setPlaying(false));
-    } else {
-      audioRef.current.pause();
-    }
   }
 
   return (
