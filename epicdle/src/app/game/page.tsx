@@ -1,7 +1,7 @@
 "use client";
 import { Button, Group, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Game.module.css";
 import Image from "next/image";
 import {
@@ -22,14 +22,112 @@ import SongListModal from "../../../components/SongListModal/SongListModal";
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
   const [openedSearchModal, searchModalHandler] = useDisclosure(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const [guesses, setGuesses] = useState<Song[]>([]);
+  const [selectedSong, setSelectedSong] = useState<Song>();
+  const [currentSongTime, setCurrentSongTime] = useState(0);
 
   useEffect(() => {
-    // TODO: only show this if the user has not played yet
+    // TODO: only show this if the user has not played ever
     helpHandler.open();
   }, []);
 
-  const [guesses, setGuesses] = useState<Song[]>([]);
-  const [selectedSong, setSelectedSong] = useState<Song>();
+  function resetAudio() {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+    }
+    setCurrentSongTime(0);
+  }
+
+  // the available audio will always be the number of guesses made + 1 second
+  const targetSeconds = guesses.length + 1;
+
+  // RAF loop effect: start/stop based on `playing` and keep an eye on targetSeconds
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) {
+      return;
+    }
+
+    // If not playing, ensure RAF is cancelled
+    if (!playing) {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      return;
+    }
+
+    // If we are playing, start the RAF loop
+    const loop = () => {
+      const now = a.currentTime;
+
+      // If we've reached or passed the target time, stop and snap
+      if (now >= targetSeconds) {
+        // cancel further RAF
+        if (rafRef.current) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+
+        try {
+          a.pause();
+        } catch (e) {
+          // ignore pause errors
+        }
+        setPlaying(false);
+
+        try {
+          a.currentTime = targetSeconds;
+          setCurrentSongTime(a.currentTime);
+        } catch (e) {
+          // some browsers may throw if setting currentTime too quickly; ignore
+        }
+
+        return;
+      } else {
+        setCurrentSongTime(now);
+      }
+
+      // continue the loop
+      rafRef.current = requestAnimationFrame(loop);
+    };
+
+    // Start the RAF loop
+    // if the audio is already at the target, reset it
+    if (a.currentTime >= targetSeconds) {
+      resetAudio();
+    }
+
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+    rafRef.current = requestAnimationFrame(loop);
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+  }, [playing, targetSeconds]);
+
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    function onEnded() {
+      setPlaying(false);
+      setCurrentSongTime(a!.currentTime);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    }
+    a.addEventListener("ended", onEnded);
+    return () => a.removeEventListener("ended", onEnded);
+  }, []);
 
   function handleSongSearch() {
     // open up the guessing modal
@@ -44,6 +142,7 @@ export default function Game() {
     }
     setGuesses(newGuesses);
     setSelectedSong(undefined);
+    resetAudio();
   }
 
   return (
@@ -73,7 +172,10 @@ export default function Game() {
         <Text className={styles.songTitle}>
           {selectedSong?.name ?? "Select a song below..."}
         </Text>
-        <AudioSlider availableGuesses={MAX_GUESSES} guesses={guesses} />
+        <AudioSlider
+          availableGuesses={MAX_GUESSES}
+          currentSongTime={currentSongTime}
+        />
         <Group grow wrap="nowrap" gap={5} w="100%" mt="md" mb="md">
           {/* // Generate a Progress Bar segment for each possible guess */}
           {[...Array(MAX_GUESSES)].map((_, index) => (
@@ -81,7 +183,7 @@ export default function Game() {
             <GuessProgress
               key={`guess-progress-${index}`}
               guessIndex={index}
-              guesses={guesses}
+              guessesCount={guesses.length}
               color={index === guesses.length ? "cyan" : "red"}
             />
           ))}
@@ -95,7 +197,13 @@ export default function Game() {
           >
             Select Song
           </Button>
-          <PlayAudioButton />
+          {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
+          <audio ref={audioRef} src="/sample.mp3" preload="auto" />
+          <PlayAudioButton
+            audioRef={audioRef}
+            playing={playing}
+            setPlaying={setPlaying}
+          />
           <Button
             rightSection={<IconArrowRight />}
             variant="default"
