@@ -1,7 +1,7 @@
 import { Button, Modal, Text } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./LoseModal.module.css";
-import { PRIMARY_COLOR } from "../../src/theme";
+import { PRIMARY_COLOR } from "@/theme";
 
 export default function TutorialModal({
   openState,

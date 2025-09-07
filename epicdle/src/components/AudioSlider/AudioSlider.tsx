@@ -1,6 +1,6 @@
 "use client";
 import { Progress } from "@mantine/core";
-import { PRIMARY_COLOR } from "../../src/theme";
+import { PRIMARY_COLOR } from "@/theme";
 
 export default function AudioSlider({
   availableGuesses,

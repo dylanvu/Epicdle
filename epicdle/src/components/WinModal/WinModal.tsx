@@ -1,9 +1,9 @@
 import { Button, Modal, Text } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./WinModal.module.css";
-import { PRIMARY_COLOR } from "../../src/theme";
+import { PRIMARY_COLOR } from "@/theme";
 import { IconShare } from "@tabler/icons-react";
-import { MAX_GUESSES } from "../../src/constants";
+import { MAX_GUESSES } from "@/constants";
 
 export default function TutorialModal({
   openState,

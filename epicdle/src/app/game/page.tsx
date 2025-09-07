@@ -9,18 +9,18 @@ import {
   IconSearch,
   IconQuestionMark,
 } from "@tabler/icons-react";
-import { Song } from "../../interfaces/interfaces";
-import GuessProgress from "../../components/GuessProgress/GuessProgress";
-import AudioSlider from "../../components/AudioSlider/AudioSlider";
+import { Song } from "@/interfaces/interfaces";
+import GuessProgress from "@/components/GuessProgress/GuessProgress";
+import AudioSlider from "@/components/AudioSlider/AudioSlider";
 
-import { MAX_GUESSES, ALBUM_NAME_TO_COVER_MAP } from "../../constants";
-import GuessHistoryOverlay from "../../components/GuessHistoryOverlay/GuessHistoryOverlay";
-import PlayAudioButton from "../../components/PlayAudioButton/PlayAudioButton";
-import TutorialModal from "../../components/TutorialModal/TutorialModal";
-import SongListModal from "../../components/SongListModal/SongListModal";
-import { PRIMARY_COLOR } from "../../theme";
-import WinModal from "../../components/WinModal/WinModal";
-import LoseModal from "../../components/LoseModal/LoseModal";
+import { MAX_GUESSES, ALBUM_NAME_TO_COVER_MAP } from "@/constants";
+import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
+import PlayAudioButton from "@/components/PlayAudioButton/PlayAudioButton";
+import TutorialModal from "@/components/TutorialModal/TutorialModal";
+import SongListModal from "@/components/SongListModal/SongListModal";
+import { PRIMARY_COLOR } from "@/theme";
+import WinModal from "@/components/WinModal/WinModal";
+import LoseModal from "@/components/LoseModal/LoseModal";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);

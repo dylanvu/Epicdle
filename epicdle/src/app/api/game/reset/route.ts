@@ -1,5 +1,5 @@
-import { firestore } from "../../firebase";
-import { FIREBASE_DATABASE_COLLECTION_NAME } from "../../../../constants";
+import { firestore } from "@/app/api/firebase";
+import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
 
 /**
  * Function that runs daily to reset the state of the game

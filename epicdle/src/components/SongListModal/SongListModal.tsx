@@ -1,11 +1,11 @@
 import { Button, Modal } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./SongListModal.module.css";
-import { SONG_LIST } from "../../constants";
-import GuessOption from "../GuessOption/GuessOption";
+import { SONG_LIST } from "@/constants";
+import GuessOption from "@/components/GuessOption/GuessOption";
 import { Dispatch, SetStateAction } from "react";
-import { Song } from "../../interfaces/interfaces";
-import { PRIMARY_COLOR } from "../../theme";
+import { Song } from "@/interfaces/interfaces";
+import { PRIMARY_COLOR } from "@/theme";
 
 export default function SongListModal({
   openState,

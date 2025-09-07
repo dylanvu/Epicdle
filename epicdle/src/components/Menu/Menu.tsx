@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@mantine/core";
 import styles from "./Menu.module.css";
-import { PRIMARY_COLOR } from "../../theme";
+import { PRIMARY_COLOR } from "@/theme";
 
 export default function Menu() {
   return (

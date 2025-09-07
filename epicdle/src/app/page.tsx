@@ -1,6 +1,6 @@
 import styles from "./page.module.css";
-import Menu from "../components/Menu/Menu";
-import EpicdleTitle from "../components/Epicdle/EpicdleTitle";
+import Menu from "@/components/Menu/Menu";
+import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
 
 export default function Home() {
   return (
