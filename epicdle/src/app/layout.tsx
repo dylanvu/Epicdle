@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
 import { MantineProvider } from "@mantine/core";
-import { theme } from "../../theme";
+import { theme } from "../theme";
 
 const lato = Lato({
   subsets: ["latin"],

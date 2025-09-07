@@ -1,4 +1,4 @@
-import { Song } from "../../interfaces/interfaces";
+import { Song } from "../../src/interfaces/interfaces";
 import styles from "./GuessHistoryOverlay.module.css";
 import { Text } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";

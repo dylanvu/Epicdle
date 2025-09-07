@@ -1,5 +1,5 @@
 import { firestore } from "./firebase";
-import { FIREBASE_DATABASE_COLLECTION_NAME } from "../../../constants";
+import { FIREBASE_DATABASE_COLLECTION_NAME } from "../../constants";
 
 export async function GET(request: Request) {
   const testDoc = (

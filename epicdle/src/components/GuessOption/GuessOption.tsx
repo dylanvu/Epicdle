@@ -1,6 +1,6 @@
-import { Song } from "../../interfaces/interfaces";
+import { Song } from "../../src/interfaces/interfaces";
 import Image from "next/image";
-import { ALBUM_NAME_TO_COVER_MAP } from "../../constants";
+import { ALBUM_NAME_TO_COVER_MAP } from "../../src/constants";
 import { IconChevronRight } from "@tabler/icons-react";
 import styles from "./GuessOption.module.css";
 import { Dispatch, SetStateAction } from "react";
