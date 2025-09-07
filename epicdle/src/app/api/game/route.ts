@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 }
 
 /**
- * Put the new audio snippet into the storage
+ * Check if the answer is correct
  * @param request
  */
 export async function POST(request: Request) {

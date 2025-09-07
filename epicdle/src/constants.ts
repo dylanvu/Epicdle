@@ -68,9 +68,9 @@ export const SONG_LIST: Song[] = [
 ];
 
 /**
- * The name of the collection in the Firestore database
+ * The name of the collection in the Firestore database and also the storage bucket
  */
-export const FIREBASE_DATABASE_COLLECTION_NAME = "epicdle";
+export const FIREBASE_DATABASE_COLLECTION_NAME = "epic_the_musical";
 
 /**
  * The hours in 24 hour time to reset the daily Wordle
