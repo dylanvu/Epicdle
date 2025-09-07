@@ -2,16 +2,18 @@ import { Song } from "./interfaces/interfaces";
 
 export const MAX_GUESSES = 6;
 
+const ASSET_BASE_PATH = "/";
+
 export const ALBUM_NAME_TO_COVER_MAP: Record<string, string> = {
-  "The Troy Saga": "/The_Troy_Saga.webp",
-  "The Cyclops Saga": "/The_Cyclops_Saga.webp",
-  "The Ocean Saga": "/The_Ocean_Saga.webp",
-  "The Circe Saga": "/The_Circe_Saga.webp",
-  "The Underworld Saga": "/The_Underworld_Saga.webp",
-  "The Thunder Saga": "/The_Thunder_Saga.webp",
-  "The Wisdom Saga": "/The_Wisdom_Saga.webp",
-  "The Vengeance Saga": "/The_Vengeance_Saga.webp",
-  "The Ithaca Saga": "/The_Ithaca_Saga.webp",
+  "The Troy Saga": `${ASSET_BASE_PATH}/The_Troy_Saga.webp`,
+  "The Cyclops Saga": `${ASSET_BASE_PATH}/The_Cyclops_Saga.webp`,
+  "The Ocean Saga": `${ASSET_BASE_PATH}/The_Ocean_Saga.webp`,
+  "The Circe Saga": `${ASSET_BASE_PATH}/The_Circe_Saga.webp`,
+  "The Underworld Saga": `${ASSET_BASE_PATH}/The_Underworld_Saga.webp`,
+  "The Thunder Saga": `${ASSET_BASE_PATH}/The_Thunder_Saga.webp`,
+  "The Wisdom Saga": `${ASSET_BASE_PATH}/The_Wisdom_Saga.webp`,
+  "The Vengeance Saga": `${ASSET_BASE_PATH}/The_Vengeance_Saga.webp`,
+  "The Ithaca Saga": `${ASSET_BASE_PATH}/The_Ithaca_Saga.webp`,
 };
 
 export const SONG_LIST: Song[] = [
@@ -64,3 +66,13 @@ export const SONG_LIST: Song[] = [
   { name: "I Can't Help but Wonder", album: "The Ithaca Saga" },
   { name: "Would You Fall in Love with Me Again", album: "The Ithaca Saga" },
 ];
+
+/**
+ * The name of the collection in the Firestore database
+ */
+export const FIREBASE_DATABASE_COLLECTION_NAME = "epicdle";
+
+/**
+ * The hours in 24 hour time to reset the daily Wordle
+ */
+export const RESET_TIME_PST = 0;
