@@ -7,9 +7,12 @@ import { firebaseStorage } from "@/app/api/firebase";
 import { FIREBASE_DATABASE_COLLECTION_NAME, SONG_LIST } from "@/constants";
 import ffmpegPath from "ffmpeg-static";
 
-export async function createAudioSnippet(
-  dateSeed: Date
-): Promise<{ result: boolean; message: string; songName: string }> {
+export async function createAudioSnippet(dateSeed: Date): Promise<{
+  result: boolean;
+  message: string;
+  songName: string;
+  audioOutputPath: string | null;
+}> {
   // extract out the day in the year-month-day format, like 2025-9-7 or something
   const seed = `${dateSeed.getFullYear()}-${dateSeed.getMonth()}-${dateSeed.getDate()}`;
 
@@ -37,6 +40,7 @@ export async function createAudioSnippet(
       result: false,
       message: `Audio file ${audioFileName} does not exist`,
       songName: audioFileName,
+      audioOutputPath: null,
     };
   }
 
@@ -107,6 +111,7 @@ export async function createAudioSnippet(
       result: true,
       message: `Successfully created audio snippet at ${snippetOutputPath}`,
       songName: audioFileName,
+      audioOutputPath: snippetOutputPath,
     };
   } catch (err) {
     if (err instanceof Error) {
@@ -114,12 +119,14 @@ export async function createAudioSnippet(
         result: false,
         message: `Error slicing audio file: ${err.toString()}`,
         songName: audioFileName,
+        audioOutputPath: null,
       };
     } else {
       return {
         result: false,
         message: `Error slicing audio file: ${err}`,
         songName: audioFileName,
+        audioOutputPath: null,
       };
     }
   }
