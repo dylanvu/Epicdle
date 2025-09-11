@@ -13,6 +13,8 @@
     "@mantine/hooks": "^8.2.8",
     "@mantine/spotlight": "^8.2.8",
     "@tabler/icons-react": "^3.34.1",
+    "ffmpeg-static": "^5.2.0",
+    "ffprobe-static": "^3.1.0",
     "firebase-admin": "^13.5.0",
     "next": "15.5.2",
     "react": "19.1.0",
@@ -20,6 +22,7 @@
     "seedrandom": "^3.0.5"
   },
   "devDependencies": {
+    "@types/ffprobe-static": "^2.0.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
