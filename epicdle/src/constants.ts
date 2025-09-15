@@ -68,9 +68,15 @@ export const SONG_LIST: Song[] = [
 ];
 
 /**
- * The name of the collection in the Firestore database and also the storage bucket
+ * The name of the collection in the Firestore database, the Google storage folder name, and the Cloudflare CDN R2 bucket (cannot use underscores)
  */
-export const FIREBASE_DATABASE_COLLECTION_NAME = "epic_the_musical";
+export const FIREBASE_DATABASE_COLLECTION_NAME = "epic-the-musical";
+
+/**
+ * The name of the Firebase Storage bucket
+ * https://firebase.google.com/docs/storage/web/start#add-sdk-and-initialize
+ */
+export const FIREBASE_STORAGE_BUCKET_NAME = "epicdle.firebasestorage.app";
 
 /**
  * The hours in 24 hour time to reset the daily Wordle
