@@ -10,6 +10,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.888.0",
     "@clerk/nextjs": "^6.31.8",
+    "@ffmpeg/ffmpeg": "^0.12.15",
     "@mantine/core": "^8.2.8",
     "@mantine/hooks": "^8.2.8",
     "@mantine/spotlight": "^8.2.8",

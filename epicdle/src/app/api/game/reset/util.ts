@@ -12,6 +12,8 @@ import {
   SONG_LIST,
   FIREBASE_STORAGE_BUCKET_NAME,
 } from "@/constants";
+import fs from "fs";
+import ffmpegPath from "ffmpeg-static";
 
 /** Resolve ffmpeg-static at runtime and return path */
 function resolveFfmpegStatic(): string {
@@ -124,7 +126,16 @@ export async function createAudioSnippet(
   // use the seed to pick the timestamp starting point of the whole song
   const startSeconds = Math.floor(seedrandom(seed)() * validSongLength);
 
-  // Build ffmpeg args to slice the temp audio file
+  console.log("ffmpegPath:", ffmpegPath);
+  console.log("exists:", ffmpegPath ? fs.existsSync(ffmpegPath) : false);
+  if (ffmpegPath) {
+    try {
+      console.log("stat:", fs.statSync(ffmpegPath));
+    } catch (e) {
+      console.log("stat error", e);
+    }
+  }
+
   // Build ffmpeg args to slice the temp audio file
   const snippetOutputPath = path.join(
     tmpDir,
@@ -145,22 +156,22 @@ export async function createAudioSnippet(
     snippetOutputPath,
   ];
 
+  // ! REMEMBER TO MANUALLY INSTALL FFMPEG ON WINDOWS
   const ffBinary = resolveFfmpegStatic();
-  const ffBinaryQuoted = `"${ffBinary}"`;
 
-  console.log("Using ffmpeg binary:", ffBinaryQuoted);
+  console.log("Using ffmpeg binary:", ffBinary);
 
   try {
     await new Promise<void>((resolve, reject) => {
-      const ff = spawn(
-        ffBinaryQuoted,
-        ffmpegArgs,
-        { shell: true } // always true works on Windows
+      const ff = spawn(ffBinary, ffmpegArgs, { shell: true });
+
+      ff.stdout!.on("data", (chunk) =>
+        console.log("ffmpeg stdout:", chunk.toString())
+      );
+      ff.stderr!.on("data", (chunk) =>
+        console.error("ffmpeg stderr:", chunk.toString())
       );
 
-      ff.stderr!.on("data", (chunk) =>
-        console.log("ffmpeg:", chunk.toString())
-      );
       ff.on("error", reject);
       ff.on("close", (code) =>
         code === 0
