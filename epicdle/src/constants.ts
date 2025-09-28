@@ -2,7 +2,7 @@ import { Song } from "./interfaces/interfaces";
 
 export const MAX_GUESSES = 6;
 
-const ASSET_BASE_PATH = "/";
+const ASSET_BASE_PATH = "";
 
 export const ALBUM_NAME_TO_COVER_MAP: Record<string, string> = {
   "The Troy Saga": `${ASSET_BASE_PATH}/The_Troy_Saga.webp`,

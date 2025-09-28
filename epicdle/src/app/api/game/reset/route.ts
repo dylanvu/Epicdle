@@ -11,6 +11,7 @@ import {
   S3ServiceException,
 } from "@aws-sdk/client-s3";
 import fs from "fs";
+import { createSnippetKey, getTodaysDate } from "../util";
 
 /**
  * Function that runs daily to reset the state of the game
@@ -96,9 +97,8 @@ export async function PATCH(req: NextRequest) {
 
   // now let's get the next day's song
 
-  // create a fixed date for testing
-  const today = new Date(2025, 8, 8);
-  // const today = new Date();
+  const today = getTodaysDate();
+
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -126,7 +126,7 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  const newSnippetFileKey = `${tomorrow.getFullYear()}-${tomorrow.getMonth()}-${tomorrow.getDate()}.mp3`;
+  const newSnippetFileKey = createSnippetKey(tomorrow);
 
   await S3.send(
     new PutObjectCommand({
