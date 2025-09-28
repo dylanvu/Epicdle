@@ -13,7 +13,6 @@ import {
   FIREBASE_STORAGE_BUCKET_NAME,
 } from "@/constants";
 import mp3Parser from "mp3-parser";
-import fs from "fs";
 
 /** Resolve ffprobe-static at runtime and return path */
 function resolveFfprobeStatic(): string {
