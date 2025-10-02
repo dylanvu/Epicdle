@@ -27,9 +27,10 @@ export default function Game() {
   const [openedSearchModal, searchModalHandler] = useDisclosure(false);
   const [openedWinModal, winModalHandler] = useDisclosure(false);
   const [openedLoseModal, loseModalHandler] = useDisclosure(false);
+  const [gameState, setGameState] = useState<"win" | "lose" | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [playing, setPlaying] = useState(false);
+  const [playingAudio, setPlayingAudio] = useState(false);
   const [guesses, setGuesses] = useState<Song[]>([]);
   const [selectedSong, setSelectedSong] = useState<Song>();
 
@@ -48,11 +49,11 @@ export default function Game() {
     return guesses.length + 1;
   }, [guesses]);
 
-  // when playing is toggled, start/stop the audio
+  // when playingAudio is toggled, start/stop the audio
   useEffect(() => {
     const audioElement = audioRef.current;
 
-    if (playing) {
+    if (playingAudio) {
       // if we hit the target seconds, go back to the start
       if (audioElement && audioElement?.currentTime >= targetSeconds) {
         audioElement.currentTime = 0;
@@ -72,7 +73,7 @@ export default function Game() {
             // snap the audio back to the targetSeconds
             audioElement.currentTime = targetSeconds;
             // stop the audio
-            setPlaying(false);
+            setPlayingAudio(false);
           } else {
             // perform a throttled update
             if (audioElement) {
@@ -107,7 +108,7 @@ export default function Game() {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [playing]);
+  }, [playingAudio]);
 
   function handleSongSearch() {
     // open up the guessing modal
@@ -115,7 +116,18 @@ export default function Game() {
   }
 
   function handleSubmit() {
+    // TODO: make this a real function
+    if (selectedSong?.name === "Warrior of the Mind") {
+      setGameState("win");
+      winModalHandler.open();
+      return;
+    }
+
     let newGuesses = [...guesses, selectedSong!];
+    if (newGuesses.length > MAX_GUESSES - 1) {
+      setGameState("lose");
+      loseModalHandler.open();
+    }
 
     setGuesses(newGuesses);
     setSelectedSong(undefined);
@@ -124,15 +136,15 @@ export default function Game() {
     }
     setAudioProgress(0);
     lastProgressRef.current = 0;
+  }
 
-    // TODO: make this a real function
-    if (selectedSong?.name === "Warrior of the Mind") {
-      winModalHandler.open();
-      return;
-    }
-    if (newGuesses.length > MAX_GUESSES - 1) {
-      loseModalHandler.open();
-    }
+  let progressColorOverride: string | undefined;
+  if (gameState === "win") {
+    progressColorOverride = "green";
+  } else if (gameState === "lose") {
+    progressColorOverride = "red";
+  } else {
+    progressColorOverride = undefined;
   }
 
   return (
@@ -180,7 +192,13 @@ export default function Game() {
               key={`guess-progress-${index}`}
               guessIndex={index}
               guessesCount={guesses.length}
-              color={index === guesses.length ? PRIMARY_COLOR : "red"}
+              color={
+                progressColorOverride
+                  ? progressColorOverride
+                  : index === guesses.length
+                  ? PRIMARY_COLOR
+                  : "red"
+              }
             />
           ))}
         </Group>
@@ -190,18 +208,22 @@ export default function Game() {
             variant="default"
             onClick={handleSongSearch}
             aria-label="Search for a Song"
+            disabled={gameState !== null}
           >
             Select Song
           </Button>
           {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
           <audio ref={audioRef} src="/sample.mp3" preload="auto" />
-          <PlayAudioButton playing={playing} setPlaying={setPlaying} />
+          <PlayAudioButton
+            playing={playingAudio}
+            setPlaying={setPlayingAudio}
+          />
           <Button
             rightSection={<IconArrowRight />}
             variant="default"
             onClick={handleSubmit}
             aria-label="Submit Song Guess"
-            disabled={selectedSong === undefined}
+            disabled={selectedSong === undefined || gameState !== null}
           >
             Submit Guess
           </Button>
@@ -213,6 +235,7 @@ export default function Game() {
           aria-label="How to Play"
           w="100%"
           mt="md"
+          disabled={gameState !== null}
         >
           How to Play
         </Button>
