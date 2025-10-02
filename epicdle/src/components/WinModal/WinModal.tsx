@@ -18,10 +18,10 @@ export default function TutorialModal({
     // for each incorrect guess, create a black square
     let squares = "";
     for (let i = 0; i < guessesUsed - 1; i++) {
-      squares += "⬛ ";
+      squares += "🎵 ";
     }
     // make the last guess a GREEN square
-    squares += "🟩";
+    squares += "🏆";
 
     // TODO: update the link
     navigator.clipboard.writeText(
