@@ -59,7 +59,11 @@ export default function Game() {
 
   // the available audio will always be the number of guesses made + 1 second
   const targetSeconds = useMemo(() => {
-    return guesses.length + 1;
+    if (guesses.length >= MAX_GUESSES) {
+      return MAX_GUESSES;
+    } else {
+      return guesses.length + 1;
+    }
   }, [guesses]);
 
   // when playingAudio is toggled, start/stop the audio
