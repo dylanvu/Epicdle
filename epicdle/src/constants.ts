@@ -2,6 +2,11 @@ import { Song } from "./interfaces/interfaces";
 
 export const MAX_GUESSES = 6;
 
+/**
+ * How many seconds each segment is
+ */
+export const SECONDS_PER_GUESS = 0.5;
+
 const ASSET_BASE_PATH = "";
 
 export const ALBUM_NAME_TO_COVER_MAP: Record<string, string> = {

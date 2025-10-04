@@ -14,7 +14,11 @@ import { Song } from "@/interfaces/interfaces";
 import GuessProgress from "@/components/GuessProgress/GuessProgress";
 import AudioSlider from "@/components/AudioSlider/AudioSlider";
 
-import { MAX_GUESSES, ALBUM_NAME_TO_COVER_MAP } from "@/constants";
+import {
+  MAX_GUESSES,
+  SECONDS_PER_GUESS,
+  ALBUM_NAME_TO_COVER_MAP,
+} from "@/constants";
 import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
 import PlayAudioButton from "@/components/PlayAudioButton/PlayAudioButton";
 import TutorialModal from "@/components/TutorialModal/TutorialModal";
@@ -30,7 +34,9 @@ export default function Game() {
   const [openedSearchModal, searchModalHandler] = useDisclosure(false);
   const [openedWinModal, winModalHandler] = useDisclosure(false);
   const [openedLoseModal, loseModalHandler] = useDisclosure(false);
-  const [gameState, setGameState] = useState<"win" | "lose" | null>(null);
+  const [gameState, setGameState] = useState<
+    "win" | "lose" | "submit" | "loading" | "play"
+  >("play");
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playingAudio, setPlayingAudio] = useState(false);
@@ -58,9 +64,9 @@ export default function Game() {
   // the available audio will always be the number of guesses made + 1 second
   const targetSeconds = useMemo(() => {
     if (guesses.length >= MAX_GUESSES) {
-      return MAX_GUESSES;
+      return MAX_GUESSES * SECONDS_PER_GUESS;
     } else {
-      return guesses.length + 1;
+      return (guesses.length + 1) * SECONDS_PER_GUESS;
     }
   }, [guesses]);
 
@@ -139,6 +145,7 @@ export default function Game() {
     progressGuessUI();
     setGameState("win");
     winModalHandler.open();
+    // TODO: trigger win visual effect
   }
 
   function handleLose() {
@@ -149,6 +156,7 @@ export default function Game() {
     // progress the UI state
     setGameState("lose");
     loseModalHandler.open();
+    // TODO: trigger the lose visual effect
   }
 
   function handleWrong() {
@@ -157,6 +165,8 @@ export default function Game() {
     playAudioWithoutUseSound("/sfx/thunder_wrong_guess.mp3");
     // progress the UI
     progressGuessUI();
+    setGameState("play");
+    // TODO: trigger the wrong guess visual effect
   }
 
   function handleSubmit() {
@@ -165,6 +175,9 @@ export default function Game() {
       console.warn("Attempted to submit with no song selected.");
       return;
     }
+
+    setGameState("submit");
+    // TODO: trigger submit visual effect
 
     // store the submitted song in a ref so callbacks (which run after sound) use the exact submitted song
     lastSubmittedSongRef.current = selectedSong;
@@ -284,7 +297,7 @@ export default function Game() {
             variant="default"
             onClick={handleSongSearch}
             aria-label="Search for a Song"
-            disabled={gameState !== null}
+            disabled={gameState !== "play"}
           >
             Select Song
           </Button>
@@ -299,7 +312,7 @@ export default function Game() {
             variant="default"
             onClick={handleSubmit}
             aria-label="Submit Song Guess"
-            disabled={selectedSong === undefined || gameState !== null}
+            disabled={selectedSong === undefined || gameState !== "play"}
           >
             Submit Guess
           </Button>
@@ -313,7 +326,7 @@ export default function Game() {
           aria-label="How to Play"
           w="100%"
           mt="md"
-          disabled={gameState !== null}
+          disabled={gameState !== "play"}
         >
           How to Play
         </Button>

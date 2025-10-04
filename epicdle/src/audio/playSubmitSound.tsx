@@ -2,9 +2,9 @@
 import useSound from "use-sound";
 
 export function useSubmitSound(onend?: () => void) {
-  const [play] = useSound("/sfx/submit.mp3", {
+  const [play] = useSound("/sfx/orchestral_reveal.mp3", {
     onend,
-    playbackRate: 2.5,
+    playbackRate: 1.5,
   });
   return play;
 }

@@ -13,6 +13,7 @@ import {
   FIREBASE_STORAGE_BUCKET_NAME,
 } from "@/constants";
 import mp3Parser from "mp3-parser";
+import { SECONDS_PER_GUESS, MAX_GUESSES } from "@/constants";
 
 /** Resolve ffprobe-static at runtime and return path */
 function resolveFfprobeStatic(): string {
@@ -117,7 +118,7 @@ export async function createAudioSnippet(
   console.log("Got audio duration in seconds:", songLength);
 
   // choose snippet start
-  const snippetLength = 6; // seconds as number
+  const snippetLength = SECONDS_PER_GUESS * (MAX_GUESSES + 1);
   const validSongLength = Math.max(0, songLength - snippetLength);
   const startSeconds =
     validSongLength > 0 ? Math.floor(seedrandom(seed)() * validSongLength) : 0;
