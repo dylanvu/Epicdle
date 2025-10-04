@@ -10,8 +10,6 @@ import {
   IconQuestionMark,
 } from "@tabler/icons-react";
 
-import useSound from "use-sound";
-
 import { Song } from "@/interfaces/interfaces";
 import GuessProgress from "@/components/GuessProgress/GuessProgress";
 import AudioSlider from "@/components/AudioSlider/AudioSlider";
