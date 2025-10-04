@@ -6,6 +6,7 @@ import GuessOption from "@/components/GuessOption/GuessOption";
 import { Dispatch, SetStateAction } from "react";
 import { Song } from "@/interfaces/interfaces";
 import { PRIMARY_COLOR } from "@/theme";
+import { useButtonSound } from "@/audio/playButtonSound";
 
 export default function SongListModal({
   openState,
@@ -18,10 +19,14 @@ export default function SongListModal({
   setSelectedSong: Dispatch<SetStateAction<Song | undefined>>;
   guesses: Song[];
 }) {
+  const playButtonSound = useButtonSound();
   return (
     <Modal
       opened={openState}
-      onClose={modalHandler.close}
+      onClose={() => {
+        playButtonSound();
+        modalHandler.close();
+      }}
       title="Select a song from the list:"
       className={styles.game}
     >
@@ -41,7 +46,10 @@ export default function SongListModal({
         })}
       </div>
       <Button
-        onClick={modalHandler.close}
+        onClick={() => {
+          playButtonSound();
+          modalHandler.close();
+        }}
         mt="md"
         w="100%"
         color={PRIMARY_COLOR}

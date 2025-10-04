@@ -9,6 +9,9 @@ import {
   IconSearch,
   IconQuestionMark,
 } from "@tabler/icons-react";
+
+import useSound from "use-sound";
+
 import { Song } from "@/interfaces/interfaces";
 import GuessProgress from "@/components/GuessProgress/GuessProgress";
 import AudioSlider from "@/components/AudioSlider/AudioSlider";
@@ -21,6 +24,8 @@ import SongListModal from "@/components/SongListModal/SongListModal";
 import { PRIMARY_COLOR } from "@/theme";
 import WinModal from "@/components/WinModal/WinModal";
 import LoseModal from "@/components/LoseModal/LoseModal";
+import { useButtonSound } from "@/audio/playButtonSound";
+import { useSubmitSound } from "@/audio/playSubmitSound";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -34,6 +39,9 @@ export default function Game() {
   const [guesses, setGuesses] = useState<Song[]>([]);
   const [selectedSong, setSelectedSong] = useState<Song>();
 
+  // keep the song that was submitted (so callbacks that run later use this exact song)
+  const lastSubmittedSongRef = useRef<Song | undefined>(undefined);
+
   const rafRef = useRef<number | null>(null);
   const [audioProgress, setAudioProgress] = useState(0);
   const lastProgressRef = useRef<number>(0);
@@ -43,8 +51,16 @@ export default function Game() {
     helpHandler.open();
   }, []);
 
-  // the available audio will always be the number of guesses made + 1 second
+  // load the sounds
+  const playButtonSound = useButtonSound();
+  const playSubmitWinSound = useSubmitSound(handleWin);
+  const playSubmitLossSound = useSubmitSound(handleLose);
+  const playSubmitWrongSound = useSubmitSound(handleWrong);
 
+  const [playLossSound] = useSound("/sfx/thunder_loss.mp3");
+  const [playWrongSound] = useSound("/sfx/thunder_wrong_guess.mp3");
+
+  // the available audio will always be the number of guesses made + 1 second
   const targetSeconds = useMemo(() => {
     return guesses.length + 1;
   }, [guesses]);
@@ -108,28 +124,79 @@ export default function Game() {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [playingAudio]);
+  }, [playingAudio, targetSeconds]);
 
   function handleSongSearch() {
+    playButtonSound();
     // open up the guessing modal
     searchModalHandler.open();
   }
 
+  /**
+   * this function is called after the submit sound
+   */
+  function handleWin() {
+    // progress the UI (record the guess)
+    progressGuessUI();
+    setGameState("win");
+    winModalHandler.open();
+  }
+
+  function handleLose() {
+    // play the lose sound
+    playLossSound();
+    // progress the UI
+    progressGuessUI();
+    // progress the UI state
+    setGameState("lose");
+    loseModalHandler.open();
+  }
+
+  function handleWrong() {
+    // play the wrong sound
+    playWrongSound();
+    // progress the UI
+    progressGuessUI();
+  }
+
   function handleSubmit() {
-    // TODO: make this a real function
-    if (selectedSong?.name === "Warrior of the Mind") {
-      setGameState("win");
-      winModalHandler.open();
+    // guard: make sure there is a selected song
+    if (!selectedSong) {
+      console.warn("Attempted to submit with no song selected.");
       return;
     }
 
-    let newGuesses = [...guesses, selectedSong!];
-    if (newGuesses.length > MAX_GUESSES - 1) {
-      setGameState("lose");
-      loseModalHandler.open();
+    // store the submitted song in a ref so callbacks (which run after sound) use the exact submitted song
+    lastSubmittedSongRef.current = selectedSong;
+
+    // first, determine if the answer is right
+    if (selectedSong.name === "Warrior of the Mind") {
+      // correct
+      playSubmitWinSound();
+    } else if (guesses.length + 1 >= MAX_GUESSES) {
+      // player will have used up the allowed guesses => loss
+      playSubmitLossSound();
+    } else {
+      // wrong guess (will trigger handleWrong after submit sound finishes)
+      playSubmitWrongSound();
+    }
+  }
+
+  function progressGuessUI() {
+    const songToAdd = lastSubmittedSongRef.current;
+
+    if (!songToAdd) {
+      console.warn(
+        "No submitted song found in lastSubmittedSongRef — ignoring progress."
+      );
+      return;
     }
 
-    setGuesses(newGuesses);
+    // use functional update to avoid stale closures
+    setGuesses((prev) => [...prev, songToAdd]);
+
+    // clear the selected song and reset audio
+    lastSubmittedSongRef.current = undefined;
     setSelectedSong(undefined);
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
@@ -231,7 +298,10 @@ export default function Game() {
         <Button
           leftSection={<IconQuestionMark />}
           variant="default"
-          onClick={helpHandler.open}
+          onClick={() => {
+            playButtonSound();
+            helpHandler.open();
+          }}
           aria-label="How to Play"
           w="100%"
           mt="md"

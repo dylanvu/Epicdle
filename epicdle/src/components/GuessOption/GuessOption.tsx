@@ -5,6 +5,7 @@ import { IconChevronRight } from "@tabler/icons-react";
 import styles from "./GuessOption.module.css";
 import { Dispatch, SetStateAction } from "react";
 import { Text } from "@mantine/core";
+import { useButtonSound } from "@/audio/playButtonSound";
 
 export default function GuessOption({
   song,
@@ -17,8 +18,10 @@ export default function GuessOption({
   closeModal: () => void;
   isDisabled?: boolean;
 }) {
+  const playButtonSound = useButtonSound();
   function handleGuessOptionClick() {
     setSelectedSong(song);
+    playButtonSound();
     closeModal();
   }
   return (

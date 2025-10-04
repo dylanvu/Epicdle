@@ -3,6 +3,7 @@ import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./TutorialModal.module.css";
 import { MAX_GUESSES } from "@/constants";
 import { PRIMARY_COLOR } from "@/theme";
+import { useButtonSound } from "@/audio/playButtonSound";
 
 export default function TutorialModal({
   openState,
@@ -11,10 +12,14 @@ export default function TutorialModal({
   openState: boolean;
   modalHandler: UseDisclosureHandlers;
 }) {
+  const playButtonSound = useButtonSound();
   return (
     <Modal
       opened={openState}
-      onClose={modalHandler.close}
+      onClose={() => {
+        playButtonSound();
+        modalHandler.close();
+      }}
       title="How to Play"
       className={styles.game}
     >
@@ -25,7 +30,10 @@ export default function TutorialModal({
       </Text>
       <Text>Each guess brings you close as the music spills</Text>
       <Button
-        onClick={modalHandler.close}
+        onClick={() => {
+          playButtonSound();
+          modalHandler.close();
+        }}
         mt="md"
         w="100%"
         color={PRIMARY_COLOR}

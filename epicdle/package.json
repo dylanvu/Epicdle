@@ -22,7 +22,8 @@
     "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "seedrandom": "^3.0.5"
+    "seedrandom": "^3.0.5",
+    "use-sound": "^5.0.0"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.6",
