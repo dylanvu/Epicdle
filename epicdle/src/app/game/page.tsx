@@ -57,9 +57,6 @@ export default function Game() {
   const playSubmitLossSound = useSubmitSound(handleLose);
   const playSubmitWrongSound = useSubmitSound(handleWrong);
 
-  const [playLossSound] = useSound("/sfx/thunder_loss.mp3");
-  const [playWrongSound] = useSound("/sfx/thunder_wrong_guess.mp3");
-
   // the available audio will always be the number of guesses made + 1 second
   const targetSeconds = useMemo(() => {
     return guesses.length + 1;
@@ -144,7 +141,7 @@ export default function Game() {
 
   function handleLose() {
     // play the lose sound
-    playLossSound();
+    playAudioWithoutUseSound("/sfx/thunder_loss.mp3");
     // progress the UI
     progressGuessUI();
     // progress the UI state
@@ -154,7 +151,8 @@ export default function Game() {
 
   function handleWrong() {
     // play the wrong sound
-    playWrongSound();
+    // TODO: this is not working
+    playAudioWithoutUseSound("/sfx/thunder_wrong_guess.mp3");
     // progress the UI
     progressGuessUI();
   }
@@ -203,6 +201,15 @@ export default function Game() {
     }
     setAudioProgress(0);
     lastProgressRef.current = 0;
+  }
+
+  async function playAudioWithoutUseSound(audioPath: string) {
+    // TODO: honestly can I just refactor the whole app to not use useSound?
+    try {
+      await new Audio(audioPath).play();
+    } catch (e) {
+      console.error("native Audio failed:", e);
+    }
   }
 
   let progressColorOverride: string | undefined;
@@ -299,7 +306,6 @@ export default function Game() {
           leftSection={<IconQuestionMark />}
           variant="default"
           onClick={() => {
-            playButtonSound();
             helpHandler.open();
           }}
           aria-label="How to Play"
