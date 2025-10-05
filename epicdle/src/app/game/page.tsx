@@ -64,22 +64,28 @@ export default function Game() {
   const playSubmitWrongSound = useSubmitSound(handleWrong);
 
   const [scope, animate] = useAnimate();
-  const [progressBarScope, animateWave] = useAnimate();
+  /**
+   * submit wave animation
+   */
+  const [_, animateWave] = useAnimate();
 
   // the available audio will always be the number of guesses made + 1 second
   const targetSeconds = useMemo(() => {
-    if (guesses.length >= MAX_GUESSES) {
+    // let the player hear the whole song if they win, and also prevent the game from showing too much audio if they have lost
+    if (guesses.length >= MAX_GUESSES || gameState === "win") {
       return MAX_GUESSES * SECONDS_PER_GUESS;
     } else {
+      // let the player hear the next segment
       return (guesses.length + 1) * SECONDS_PER_GUESS;
     }
-  }, [guesses]);
+  }, [guesses, gameState]);
 
   // when playingAudio is toggled, start/stop the audio
   useEffect(() => {
     const audioElement = audioRef.current;
 
     if (playingAudio) {
+      // if the player has won, let all the audio play
       // if we hit the target seconds, go back to the start
       if (audioElement && audioElement?.currentTime >= targetSeconds) {
         audioElement.currentTime = 0;
@@ -95,6 +101,7 @@ export default function Game() {
         // cancel the animation frame, let's process the current frame first
         cancelAnimationFrame(rafRef.current!);
         if (audioElement) {
+          // only stop the music if the player has not won AND we are over the time limit given
           if (audioElement.currentTime >= targetSeconds) {
             // snap the audio back to the targetSeconds
             audioElement.currentTime = targetSeconds;
@@ -149,9 +156,11 @@ export default function Game() {
     // play the win sound
     playAudioWithoutUseSound("/sfx/triumphant_orchestra.mp3");
     // progress the UI (record the guess)
-    progressGuessUI();
     setGameState("win");
+    progressGuessUI(false, false);
     winModalHandler.open();
+
+    // win animation
     animate(
       scope.current,
       {
@@ -271,7 +280,14 @@ export default function Game() {
     }
   }
 
-  function progressGuessUI() {
+  /**
+   * This function progresses the UI
+   * The optional flags are mostly for making the win UI work better
+   * @param clearSelectedSong
+   * @param addToGuesses
+   * @returns
+   */
+  function progressGuessUI(clearSelectedSong = true, addToGuesses = true) {
     const songToAdd = lastSubmittedSongRef.current;
 
     if (!songToAdd) {
@@ -281,17 +297,21 @@ export default function Game() {
       return;
     }
 
-    // use functional update to avoid stale closures
-    setGuesses((prev) => [...prev, songToAdd]);
+    if (addToGuesses) {
+      // use functional update to avoid stale closures
+      setGuesses((prev) => [...prev, songToAdd]);
+    }
 
     // clear the selected song and reset audio
-    lastSubmittedSongRef.current = undefined;
-    setSelectedSong(undefined);
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
+    if (clearSelectedSong) {
+      lastSubmittedSongRef.current = undefined;
+      setSelectedSong(undefined);
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+      }
+      setAudioProgress(0);
+      lastProgressRef.current = 0;
     }
-    setAudioProgress(0);
-    lastProgressRef.current = 0;
   }
 
   async function playAudioWithoutUseSound(audioPath: string) {
@@ -339,6 +359,7 @@ export default function Game() {
             // TODO: fix the sizing of all images
             width={400}
             height={400}
+            style={{ opacity: gameState !== "win" ? 0.5 : 1 }}
           />
           <GuessHistoryOverlay guesses={guesses} />
         </div>
