@@ -22,11 +22,11 @@ import {
 } from "@/constants";
 import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
 import PlayAudioButton from "@/components/PlayAudioButton/PlayAudioButton";
-import TutorialModal from "@/components/TutorialModal/TutorialModal";
+import TutorialModal from "@/components/modals/TutorialModal/TutorialModal";
 import SongListModal from "@/components/SongListModal/SongListModal";
 import { PRIMARY_COLOR } from "@/theme";
-import WinModal from "@/components/WinModal/WinModal";
-import LoseModal from "@/components/LoseModal/LoseModal";
+import WinModal from "@/components/modals/WinModal/WinModal";
+import LoseModal from "@/components/modals/LoseModal/LoseModal";
 import { useButtonSound } from "@/audio/playButtonSound";
 import { useSubmitSound } from "@/audio/playSubmitSound";
 import { Easing, motion, useAnimate } from "motion/react";

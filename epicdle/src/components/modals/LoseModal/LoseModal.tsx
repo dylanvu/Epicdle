@@ -3,7 +3,7 @@ import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./LoseModal.module.css";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/audio/playButtonSound";
-import ShareButton from "../ShareButton.tsx/ShareButton";
+import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 import { MAX_GUESSES } from "@/constants";
 
 export default function TutorialModal({

@@ -1,6 +1,7 @@
 .gamePage {
   margin-top: 1rem;
   margin-bottom: 1rem;
+  min-height: 100vh;
 }
 
 .gameplayArea {

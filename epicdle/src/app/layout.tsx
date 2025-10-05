@@ -7,6 +7,7 @@ import { theme } from "@/theme";
 import Head from "next/head";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
+import Footer from "@/components/Footer/Footer";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({
           <Notifications />
           {children}
         </MantineProvider>
+        <Footer />
       </body>
     </html>
   );

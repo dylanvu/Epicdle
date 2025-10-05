@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@mantine/core";
+import { Button, Text } from "@mantine/core";
 import styles from "./Menu.module.css";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/audio/playButtonSound";
@@ -8,6 +8,10 @@ export default function Menu() {
   const playButtonSound = useButtonSound(() => {
     // navigate to the game page
     window.location.href = "/game";
+  });
+  const playAboutButtonSound = useButtonSound(() => {
+    // navigate to the about page
+    window.location.href = "/about";
   });
   return (
     <div className={styles.Menu}>
@@ -26,15 +30,22 @@ export default function Menu() {
       <div>
         <Button
           size="lg"
-          variant="light"
+          variant="outline"
           fullWidth
           component="a"
           href="/auth"
           color={PRIMARY_COLOR}
         >
-          Log In
+          About
         </Button>
       </div>
+      <Text>
+        All rights to the original music and album art belong to their
+        respective owners.
+      </Text>
+      <Text>
+        Please support Jorge Rivera-Herrans and Winion Entertainment LLC!
+      </Text>
     </div>
   );
 }
