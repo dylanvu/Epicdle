@@ -177,7 +177,7 @@ export default function Game() {
   }
 
   function animateIncorrectGuess() {
-    const absXShakeMax = 10;
+    const absXShakeMax = 0.8;
 
     animate(
       scope.current,
@@ -256,13 +256,13 @@ export default function Game() {
     }
   }
 
-  let progressColorOverride: string | undefined;
+  let endGameProgressColorOverride: string | null;
   if (gameState === "win") {
-    progressColorOverride = "green";
+    endGameProgressColorOverride = "green";
   } else if (gameState === "lose") {
-    progressColorOverride = "red";
+    endGameProgressColorOverride = "red";
   } else {
-    progressColorOverride = undefined;
+    endGameProgressColorOverride = null;
   }
 
   return (
@@ -311,8 +311,8 @@ export default function Game() {
               guessIndex={index}
               guessesCount={guesses.length}
               color={
-                progressColorOverride
-                  ? progressColorOverride
+                endGameProgressColorOverride
+                  ? endGameProgressColorOverride
                   : index === guesses.length
                   ? PRIMARY_COLOR
                   : "red"
