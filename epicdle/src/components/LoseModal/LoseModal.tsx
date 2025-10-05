@@ -3,6 +3,8 @@ import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./LoseModal.module.css";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/audio/playButtonSound";
+import ShareButton from "../ShareButton.tsx/ShareButton";
+import { MAX_GUESSES } from "@/constants";
 
 export default function TutorialModal({
   openState,
@@ -23,6 +25,7 @@ export default function TutorialModal({
       className={styles.game}
     >
       <Text>RIP</Text>
+      <ShareButton guessesUsed={MAX_GUESSES} win={false} />
       <Button
         onClick={() => {
           modalHandler.close();
