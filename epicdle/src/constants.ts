@@ -10,6 +10,16 @@ export const MAX_GUESSES = 6;
  */
 export const SECONDS_PER_GUESS = 0.5;
 
+/**
+ * IANA time zone identifier
+ * Some other ones:
+ * "America/New_York"	Eastern Time (US & Canada)
+ * "America/Chicago"	Central Time (US & Canada)
+ * "America/Denver"	Mountain Time (US & Canada)
+ * "America/Los_Angeles"	Pacific Time (US & Canada)
+ */
+export const RESET_TIMEZONE = "America/Chicago";
+
 const ASSET_BASE_PATH = "";
 
 export const ALBUM_NAME_TO_COVER_MAP: Record<string, string> = {
