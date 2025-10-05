@@ -33,8 +33,7 @@ export default function ShareButton({
     navigator.clipboard.writeText(
       `Epicdle XYZ ${guessesUsed}/${MAX_GUESSES}
 ${guessesString}
-https://epicdle.vercel.app/
-`
+https://epicdle.vercel.app/`
     );
   }
 
