@@ -2,6 +2,7 @@ import { useButtonSound } from "@/audio/playButtonSound";
 import { MAX_GUESSES } from "@/constants";
 import { PRIMARY_COLOR } from "@/theme";
 import { Button } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { IconShare } from "@tabler/icons-react";
 
 export default function ShareButton({
@@ -35,6 +36,14 @@ export default function ShareButton({
 ${guessesString}
 https://epicdle.vercel.app/`
     );
+
+    // show a toast
+    notifications.show({
+      title: "Copied results to clipboard!",
+      message: "Share your results with your friends!",
+      position: "bottom-right",
+      color: PRIMARY_COLOR,
+    });
   }
 
   return (

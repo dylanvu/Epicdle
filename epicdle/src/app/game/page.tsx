@@ -8,6 +8,7 @@ import {
   IconArrowRight,
   IconSearch,
   IconQuestionMark,
+  IconChartBarPopular,
 } from "@tabler/icons-react";
 
 import { Song } from "@/interfaces/interfaces";
@@ -319,19 +320,40 @@ export default function Game() {
             Submit Guess
           </Button>
         </div>
-        <Button
-          leftSection={<IconQuestionMark />}
-          variant="default"
-          onClick={() => {
-            helpHandler.open();
-          }}
-          aria-label="How to Play"
-          w="100%"
-          mt="md"
-          disabled={gameState !== "play"}
-        >
-          How to Play
-        </Button>
+        {gameState !== "win" && gameState !== "lose" ? (
+          <Button
+            leftSection={<IconQuestionMark />}
+            variant="default"
+            onClick={() => {
+              playButtonSound();
+              helpHandler.open();
+            }}
+            aria-label="How to Play"
+            w="100%"
+            mt="md"
+            disabled={gameState !== "play"}
+          >
+            How to Play
+          </Button>
+        ) : (
+          <Button
+            leftSection={<IconChartBarPopular />}
+            variant="default"
+            onClick={() => {
+              playButtonSound();
+              if (gameState === "win") {
+                winModalHandler.open();
+              } else if (gameState === "lose") {
+                loseModalHandler.open();
+              }
+            }}
+            aria-label="View Today's Results"
+            w="100%"
+            mt="md"
+          >
+            View Today's Results
+          </Button>
+        )}
       </div>
     </div>
   );

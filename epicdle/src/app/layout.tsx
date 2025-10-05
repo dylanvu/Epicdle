@@ -2,8 +2,11 @@ import "@mantine/core/styles.css";
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import { theme } from "@/theme";
+import Head from "next/head";
+import { Notifications } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -24,8 +27,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
+      <Head>
+        <title>Epicdle</title>
+        <ColorSchemeScript />
+      </Head>
       <body className={`${lato.className}`}>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          <Notifications />
+          {children}
+        </MantineProvider>
       </body>
     </html>
   );
