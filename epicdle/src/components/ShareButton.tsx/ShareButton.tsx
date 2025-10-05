@@ -1,0 +1,56 @@
+import { useButtonSound } from "@/audio/playButtonSound";
+import { MAX_GUESSES } from "@/constants";
+import { PRIMARY_COLOR } from "@/theme";
+import { Button } from "@mantine/core";
+import { IconShare } from "@tabler/icons-react";
+
+export default function ShareButton({
+  guessesUsed,
+  win,
+}: {
+  guessesUsed: number;
+  win: boolean;
+}) {
+  const playButtonSound = useButtonSound();
+
+  function generateShareMessage() {
+    const guessEmoji = "🎵";
+    const winEmoji = "🏆";
+    const loseEmoji = "🌩️";
+    // for each incorrect guess, create a black square
+    let guessesString = "";
+    for (let i = 0; i < guessesUsed - 1; i++) {
+      guessesString += `${guessEmoji} `;
+    }
+
+    if (win) {
+      guessesString += winEmoji;
+    } else {
+      guessesString += loseEmoji;
+    }
+
+    // TODO: update the link
+    navigator.clipboard.writeText(
+      `Epicdle XYZ ${guessesUsed}/${MAX_GUESSES}
+${guessesString}
+https://epicdle.vercel.app/
+`
+    );
+  }
+
+  return (
+    <Button
+      leftSection={<IconShare />}
+      mt="md"
+      w="100%"
+      color={PRIMARY_COLOR}
+      variant="outline"
+      onClick={() => {
+        playButtonSound();
+        generateShareMessage();
+      }}
+    >
+      Share Results
+    </Button>
+  );
+}

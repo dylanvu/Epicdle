@@ -141,6 +141,8 @@ export default function Game() {
    * this function is called after the submit sound
    */
   function handleWin() {
+    // play the win sound
+    playAudioWithoutUseSound("/sfx/triumphant_orchestra.mp3");
     // progress the UI (record the guess)
     progressGuessUI();
     setGameState("win");
