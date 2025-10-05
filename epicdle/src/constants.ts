@@ -1,5 +1,8 @@
 import { Song } from "./interfaces/interfaces";
 
+/**
+ * The maximum number of guesses the user can make, inclusive
+ */
 export const MAX_GUESSES = 6;
 
 /**
