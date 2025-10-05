@@ -1,5 +1,6 @@
 import { Progress } from "@mantine/core";
 import React from "react";
+import { AnimationScope } from "motion";
 
 /**
  *
@@ -17,13 +18,24 @@ function GuessProgress({
   color: string;
 }) {
   return (
-    <Progress
-      size="lg"
-      color={color}
-      value={guessesCount >= guessIndex ? 100 : 0}
-      transitionDuration={200}
-      flex={1}
-    />
+    <div
+      data-guess-index={guessIndex}
+      style={{
+        // pivot at the bottom so "jumping" animation looks natural
+        transformOrigin: "center bottom",
+        willChange: "transform",
+        display: "flex",
+        flex: 1,
+      }}
+    >
+      <Progress
+        size="lg"
+        color={color}
+        value={guessesCount >= guessIndex ? 100 : 0}
+        transitionDuration={200}
+        flex={1}
+      />
+    </div>
   );
 }
 

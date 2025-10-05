@@ -29,7 +29,7 @@ import WinModal from "@/components/WinModal/WinModal";
 import LoseModal from "@/components/LoseModal/LoseModal";
 import { useButtonSound } from "@/audio/playButtonSound";
 import { useSubmitSound } from "@/audio/playSubmitSound";
-import { motion, useAnimate } from "motion/react";
+import { Easing, motion, useAnimate } from "motion/react";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -64,6 +64,7 @@ export default function Game() {
   const playSubmitWrongSound = useSubmitSound(handleWrong);
 
   const [scope, animate] = useAnimate();
+  const [progressBarScope, animateWave] = useAnimate();
 
   // the available audio will always be the number of guesses made + 1 second
   const targetSeconds = useMemo(() => {
@@ -189,6 +190,46 @@ export default function Game() {
     );
   }
 
+  function performWaveAnimation({
+    amplitude = 20, // px
+    duration = 0.45, // seconds
+    stagger = 0.06, // seconds between items
+    easing = "easeInOut",
+    onlyFilled = false, // if true, animate only already-filled bars (< guesses.length)
+    onlyCurrent = false, // if true, animate only the current guess index (guesses.length)
+  }: {
+    amplitude?: number;
+    duration?: number;
+    stagger?: number;
+    easing?: Easing;
+    onlyFilled?: boolean;
+    onlyCurrent?: boolean;
+  }) {
+    for (let i = 0; i < MAX_GUESSES; i++) {
+      // optional filters
+      if (onlyFilled && i >= guesses.length) continue;
+      if (onlyCurrent && i !== guesses.length) continue;
+
+      const el =
+        scope.current?.querySelector(`[data-guess-index="${i}"]`) ?? null;
+      if (!el) continue;
+
+      animateWave(
+        el,
+        {
+          y: [0, -amplitude, 0],
+          scaleY: [1, 0.92, 1],
+          scaleX: [1, 1.04, 1],
+        },
+        {
+          duration,
+          delay: i * stagger,
+          ease: easing,
+        }
+      );
+    }
+  }
+
   function handleWrong() {
     // play the wrong sound
     playAudioWithoutUseSound("/sfx/thunder_wrong_guess.mp3");
@@ -206,7 +247,13 @@ export default function Game() {
     }
 
     setGameState("submit");
-    // TODO: trigger submit visual effect
+
+    performWaveAnimation({
+      amplitude: 20,
+      duration: 1,
+      stagger: 0.05,
+      onlyFilled: false,
+    });
 
     // store the submitted song in a ref so callbacks (which run after sound) use the exact submitted song
     lastSubmittedSongRef.current = selectedSong;
