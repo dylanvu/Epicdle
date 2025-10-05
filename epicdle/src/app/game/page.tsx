@@ -29,6 +29,7 @@ import WinModal from "@/components/WinModal/WinModal";
 import LoseModal from "@/components/LoseModal/LoseModal";
 import { useButtonSound } from "@/audio/playButtonSound";
 import { useSubmitSound } from "@/audio/playSubmitSound";
+import { motion, useAnimate } from "motion/react";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -61,6 +62,8 @@ export default function Game() {
   const playSubmitWinSound = useSubmitSound(handleWin);
   const playSubmitLossSound = useSubmitSound(handleLose);
   const playSubmitWrongSound = useSubmitSound(handleWrong);
+
+  const [scope, animate] = useAnimate();
 
   // the available audio will always be the number of guesses made + 1 second
   const targetSeconds = useMemo(() => {
@@ -148,7 +151,18 @@ export default function Game() {
     progressGuessUI();
     setGameState("win");
     winModalHandler.open();
-    // TODO: trigger win visual effect
+    animate(
+      scope.current,
+      {
+        y: [0, -20, 0], // up, then back down
+        scaleY: [1, 0.9, 1], // squash slightly on landing
+        scaleX: [1, 1.05, 1], // stretch slightly on landing
+      },
+      {
+        duration: 0.5,
+        ease: "easeOut",
+      }
+    );
   }
 
   function handleLose() {
@@ -159,17 +173,29 @@ export default function Game() {
     // progress the UI state
     setGameState("lose");
     loseModalHandler.open();
-    // TODO: trigger the lose visual effect
+    animateIncorrectGuess();
+  }
+
+  function animateIncorrectGuess() {
+    const absXShakeMax = 10;
+
+    animate(
+      scope.current,
+      {
+        x: [0, -absXShakeMax, absXShakeMax, -absXShakeMax, absXShakeMax, 0],
+        y: [absXShakeMax, 0, -absXShakeMax, absXShakeMax, 0, -absXShakeMax],
+      },
+      { duration: 0.4, ease: "easeInOut" }
+    );
   }
 
   function handleWrong() {
     // play the wrong sound
-    // TODO: this is not working
     playAudioWithoutUseSound("/sfx/thunder_wrong_guess.mp3");
     // progress the UI
     progressGuessUI();
     setGameState("play");
-    // TODO: trigger the wrong guess visual effect
+    animateIncorrectGuess();
   }
 
   function handleSubmit() {
@@ -240,7 +266,7 @@ export default function Game() {
   }
 
   return (
-    <div className={styles.gamePage}>
+    <motion.div ref={scope} className={styles.gamePage}>
       <TutorialModal openState={openedHelp} modalHandler={helpHandler} />
       <SongListModal
         openState={openedSearchModal}
@@ -355,6 +381,6 @@ export default function Game() {
           </Button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
