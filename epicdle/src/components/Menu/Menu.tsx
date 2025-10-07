@@ -3,18 +3,20 @@ import { Button, Text } from "@mantine/core";
 import styles from "./Menu.module.css";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/audio/playButtonSound";
+import { useDisclosure } from "@mantine/hooks";
+import DisclaimerModal from "@/components/modals/DisclaimerModal/DisclaimerModal";
 
 export default function Menu() {
+  const [openedAbout, aboutHandler] = useDisclosure(false);
+
   const playButtonSound = useButtonSound(() => {
     // navigate to the game page
     window.location.href = "/game";
   });
-  const playAboutButtonSound = useButtonSound(() => {
-    // navigate to the about page
-    window.location.href = "/about";
-  });
+  const playAboutButtonSound = useButtonSound();
   return (
     <div className={styles.Menu}>
+      <DisclaimerModal openState={openedAbout} modalHandler={aboutHandler} />
       <div>
         <Button
           onClick={() => playButtonSound()}
@@ -32,20 +34,20 @@ export default function Menu() {
           size="lg"
           variant="outline"
           fullWidth
-          component="a"
-          href="/auth"
+          onClick={() => {
+            playAboutButtonSound();
+            aboutHandler.open();
+          }}
           color={PRIMARY_COLOR}
         >
-          About
+          Credits & Disclaimer
         </Button>
       </div>
       <Text>
-        All rights to the original music and album art belong to their
-        respective owners.
+        All rights to the original music, sound effects, and album art belong to
+        their respective owners.
       </Text>
-      <Text>
-        Please support Jorge Rivera-Herrans and Winion Entertainment LLC!
-      </Text>
+      <Text>Please see the credits section for attributions.</Text>
     </div>
   );
 }
