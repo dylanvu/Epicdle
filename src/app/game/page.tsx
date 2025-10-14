@@ -1,5 +1,5 @@
 "use client";
-import { Button, Group, Text } from "@mantine/core";
+import { Button, Group, Text, Loader, Center } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Game.module.css";
@@ -23,7 +23,7 @@ import {
 import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
 import PlayAudioButton from "@/components/PlayAudioButton/PlayAudioButton";
 import TutorialModal from "@/components/modals/TutorialModal/TutorialModal";
-import SongListModal from "@/components/SongListModal/SongListModal";
+import SongListModal from "@/components/modals/SongListModal/SongListModal";
 import { PRIMARY_COLOR } from "@/theme";
 import WinModal from "@/components/modals/WinModal/WinModal";
 import LoseModal from "@/components/modals/LoseModal/LoseModal";
@@ -37,8 +37,8 @@ export default function Game() {
   const [openedWinModal, winModalHandler] = useDisclosure(false);
   const [openedLoseModal, loseModalHandler] = useDisclosure(false);
   const [gameState, setGameState] = useState<
-    "win" | "lose" | "submit" | "loading" | "play"
-  >("play");
+    "initial_loading" | "win" | "lose" | "submit" | "loading" | "play"
+  >("initial_loading");
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playingAudio, setPlayingAudio] = useState(false);
@@ -55,6 +55,7 @@ export default function Game() {
   useEffect(() => {
     // TODO: only show this if the user has not played ever
     helpHandler.open();
+    setGameState("play");
   }, []);
 
   // load the sounds
@@ -347,108 +348,114 @@ export default function Game() {
         guessesUsed={guesses.length}
       />
       <LoseModal openState={openedLoseModal} modalHandler={loseModalHandler} />
-      <div className={styles.gameplayArea}>
-        <div className={styles.albumCover}>
-          <Image
-            src={
-              selectedSong?.album
-                ? ALBUM_NAME_TO_COVER_MAP[selectedSong.album]
-                : "/Epic_The_Musical_Album_Cover.webp"
-            }
-            alt="Epicdle"
-            // TODO: fix the sizing of all images
-            width={400}
-            height={400}
-            style={{ opacity: gameState !== "win" ? 0.5 : 1 }}
-          />
-          <GuessHistoryOverlay guesses={guesses} />
-        </div>
-        <Text className={styles.songTitle}>
-          {selectedSong?.name ?? "Select a song below..."}
-        </Text>
-        <AudioSlider
-          availableGuesses={MAX_GUESSES}
-          currentSongTime={audioProgress}
-        />
-        <Group grow wrap="nowrap" gap={5} w="100%" mt="md" mb="md">
-          {/* // Generate a Progress Bar segment for each possible guess */}
-          {[...Array(MAX_GUESSES)].map((_, index) => (
-            // change the color to be red for past guesses and cyan for the current guess
-            <GuessProgress
-              key={`guess-progress-${index}`}
-              guessIndex={index}
-              guessesCount={guesses.length}
-              color={
-                endGameProgressColorOverride
-                  ? endGameProgressColorOverride
-                  : index === guesses.length
-                  ? PRIMARY_COLOR
-                  : "red"
+      {gameState === "initial_loading" ? (
+        <Center h={"100vh"}>
+          <Loader color={PRIMARY_COLOR} />
+        </Center>
+      ) : (
+        <div className={styles.gameplayArea}>
+          <div className={styles.albumCover}>
+            <Image
+              src={
+                selectedSong?.album
+                  ? ALBUM_NAME_TO_COVER_MAP[selectedSong.album]
+                  : "/Epic_The_Musical_Album_Cover.webp"
               }
+              alt="Epicdle"
+              // TODO: fix the sizing of all images
+              width={400}
+              height={400}
+              style={{ opacity: gameState !== "win" ? 0.5 : 1 }}
             />
-          ))}
-        </Group>
-        <div className={styles.buttonArea}>
-          <Button
-            leftSection={<IconSearch />}
-            variant="default"
-            onClick={handleSongSearch}
-            aria-label="Search for a Song"
-            disabled={gameState !== "play"}
-          >
-            Select Song
-          </Button>
-          {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
-          <audio ref={audioRef} src="/sample.mp3" preload="auto" />
-          <PlayAudioButton
-            playing={playingAudio}
-            setPlaying={setPlayingAudio}
+            <GuessHistoryOverlay guesses={guesses} />
+          </div>
+          <Text className={styles.songTitle}>
+            {selectedSong?.name ?? "Select a song below..."}
+          </Text>
+          <AudioSlider
+            availableGuesses={MAX_GUESSES}
+            currentSongTime={audioProgress}
           />
-          <Button
-            rightSection={<IconArrowRight />}
-            variant="default"
-            onClick={handleSubmit}
-            aria-label="Submit Song Guess"
-            disabled={selectedSong === undefined || gameState !== "play"}
-          >
-            Submit Guess
-          </Button>
+          <Group grow wrap="nowrap" gap={5} w="100%" mt="md" mb="md">
+            {/* // Generate a Progress Bar segment for each possible guess */}
+            {[...Array(MAX_GUESSES)].map((_, index) => (
+              // change the color to be red for past guesses and cyan for the current guess
+              <GuessProgress
+                key={`guess-progress-${index}`}
+                guessIndex={index}
+                guessesCount={guesses.length}
+                color={
+                  endGameProgressColorOverride
+                    ? endGameProgressColorOverride
+                    : index === guesses.length
+                    ? PRIMARY_COLOR
+                    : "red"
+                }
+              />
+            ))}
+          </Group>
+          <div className={styles.buttonArea}>
+            <Button
+              leftSection={<IconSearch />}
+              variant="default"
+              onClick={handleSongSearch}
+              aria-label="Search for a Song"
+              disabled={gameState !== "play"}
+            >
+              Select Song
+            </Button>
+            {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
+            <audio ref={audioRef} src="/sample.mp3" preload="auto" />
+            <PlayAudioButton
+              playing={playingAudio}
+              setPlaying={setPlayingAudio}
+            />
+            <Button
+              rightSection={<IconArrowRight />}
+              variant="default"
+              onClick={handleSubmit}
+              aria-label="Submit Song Guess"
+              disabled={selectedSong === undefined || gameState !== "play"}
+            >
+              Submit Guess
+            </Button>
+          </div>
+          {gameState !== "win" && gameState !== "lose" ? (
+            <Button
+              leftSection={<IconQuestionMark />}
+              variant="default"
+              onClick={() => {
+                playButtonSound();
+                helpHandler.open();
+              }}
+              aria-label="How to Play"
+              w="100%"
+              mt="md"
+              disabled={gameState !== "play"}
+            >
+              How to Play
+            </Button>
+          ) : (
+            <Button
+              leftSection={<IconChartBarPopular />}
+              variant="default"
+              onClick={() => {
+                playButtonSound();
+                if (gameState === "win") {
+                  winModalHandler.open();
+                } else if (gameState === "lose") {
+                  loseModalHandler.open();
+                }
+              }}
+              aria-label="View Today's Results"
+              w="100%"
+              mt="md"
+            >
+              View Today's Results
+            </Button>
+          )}
         </div>
-        {gameState !== "win" && gameState !== "lose" ? (
-          <Button
-            leftSection={<IconQuestionMark />}
-            variant="default"
-            onClick={() => {
-              playButtonSound();
-              helpHandler.open();
-            }}
-            aria-label="How to Play"
-            w="100%"
-            mt="md"
-            disabled={gameState !== "play"}
-          >
-            How to Play
-          </Button>
-        ) : (
-          <Button
-            leftSection={<IconChartBarPopular />}
-            variant="default"
-            onClick={() => {
-              playButtonSound();
-              if (gameState === "win") {
-                winModalHandler.open();
-              } else if (gameState === "lose") {
-                loseModalHandler.open();
-              }
-            }}
-            aria-label="View Today's Results"
-            w="100%"
-            mt="md"
-          >
-            View Today's Results
-          </Button>
-        )}
-      </div>
+      )}
     </motion.div>
   );
 }
