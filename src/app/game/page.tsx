@@ -30,6 +30,7 @@ import LoseModal from "@/components/modals/LoseModal/LoseModal";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
 import { Easing, motion, useAnimate } from "motion/react";
+import { useGameAudio } from "@/hooks/audio/useGameAudio";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -40,8 +41,8 @@ export default function Game() {
     "initial_loading" | "win" | "lose" | "submit" | "loading" | "play"
   >("initial_loading");
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [playingAudio, setPlayingAudio] = useState(false);
+  // const audioRef = useRef<HTMLAudioElement | null>(null);
+  // const [playingAudio, setPlayingAudio] = useState(false);
   const [guesses, setGuesses] = useState<Song[]>([]);
   const [selectedSong, setSelectedSong] = useState<Song>();
 
@@ -49,7 +50,7 @@ export default function Game() {
   const lastSubmittedSongRef = useRef<Song | undefined>(undefined);
 
   const rafRef = useRef<number | null>(null);
-  const [audioProgress, setAudioProgress] = useState(0);
+  // const [audioProgress, setAudioProgress] = useState(0);
   const lastProgressRef = useRef<number>(0);
 
   useEffect(() => {
@@ -81,16 +82,19 @@ export default function Game() {
     }
   }, [guesses, gameState]);
 
+  const { audioRef, playing, setPlaying, progress, setProgress } =
+    useGameAudio(targetSeconds);
+
   // when playingAudio is toggled, start/stop the audio
   useEffect(() => {
     const audioElement = audioRef.current;
 
-    if (playingAudio) {
+    if (playing) {
       // if the player has won, let all the audio play
       // if we hit the target seconds, go back to the start
       if (audioElement && audioElement?.currentTime >= targetSeconds) {
         audioElement.currentTime = 0;
-        setAudioProgress(0);
+        setProgress(0);
         lastProgressRef.current = 0;
       }
 
@@ -107,12 +111,12 @@ export default function Game() {
             // snap the audio back to the targetSeconds
             audioElement.currentTime = targetSeconds;
             // stop the audio
-            setPlayingAudio(false);
+            setPlaying(false);
           } else {
             // perform a throttled update
             if (audioElement) {
               if (audioElement.currentTime - lastProgressRef.current >= 0.05) {
-                setAudioProgress(audioElement.currentTime);
+                setProgress(audioElement.currentTime);
                 lastProgressRef.current = audioElement.currentTime;
               }
             }
@@ -131,7 +135,7 @@ export default function Game() {
       }
       // update the audio time to the current time
       if (audioElement) {
-        setAudioProgress(audioElement.currentTime);
+        setProgress(audioElement.currentTime);
         lastProgressRef.current = audioElement.currentTime;
       }
     }
@@ -142,7 +146,7 @@ export default function Game() {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [playingAudio, targetSeconds]);
+  }, [playing, targetSeconds]);
 
   function handleSongSearch() {
     playButtonSound();
@@ -310,7 +314,7 @@ export default function Game() {
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
       }
-      setAudioProgress(0);
+      setProgress(0);
       lastProgressRef.current = 0;
     }
   }
@@ -374,7 +378,7 @@ export default function Game() {
           </Text>
           <AudioSlider
             availableGuesses={MAX_GUESSES}
-            currentSongTime={audioProgress}
+            currentSongTime={progress}
           />
           <Group grow wrap="nowrap" gap={5} w="100%" mt="md" mb="md">
             {/* // Generate a Progress Bar segment for each possible guess */}
@@ -406,10 +410,7 @@ export default function Game() {
             </Button>
             {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
             <audio ref={audioRef} src="/sample.mp3" preload="auto" />
-            <PlayAudioButton
-              playing={playingAudio}
-              setPlaying={setPlayingAudio}
-            />
+            <PlayAudioButton playing={playing} setPlaying={setPlaying} />
             <Button
               rightSection={<IconArrowRight />}
               variant="default"
