@@ -43,6 +43,7 @@ export default function SongListModal({
       }}
       title="Select a song from the list:"
       className={styles.game}
+      lockScroll={false}
     >
       <TextInput
         placeholder="Search for a song..."

@@ -25,6 +25,7 @@ export default function TutorialModal({
       }}
       title="How to Play"
       className={styles.game}
+      lockScroll={false}
     >
       {showRealTutorial ? (
         <div>

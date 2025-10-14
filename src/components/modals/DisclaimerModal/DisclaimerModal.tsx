@@ -21,6 +21,7 @@ export default function DisclaimerModal({
       }}
       title="Credits & Disclaimer"
       className={styles.about}
+      lockScroll={false}
     >
       <Title order={2}>Attribution / Credits</Title>
       <Title order={3}>Music</Title>

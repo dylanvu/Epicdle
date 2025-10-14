@@ -24,6 +24,7 @@ export default function TutorialModal({
       }}
       title="You Won!"
       className={styles.game}
+      lockScroll={false}
     >
       <Text>You are a warrior of the mind!</Text>
       <ShareButton guessesUsed={guessesUsed} win={true} />

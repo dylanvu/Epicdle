@@ -23,6 +23,7 @@ export default function TutorialModal({
       }}
       title="You Lost..."
       className={styles.game}
+      lockScroll={false}
     >
       <Text>RIP</Text>
       <ShareButton guessesUsed={MAX_GUESSES} win={false} />
