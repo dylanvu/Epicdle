@@ -22,15 +22,12 @@ import {
 } from "@/constants";
 import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
 import PlayAudioButton from "@/components/PlayAudioButton/PlayAudioButton";
-import TutorialModal from "@/components/modals/TutorialModal/TutorialModal";
-import SongListModal from "@/components/modals/SongListModal/SongListModal";
 import { PRIMARY_COLOR } from "@/theme";
-import WinModal from "@/components/modals/WinModal/WinModal";
-import LoseModal from "@/components/modals/LoseModal/LoseModal";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
 import { Easing, motion, useAnimate } from "motion/react";
 import { useGameAudio } from "@/hooks/audio/useGameAudio";
+import GameModals from "@/components/modals/GameModals";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -339,19 +336,18 @@ export default function Game() {
 
   return (
     <motion.div ref={scope} className={styles.gamePage}>
-      <TutorialModal openState={openedHelp} modalHandler={helpHandler} />
-      <SongListModal
-        openState={openedSearchModal}
-        modalHandler={searchModalHandler}
+      <GameModals
+        openedHelp={openedHelp}
+        helpHandler={helpHandler}
+        openedSearchModal={openedSearchModal}
+        searchModalHandler={searchModalHandler}
+        openedWinModal={openedWinModal}
+        winModalHandler={winModalHandler}
+        openedLoseModal={openedLoseModal}
+        loseModalHandler={loseModalHandler}
         setSelectedSong={setSelectedSong}
         guesses={guesses}
       />
-      <WinModal
-        openState={openedWinModal}
-        modalHandler={winModalHandler}
-        guessesUsed={guesses.length}
-      />
-      <LoseModal openState={openedLoseModal} modalHandler={loseModalHandler} />
       {gameState === "initial_loading" ? (
         <Center h={"100vh"}>
           <Loader color={PRIMARY_COLOR} />
