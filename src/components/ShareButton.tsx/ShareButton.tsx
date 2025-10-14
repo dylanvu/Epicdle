@@ -1,4 +1,4 @@
-import { useButtonSound } from "@/audio/playButtonSound";
+import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { MAX_GUESSES } from "@/constants";
 import { PRIMARY_COLOR } from "@/theme";
 import { Button } from "@mantine/core";

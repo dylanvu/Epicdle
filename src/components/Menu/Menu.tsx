@@ -2,7 +2,7 @@
 import { Button, Text } from "@mantine/core";
 import styles from "./Menu.module.css";
 import { PRIMARY_COLOR } from "@/theme";
-import { useButtonSound } from "@/audio/playButtonSound";
+import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useDisclosure } from "@mantine/hooks";
 import DisclaimerModal from "@/components/modals/DisclaimerModal/DisclaimerModal";
 

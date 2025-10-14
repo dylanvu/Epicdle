@@ -2,7 +2,7 @@ import { Button, Modal, Text } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./LoseModal.module.css";
 import { PRIMARY_COLOR } from "@/theme";
-import { useButtonSound } from "@/audio/playButtonSound";
+import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 import { MAX_GUESSES } from "@/constants";
 

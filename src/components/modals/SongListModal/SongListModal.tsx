@@ -7,7 +7,7 @@ import GuessOption from "@/components/GuessOption/GuessOption";
 import { Dispatch, SetStateAction, useMemo } from "react";
 import { Song } from "@/interfaces/interfaces";
 import { PRIMARY_COLOR } from "@/theme";
-import { useButtonSound } from "@/audio/playButtonSound";
+import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useState } from "react";
 import { IconTrash } from "@tabler/icons-react";
 

@@ -2,7 +2,7 @@ import { Button, Modal, Text } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./WinModal.module.css";
 import { PRIMARY_COLOR } from "@/theme";
-import { useButtonSound } from "@/audio/playButtonSound";
+import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 
 export default function TutorialModal({

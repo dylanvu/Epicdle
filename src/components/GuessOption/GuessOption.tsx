@@ -5,7 +5,7 @@ import { IconChevronRight } from "@tabler/icons-react";
 import styles from "./GuessOption.module.css";
 import { Dispatch, SetStateAction } from "react";
 import { Text } from "@mantine/core";
-import { useButtonSound } from "@/audio/playButtonSound";
+import { useButtonSound } from "@/hooks/audio/useButtonSound";
 
 export default function GuessOption({
   song,

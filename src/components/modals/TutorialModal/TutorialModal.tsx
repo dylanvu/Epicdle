@@ -4,7 +4,7 @@ import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./TutorialModal.module.css";
 import { MAX_GUESSES } from "@/constants";
 import { PRIMARY_COLOR } from "@/theme";
-import { useButtonSound } from "@/audio/playButtonSound";
+import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useState } from "react";
 
 export default function TutorialModal({

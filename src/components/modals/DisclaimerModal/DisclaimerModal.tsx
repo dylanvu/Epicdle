@@ -2,7 +2,7 @@ import { Button, Modal, Text, Title, List, Anchor } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./DisclaimerModal.module.css";
 import { PRIMARY_COLOR } from "@/theme";
-import { useButtonSound } from "@/audio/playButtonSound";
+import { useButtonSound } from "@/hooks/audio/useButtonSound";
 
 export default function DisclaimerModal({
   openState,

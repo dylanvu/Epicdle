@@ -27,8 +27,8 @@ import SongListModal from "@/components/modals/SongListModal/SongListModal";
 import { PRIMARY_COLOR } from "@/theme";
 import WinModal from "@/components/modals/WinModal/WinModal";
 import LoseModal from "@/components/modals/LoseModal/LoseModal";
-import { useButtonSound } from "@/audio/playButtonSound";
-import { useSubmitSound } from "@/audio/playSubmitSound";
+import { useButtonSound } from "@/hooks/audio/useButtonSound";
+import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
 import { Easing, motion, useAnimate } from "motion/react";
 
 export default function Game() {
