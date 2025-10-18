@@ -1,6 +1,6 @@
 "use client";
 import { Button, Group, Text, Loader, Center } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, UseDisclosureHandlers } from "@mantine/hooks";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Game.module.css";
 import Image from "next/image";
@@ -97,10 +97,13 @@ export default function Game() {
     lastProgressRef,
   } = useGameAudio(targetSeconds);
 
-  function handleSongSearch() {
+  /**
+   * Generic function for opening a modal with a sound effect attached
+   * @param handler
+   */
+  function openModalHandler(handler: UseDisclosureHandlers) {
     playButtonSound();
-    // open up the guessing modal
-    searchModalHandler.open();
+    handler.open();
   }
 
   /**
@@ -337,7 +340,7 @@ export default function Game() {
             <Button
               leftSection={<IconSearch />}
               variant="default"
-              onClick={handleSongSearch}
+              onClick={() => openModalHandler(searchModalHandler)}
               aria-label="Search for a Song"
               disabled={gameState !== "play"}
               classNames={{
@@ -370,10 +373,7 @@ export default function Game() {
             <Button
               leftSection={<IconQuestionMark />}
               variant="default"
-              onClick={() => {
-                playButtonSound();
-                helpHandler.open();
-              }}
+              onClick={() => openModalHandler(helpHandler)}
               aria-label="How to Play"
               w="100%"
               mt="md"
@@ -386,11 +386,10 @@ export default function Game() {
               leftSection={<IconChartBarPopular />}
               variant="default"
               onClick={() => {
-                playButtonSound();
                 if (gameState === "win") {
-                  winModalHandler.open();
+                  openModalHandler(winModalHandler);
                 } else if (gameState === "lose") {
-                  loseModalHandler.open();
+                  openModalHandler(loseModalHandler);
                 }
               }}
               aria-label="View Today's Results"
