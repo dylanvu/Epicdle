@@ -44,9 +44,13 @@ export default function GameModals({
       <WinModal
         openState={openedWinModal}
         modalHandler={winModalHandler}
-        guessesUsed={guesses.length}
+        guesses={guesses}
       />
-      <LoseModal openState={openedLoseModal} modalHandler={loseModalHandler} />
+      <LoseModal
+        openState={openedLoseModal}
+        modalHandler={loseModalHandler}
+        guesses={guesses}
+      />
     </>
   );
 }

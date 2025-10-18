@@ -33,7 +33,6 @@ import { useWaveAnimation } from "@/hooks/useWaveAnimation";
 
 import GameModals from "@/components/modals/GameModals";
 import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
-import { s } from "motion/react-client";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -274,17 +273,18 @@ export default function Game() {
         borderColor: endGameProgressColorOverride ?? "",
       }}
     >
-      <Confetti
-        run={showConfetti}
-        width={window.innerWidth}
-        height={window.innerHeight}
-        recycle={false}
-        numberOfPieces={400}
-        tweenDuration={2000}
-        gravity={0.1}
-        initialVelocityX={10}
-        initialVelocityY={10}
-      />
+      {gameState !== "initial_loading" ? (
+        <Confetti
+          run={showConfetti}
+          recycle={false}
+          numberOfPieces={400}
+          tweenDuration={2000}
+          gravity={0.1}
+          initialVelocityX={10}
+          initialVelocityY={10}
+        />
+      ) : null}
+
       <EpicdleTitle />
       <GameModals
         openedHelp={openedHelp}

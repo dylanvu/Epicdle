@@ -5,15 +5,16 @@ import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 import ModalTitle from "../ModalTitle";
+import { Song } from "@/interfaces/interfaces";
 
 export default function TutorialModal({
   openState,
   modalHandler,
-  guessesUsed,
+  guesses,
 }: {
   openState: boolean;
   modalHandler: UseDisclosureHandlers;
-  guessesUsed: number;
+  guesses: Song[];
 }) {
   const playButtonSound = useButtonSound();
   return (
@@ -28,7 +29,7 @@ export default function TutorialModal({
       lockScroll={false}
     >
       <Text>You are a warrior of the mind!</Text>
-      <ShareButton guessesUsed={guessesUsed} win={true} />
+      <ShareButton guesses={guesses} win={true} />
       <Button
         onClick={() => {
           modalHandler.close();

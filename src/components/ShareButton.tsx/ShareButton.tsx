@@ -4,12 +4,13 @@ import { PRIMARY_COLOR } from "@/theme";
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconShare } from "@tabler/icons-react";
+import { Song } from "@/interfaces/interfaces";
 
 export default function ShareButton({
-  guessesUsed,
+  guesses,
   win,
 }: {
-  guessesUsed: number;
+  guesses: Song[];
   win: boolean;
 }) {
   const playButtonSound = useButtonSound();
@@ -20,7 +21,8 @@ export default function ShareButton({
     const loseEmoji = "🌩️";
     // for each incorrect guess, create a black square
     let guessesString = "";
-    for (let i = 0; i < guessesUsed - 1; i++) {
+
+    for (let i = 0; i < guesses.length - 1; i++) {
       guessesString += `${guessEmoji} `;
     }
 
@@ -31,8 +33,9 @@ export default function ShareButton({
     }
 
     // TODO: update the link
+    // need to add 1 to the guesses length since winning guesses are not counted in the guess history array
     navigator.clipboard.writeText(
-      `Epicdle XYZ ${win ? guessesUsed : "X"}/${MAX_GUESSES}
+      `Epicdle XYZ ${win ? guesses.length + 1 : "X"}/${MAX_GUESSES}
 ${guessesString}
 https://epicdle.vercel.app/`
     );

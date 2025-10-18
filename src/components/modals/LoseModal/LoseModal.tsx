@@ -6,13 +6,16 @@ import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 import { MAX_GUESSES } from "@/constants";
 import ModalTitle from "../ModalTitle";
+import { Song } from "@/interfaces/interfaces";
 
 export default function TutorialModal({
   openState,
   modalHandler,
+  guesses,
 }: {
   openState: boolean;
   modalHandler: UseDisclosureHandlers;
+  guesses: Song[];
 }) {
   const playButtonSound = useButtonSound();
   return (
@@ -27,7 +30,7 @@ export default function TutorialModal({
       lockScroll={false}
     >
       <Text>RIP</Text>
-      <ShareButton guessesUsed={MAX_GUESSES} win={false} />
+      <ShareButton guesses={guesses} win={false} />
       <Button
         onClick={() => {
           modalHandler.close();
