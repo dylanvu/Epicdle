@@ -81,7 +81,7 @@ export default function Game() {
     maxGuesses: MAX_GUESSES,
   });
 
-  // the available audio will always be the number of guesses made + 1 second
+  // the available audio will always be the number of guesses made + 1 additional audio segment
   const targetSeconds = useMemo(() => {
     // let the player hear the whole song if they win, and also prevent the game from showing too much audio if they have lost
     if (guesses.length >= MAX_GUESSES || gameState === "win") {
