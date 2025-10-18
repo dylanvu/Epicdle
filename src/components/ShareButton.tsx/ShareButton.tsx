@@ -32,7 +32,7 @@ export default function ShareButton({
 
     // TODO: update the link
     navigator.clipboard.writeText(
-      `Epicdle XYZ ${guessesUsed}/${MAX_GUESSES}
+      `Epicdle XYZ ${win ? guessesUsed : "X"}/${MAX_GUESSES}
 ${guessesString}
 https://epicdle.vercel.app/`
     );
