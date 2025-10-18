@@ -50,10 +50,6 @@ export default function Game() {
   // keep the song that was submitted (so callbacks that run later use this exact song)
   const lastSubmittedSongRef = useRef<Song | undefined>(undefined);
 
-  const rafRef = useRef<number | null>(null);
-  // const [audioProgress, setAudioProgress] = useState(0);
-  const lastProgressRef = useRef<number>(0);
-
   useEffect(() => {
     // TODO: only show this if the user has not played ever
     helpHandler.open();
@@ -92,71 +88,14 @@ export default function Game() {
     }
   }, [guesses, gameState]);
 
-  const { audioRef, playing, setPlaying, progress, setProgress } =
-    useGameAudio(targetSeconds);
-
-  // when playingAudio is toggled, start/stop the audio
-  useEffect(() => {
-    const audioElement = audioRef.current;
-
-    if (playing) {
-      // if the player has won, let all the audio play
-      // if we hit the target seconds, go back to the start
-      if (audioElement && audioElement?.currentTime >= targetSeconds) {
-        audioElement.currentTime = 0;
-        setProgress(0);
-        lastProgressRef.current = 0;
-      }
-
-      // start the audio
-      audioElement?.play();
-
-      // use RAF to monitor the audio time
-      const loop = () => {
-        // cancel the animation frame, let's process the current frame first
-        cancelAnimationFrame(rafRef.current!);
-        if (audioElement) {
-          // only stop the music if the player has not won AND we are over the time limit given
-          if (audioElement.currentTime >= targetSeconds) {
-            // snap the audio back to the targetSeconds
-            audioElement.currentTime = targetSeconds;
-            // stop the audio
-            setPlaying(false);
-          } else {
-            // perform a throttled update
-            if (audioElement) {
-              if (audioElement.currentTime - lastProgressRef.current >= 0.05) {
-                setProgress(audioElement.currentTime);
-                lastProgressRef.current = audioElement.currentTime;
-              }
-            }
-            rafRef.current = requestAnimationFrame(loop);
-          }
-        }
-      };
-
-      rafRef.current = requestAnimationFrame(loop);
-    } else {
-      // the user has pressed pause, so pause the audio
-      audioElement?.pause();
-      // stop any animation frame
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-      // update the audio time to the current time
-      if (audioElement) {
-        setProgress(audioElement.currentTime);
-        lastProgressRef.current = audioElement.currentTime;
-      }
-    }
-
-    return () => {
-      // cleanup
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [playing, targetSeconds]);
+  const {
+    audioRef,
+    playing,
+    setPlaying,
+    progress,
+    setProgress,
+    lastProgressRef,
+  } = useGameAudio(targetSeconds);
 
   function handleSongSearch() {
     playButtonSound();

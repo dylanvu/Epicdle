@@ -23,9 +23,14 @@ export function useGameAudio(targetSeconds: number) {
       const loop = () => {
         cancelAnimationFrame(rafRef.current!);
         if (!audio) return;
+        // only stop the music if the player has not won AND we are over the time limit given
         if (audio.currentTime >= targetSeconds) {
+          // snap the audio back to the targetSeconds
           audio.currentTime = targetSeconds;
+          // stop the audio
           setPlaying(false);
+
+          // perform a throttled update otherwise
         } else if (audio.currentTime - lastProgressRef.current >= 0.05) {
           setProgress(audio.currentTime);
           lastProgressRef.current = audio.currentTime;
@@ -36,7 +41,9 @@ export function useGameAudio(targetSeconds: number) {
       rafRef.current = requestAnimationFrame(loop);
     } else {
       audio.pause();
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
       setProgress(audio.currentTime);
       lastProgressRef.current = audio.currentTime;
     }
@@ -46,5 +53,12 @@ export function useGameAudio(targetSeconds: number) {
     };
   }, [playing, targetSeconds]);
 
-  return { audioRef, playing, setPlaying, progress, setProgress };
+  return {
+    audioRef,
+    playing,
+    setPlaying,
+    progress,
+    setProgress,
+    lastProgressRef,
+  };
 }
