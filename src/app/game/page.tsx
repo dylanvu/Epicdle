@@ -26,8 +26,10 @@ import { PRIMARY_COLOR, WIN_COLOR, WRONG_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { Easing, motion, useAnimate } from "motion/react";
+import { motion, useAnimate } from "motion/react";
 import { useGameAudio } from "@/hooks/audio/useGameAudio";
+import { useWaveAnimation } from "@/hooks/useWaveAnimation";
+
 import GameModals from "@/components/modals/GameModals";
 import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
 
@@ -65,11 +67,19 @@ export default function Game() {
   const playSubmitWrongSound = useSubmitSound(handleWrong);
   const isMobile = useIsMobile();
 
+  // main scope + animate for container-level animations (win, shake, etc)
   const [scope, animate] = useAnimate();
-  /**
-   * submit wave animation
-   */
+
+  // separate animate instance used to animate individual wave elements
   const [_, animateWave] = useAnimate();
+
+  // hook that encapsulates the wave animation behavior
+  const performWaveAnimation = useWaveAnimation({
+    scope,
+    animateWave,
+    guesses,
+    maxGuesses: MAX_GUESSES,
+  });
 
   // the available audio will always be the number of guesses made + 1 second
   const targetSeconds = useMemo(() => {
@@ -204,46 +214,6 @@ export default function Game() {
       },
       { duration: 0.4, ease: "easeInOut" }
     );
-  }
-
-  function performWaveAnimation({
-    amplitude = 20, // px
-    duration = 0.45, // seconds
-    stagger = 0.06, // seconds between items
-    easing = "easeInOut",
-    onlyFilled = false, // if true, animate only already-filled bars (< guesses.length)
-    onlyCurrent = false, // if true, animate only the current guess index (guesses.length)
-  }: {
-    amplitude?: number;
-    duration?: number;
-    stagger?: number;
-    easing?: Easing;
-    onlyFilled?: boolean;
-    onlyCurrent?: boolean;
-  }) {
-    for (let i = 0; i < MAX_GUESSES; i++) {
-      // optional filters
-      if (onlyFilled && i >= guesses.length) continue;
-      if (onlyCurrent && i !== guesses.length) continue;
-
-      const el =
-        scope.current?.querySelector(`[data-guess-index="${i}"]`) ?? null;
-      if (!el) continue;
-
-      animateWave(
-        el,
-        {
-          y: [0, -amplitude, 0],
-          scaleY: [1, 0.92, 1],
-          scaleX: [1, 1.04, 1],
-        },
-        {
-          duration,
-          delay: i * stagger,
-          ease: easing,
-        }
-      );
-    }
   }
 
   function handleWrong() {
