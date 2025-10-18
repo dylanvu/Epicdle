@@ -1,6 +1,7 @@
 "use client";
 import { Button, Group, Text, Loader, Center } from "@mantine/core";
 import { useDisclosure, UseDisclosureHandlers } from "@mantine/hooks";
+import Confetti from "react-confetti";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Game.module.css";
 import Image from "next/image";
@@ -32,6 +33,7 @@ import { useWaveAnimation } from "@/hooks/useWaveAnimation";
 
 import GameModals from "@/components/modals/GameModals";
 import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
+import { s } from "motion/react-client";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -41,6 +43,8 @@ export default function Game() {
   const [gameState, setGameState] = useState<
     "initial_loading" | "win" | "lose" | "submit" | "loading" | "play"
   >("initial_loading");
+
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const [guesses, setGuesses] = useState<Song[]>([]);
   const [selectedSong, setSelectedSong] = useState<Song>();
@@ -130,6 +134,8 @@ export default function Game() {
         ease: "easeOut",
       }
     );
+
+    setShowConfetti(true);
   }
 
   function handleLose() {
@@ -268,6 +274,17 @@ export default function Game() {
         borderColor: endGameProgressColorOverride ?? "",
       }}
     >
+      <Confetti
+        run={showConfetti}
+        width={window.innerWidth}
+        height={window.innerHeight}
+        recycle={false}
+        numberOfPieces={400}
+        tweenDuration={2000}
+        gravity={0.1}
+        initialVelocityX={10}
+        initialVelocityY={10}
+      />
       <EpicdleTitle />
       <GameModals
         openedHelp={openedHelp}
