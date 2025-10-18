@@ -2,6 +2,7 @@
 import { Button, Group, Text, Loader, Center } from "@mantine/core";
 import { useDisclosure, UseDisclosureHandlers } from "@mantine/hooks";
 import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Game.module.css";
 import Image from "next/image";
@@ -56,6 +57,8 @@ export default function Game() {
     helpHandler.open();
     setGameState("play");
   }, []);
+
+  const { width, height } = useWindowSize();
 
   // load the sounds
   const playButtonSound = useButtonSound();
@@ -276,10 +279,12 @@ export default function Game() {
       {gameState !== "initial_loading" ? (
         <Confetti
           run={showConfetti}
+          width={width}
+          height={height}
           recycle={false}
           numberOfPieces={400}
           tweenDuration={2000}
-          gravity={0.1}
+          gravity={0.5}
           initialVelocityX={10}
           initialVelocityY={10}
         />
