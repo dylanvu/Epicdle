@@ -10,6 +10,7 @@ import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useState } from "react";
 import { IconTrash } from "@tabler/icons-react";
+import ModalTitle from "../ModalTitle";
 
 export default function SongListModal({
   openState,
@@ -41,7 +42,7 @@ export default function SongListModal({
         playButtonSound();
         modalHandler.close();
       }}
-      title="Select a song from the list:"
+      title={<ModalTitle>Select a song from the list:</ModalTitle>}
       className={styles.game}
       lockScroll={false}
     >

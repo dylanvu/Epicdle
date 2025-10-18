@@ -4,6 +4,7 @@ import styles from "./WinModal.module.css";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton.tsx/ShareButton";
+import ModalTitle from "../ModalTitle";
 
 export default function TutorialModal({
   openState,
@@ -22,7 +23,7 @@ export default function TutorialModal({
         modalHandler.close();
         playButtonSound();
       }}
-      title="You Won!"
+      title={<ModalTitle>You Win!</ModalTitle>}
       className={styles.game}
       lockScroll={false}
     >

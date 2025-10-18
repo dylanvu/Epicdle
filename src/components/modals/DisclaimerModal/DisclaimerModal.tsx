@@ -3,6 +3,7 @@ import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./DisclaimerModal.module.css";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
+import ModalTitle from "../ModalTitle";
 
 export default function DisclaimerModal({
   openState,
@@ -19,18 +20,18 @@ export default function DisclaimerModal({
         modalHandler.close();
         playButtonSound();
       }}
-      title="Credits & Disclaimer"
+      title={<ModalTitle>Credits & Disclaimer</ModalTitle>}
       className={styles.about}
       lockScroll={false}
     >
-      <Title order={2}>Attribution / Credits</Title>
-      <Title order={3}>Music</Title>
+      <Title order={4}>Attribution / Credits</Title>
+      <Title order={5}>Music</Title>
       <Text>Jorge Rivera-Herrans, Winion Entertainment LLC</Text>
-      <Title order={3}>Album Art</Title>
+      <Title order={5}>Album Art</Title>
       <Text>
         <Anchor href={"https://zwistillustration.com/about-1"}>ZWIST</Anchor>
       </Text>
-      <Title order={3}>Sound Effects</Title>
+      <Title order={5}>Sound Effects</Title>
       <List>
         <List.Item>
           <Anchor href="https://pixabay.com/sound-effects/loud-thunder-sound-effect-359272/">

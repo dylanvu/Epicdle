@@ -5,6 +5,7 @@ import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 import { MAX_GUESSES } from "@/constants";
+import ModalTitle from "../ModalTitle";
 
 export default function TutorialModal({
   openState,
@@ -21,7 +22,7 @@ export default function TutorialModal({
         modalHandler.close();
         playButtonSound();
       }}
-      title="You Lost..."
+      title={<ModalTitle>You Lost...</ModalTitle>}
       className={styles.game}
       lockScroll={false}
     >

@@ -1,11 +1,12 @@
 "use client";
-import { Button, Modal, Text } from "@mantine/core";
+import { Button, Modal, Text, Title } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./TutorialModal.module.css";
 import { MAX_GUESSES } from "@/constants";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useState } from "react";
+import ModalTitle from "../ModalTitle";
 
 export default function TutorialModal({
   openState,
@@ -23,14 +24,18 @@ export default function TutorialModal({
         playButtonSound();
         modalHandler.close();
       }}
-      title="How to Play"
+      title={<ModalTitle>How to Play</ModalTitle>}
       className={styles.game}
       lockScroll={false}
     >
       {showRealTutorial ? (
         <div>
           <Text>
-            Try to guess the song in {MAX_GUESSES.toString()} or fewer tries.
+            Try to guess the song in{" "}
+            <Text fw={700} span>
+              {MAX_GUESSES.toString()} or fewer tries
+            </Text>
+            .
           </Text>
           <Text>Each attempt will reveal more of the song.</Text>
           <Text>Good luck!</Text>
