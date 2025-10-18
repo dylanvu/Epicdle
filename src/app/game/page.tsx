@@ -164,6 +164,8 @@ export default function Game() {
     setGameState("win");
     progressGuessUI(false, false);
     winModalHandler.open();
+    // play the rest of the song!
+    setPlaying(true);
 
     // win animation
     animate(
