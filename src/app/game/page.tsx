@@ -42,8 +42,6 @@ export default function Game() {
     "initial_loading" | "win" | "lose" | "submit" | "loading" | "play"
   >("initial_loading");
 
-  // const audioRef = useRef<HTMLAudioElement | null>(null);
-  // const [playingAudio, setPlayingAudio] = useState(false);
   const [guesses, setGuesses] = useState<Song[]>([]);
   const [selectedSong, setSelectedSong] = useState<Song>();
 
