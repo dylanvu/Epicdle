@@ -369,13 +369,14 @@ export default function Game() {
               }}
               w={isMobile ? "100%" : "auto"}
             >
-              {isMobile ? "Search" : "Select Song"}
+              Select Song
             </Button>
             {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
             <audio ref={audioRef} src="/sample.mp3" preload="auto" />
             <PlayAudioButton playing={playing} setPlaying={setPlaying} />
             <Button
-              rightSection={<IconArrowRight />}
+              leftSection={isMobile ? <IconArrowRight /> : null}
+              rightSection={isMobile ? null : <IconArrowRight />}
               variant="default"
               onClick={handleSubmit}
               aria-label="Submit Song Guess"
@@ -386,7 +387,7 @@ export default function Game() {
               }}
               w={isMobile ? "100%" : "auto"}
             >
-              {isMobile ? "Guess" : "Submit Guess"}
+              Submit Guess
             </Button>
           </div>
           {gameState !== "win" && gameState !== "lose" ? (
