@@ -5,6 +5,7 @@
 
   --albumImageRadius: 1rem;
   --endGamePadding: 0.8rem;
+  --gamePageWinBorderSize: 0.8rem;
 }
 
 .gameplayArea {
@@ -69,14 +70,14 @@
 
 .gamePageWin {
   padding: var(--endGamePadding);
-  border: 0.8rem solid;
+  border: var(--gamePageWinBorderSize) solid;
   border-radius: calc(var(--albumImageRadius) + var(--endGamePadding));
 }
 
 .gamePageLose {
   padding: var(--endGamePadding);
   border-radius: calc(var(--albumImageRadius) + var(--endGamePadding));
-  border: 0.8rem solid;
+  border: var(--gamePageWinBorderSize) solid;
 }
 
 /* Medium phones / large phones (portrait) */
@@ -87,6 +88,8 @@
     width: 100vw;
     padding-top: 0;
     margin: auto;
+
+    --gamePageWinBorderSize: 0.4rem;
   }
 
   .albumCover {

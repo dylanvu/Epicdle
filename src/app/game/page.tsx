@@ -269,13 +269,7 @@ export default function Game() {
       : "";
 
   return (
-    <motion.div
-      ref={scope}
-      className={`${styles.gamePage} ${isMobile ? gamePageStateStyle : ""}`}
-      style={{
-        borderColor: endGameProgressColorOverride ?? "",
-      }}
-    >
+    <motion.div ref={scope} className={styles.gamePage}>
       {gameState !== "initial_loading" ? (
         <Confetti
           run={showConfetti}
@@ -316,7 +310,14 @@ export default function Game() {
             borderColor: endGameProgressColorOverride ?? "",
           }}
         >
-          <div className={styles.albumCoverArea}>
+          <div
+            className={`${styles.albumCoverArea} ${
+              isMobile ? gamePageStateStyle : ""
+            }`}
+            style={{
+              borderColor: endGameProgressColorOverride ?? "",
+            }}
+          >
             <div className={styles.albumCover}>
               <Image
                 src={
@@ -359,7 +360,7 @@ export default function Game() {
           <div className={styles.mainButtonArea}>
             <Button
               leftSection={<IconSearch />}
-              variant="default"
+              variant={!selectedSong ? "default" : "light"}
               onClick={() => openModalHandler(searchModalHandler)}
               aria-label="Search for a Song"
               disabled={gameState !== "play"}
@@ -369,7 +370,7 @@ export default function Game() {
               }}
               w={isMobile ? "100%" : "auto"}
             >
-              Select Song
+              Choose Song
             </Button>
             {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
             <audio ref={audioRef} src="/sample.mp3" preload="auto" />
@@ -377,7 +378,7 @@ export default function Game() {
             <Button
               leftSection={isMobile ? <IconArrowRight /> : null}
               rightSection={isMobile ? null : <IconArrowRight />}
-              variant="default"
+              variant={selectedSong ? "filled" : "default"}
               onClick={handleSubmit}
               aria-label="Submit Song Guess"
               disabled={selectedSong === undefined || gameState !== "play"}
