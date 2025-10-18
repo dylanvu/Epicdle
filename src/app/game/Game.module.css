@@ -24,8 +24,14 @@
   font-size: 1.6rem;
 }
 
+.albumCoverArea {
+  position: relative;
+}
+
 .albumCover {
   position: relative;
+  width: 400px;
+  height: 400px;
 }
 
 .albumCover > img {
@@ -37,11 +43,54 @@
   border-radius: 1rem;
 }
 
-.buttonArea {
+.mainButtonArea {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+}
+
+.gameButtonOrder1 {
+  order: 1;
+}
+
+.gameButtonOrder2 {
+  order: 2;
+}
+
+.gameButtonOrder3 {
+  order: 3;
+}
+
+/* Medium phones / large phones (portrait) */
+@media (max-width: 767px) {
+  .gamePage {
+    margin-left: 4%;
+    margin-right: 4%;
+    max-width: 90vw;
+  }
+
+  .albumCover {
+    width: 90vw;
+    height: 90vw;
+  }
+
+  .gameplayArea {
+    width: auto;
+    max-width: 90%;
+  }
+
+  .gameButtonLabelSmall {
+    text-wrap: pretty;
+  }
+
+  .mainButtonArea {
+    flex-direction: column;
+  }
+}
+
+/* Tablets (portrait) */
+@media (min-width: 768px) and (max-width: 1023px) {
 }

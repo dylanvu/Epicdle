@@ -25,6 +25,7 @@ import PlayAudioButton from "@/components/PlayAudioButton/PlayAudioButton";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Easing, motion, useAnimate } from "motion/react";
 import { useGameAudio } from "@/hooks/audio/useGameAudio";
 import GameModals from "@/components/modals/GameModals";
@@ -61,6 +62,7 @@ export default function Game() {
   const playSubmitWinSound = useSubmitSound(handleWin);
   const playSubmitLossSound = useSubmitSound(handleLose);
   const playSubmitWrongSound = useSubmitSound(handleWrong);
+  const isMobile = useIsMobile();
 
   const [scope, animate] = useAnimate();
   /**
@@ -354,19 +356,19 @@ export default function Game() {
         </Center>
       ) : (
         <div className={styles.gameplayArea}>
-          <div className={styles.albumCover}>
-            <Image
-              src={
-                selectedSong?.album
-                  ? ALBUM_NAME_TO_COVER_MAP[selectedSong.album]
-                  : "/Epic_The_Musical_Album_Cover.webp"
-              }
-              alt="Epicdle"
-              // TODO: fix the sizing of all images
-              width={400}
-              height={400}
-              style={{ opacity: gameState !== "win" ? 0.5 : 1 }}
-            />
+          <div className={styles.albumCoverArea}>
+            <div className={styles.albumCover}>
+              <Image
+                src={
+                  selectedSong?.album
+                    ? ALBUM_NAME_TO_COVER_MAP[selectedSong.album]
+                    : "/Epic_The_Musical_Album_Cover.webp"
+                }
+                alt="Epicdle"
+                style={{ opacity: gameState !== "win" ? 0.5 : 1 }}
+                fill={true}
+              />
+            </div>
             <GuessHistoryOverlay guesses={guesses} />
           </div>
           <Text className={styles.songTitle}>
@@ -394,15 +396,20 @@ export default function Game() {
               />
             ))}
           </Group>
-          <div className={styles.buttonArea}>
+          <div className={styles.mainButtonArea}>
             <Button
               leftSection={<IconSearch />}
               variant="default"
               onClick={handleSongSearch}
               aria-label="Search for a Song"
               disabled={gameState !== "play"}
+              classNames={{
+                label: styles.gameButtonLabelSmall,
+                root: isMobile ? styles.gameButtonOrder2 : "",
+              }}
+              w={isMobile ? "100%" : "auto"}
             >
-              Select Song
+              {isMobile ? "Search" : "Select Song"}
             </Button>
             {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
             <audio ref={audioRef} src="/sample.mp3" preload="auto" />
@@ -413,8 +420,13 @@ export default function Game() {
               onClick={handleSubmit}
               aria-label="Submit Song Guess"
               disabled={selectedSong === undefined || gameState !== "play"}
+              classNames={{
+                label: styles.gameButtonLabelSmall,
+                root: isMobile ? styles.gameButtonOrder3 : "",
+              }}
+              w={isMobile ? "100%" : "auto"}
             >
-              Submit Guess
+              {isMobile ? "Guess" : "Submit Guess"}
             </Button>
           </div>
           {gameState !== "win" && gameState !== "lose" ? (
