@@ -7,3 +7,5 @@ export const theme = createTheme({
 });
 
 export const PRIMARY_COLOR = "#00b5ff";
+export const WRONG_COLOR = "#ff6b6b";
+export const WIN_COLOR = "#40c057";

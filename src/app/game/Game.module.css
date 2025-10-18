@@ -1,7 +1,10 @@
 .gamePage {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   min-height: 100vh;
+
+  --albumImageRadius: 1rem;
+  --endGamePadding: 0.8rem;
 }
 
 .gameplayArea {
@@ -40,7 +43,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  border-radius: 1rem;
+  border-radius: var(--albumImageRadius);
 }
 
 .mainButtonArea {
@@ -64,12 +67,26 @@
   order: 3;
 }
 
+.gamePageWin {
+  padding: var(--endGamePadding);
+  border: 0.8rem solid;
+  border-radius: calc(var(--albumImageRadius) + var(--endGamePadding));
+}
+
+.gamePageLose {
+  padding: var(--endGamePadding);
+  border-radius: calc(var(--albumImageRadius) + var(--endGamePadding));
+  border: 0.8rem solid;
+}
+
 /* Medium phones / large phones (portrait) */
 @media (max-width: 767px) {
   .gamePage {
-    margin-left: 4%;
-    margin-right: 4%;
-    max-width: 90vw;
+    padding-left: 4%;
+    padding-right: 4%;
+    width: 100vw;
+    padding-top: 0;
+    margin: auto;
   }
 
   .albumCover {

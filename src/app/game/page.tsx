@@ -22,13 +22,14 @@ import {
 } from "@/constants";
 import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
 import PlayAudioButton from "@/components/PlayAudioButton/PlayAudioButton";
-import { PRIMARY_COLOR } from "@/theme";
+import { PRIMARY_COLOR, WIN_COLOR, WRONG_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Easing, motion, useAnimate } from "motion/react";
 import { useGameAudio } from "@/hooks/audio/useGameAudio";
 import GameModals from "@/components/modals/GameModals";
+import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -329,15 +330,29 @@ export default function Game() {
 
   let endGameProgressColorOverride: string | null;
   if (gameState === "win") {
-    endGameProgressColorOverride = "green";
+    endGameProgressColorOverride = WIN_COLOR;
   } else if (gameState === "lose") {
-    endGameProgressColorOverride = "red";
+    endGameProgressColorOverride = WRONG_COLOR;
   } else {
     endGameProgressColorOverride = null;
   }
 
+  const gamePageStateStyle =
+    gameState === "win"
+      ? styles.gamePageWin
+      : gameState === "lose"
+      ? styles.gamePageLose
+      : "";
+
   return (
-    <motion.div ref={scope} className={styles.gamePage}>
+    <motion.div
+      ref={scope}
+      className={`${styles.gamePage} ${isMobile ? gamePageStateStyle : ""}`}
+      style={{
+        borderColor: endGameProgressColorOverride ?? "",
+      }}
+    >
+      <EpicdleTitle />
       <GameModals
         openedHelp={openedHelp}
         helpHandler={helpHandler}
@@ -355,7 +370,14 @@ export default function Game() {
           <Loader color={PRIMARY_COLOR} />
         </Center>
       ) : (
-        <div className={styles.gameplayArea}>
+        <div
+          className={`${styles.gameplayArea} ${
+            !isMobile ? gamePageStateStyle : ""
+          }`}
+          style={{
+            borderColor: endGameProgressColorOverride ?? "",
+          }}
+        >
           <div className={styles.albumCoverArea}>
             <div className={styles.albumCover}>
               <Image
@@ -391,7 +413,7 @@ export default function Game() {
                     ? endGameProgressColorOverride
                     : index === guesses.length
                     ? PRIMARY_COLOR
-                    : "red"
+                    : WRONG_COLOR
                 }
               />
             ))}
