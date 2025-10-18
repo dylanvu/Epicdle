@@ -230,6 +230,10 @@ export default function Game() {
     }
   }
 
+  /**
+   * This function is necessary since useSound does not let me chain together sound effects
+   * @param audioPath
+   */
   async function playAudioWithoutUseSound(audioPath: string) {
     // TODO: honestly can I just refactor the whole app to not use useSound?
     try {
