@@ -1,4 +1,4 @@
-import { PRIMARY_COLOR, WIN_COLOR } from "@/theme";
+import { CONFETTI_COLORS } from "@/theme";
 import styles from "./ConfettiOverlay.module.css";
 import Confetti from "react-confetti-boom";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -15,7 +15,6 @@ export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
   const launchSpeed = 2;
   // reduce particle count on smaller screens just for performance reasons
   const particleMultiplier = perfect ? 1.5 : 0.5;
-  const colors = [PRIMARY_COLOR];
   const particleCount = particleMultiplier * (isMobile ? 50 : 100);
   const opacityDeltaMultiplier = perfect ? 0.5 : 2;
   const spreadDegree = perfect ? 30 : 60;
@@ -25,7 +24,7 @@ export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
       <Confetti
         x={0}
         y={1}
-        colors={colors}
+        colors={CONFETTI_COLORS}
         // Fire to the top right
         deg={300}
         launchSpeed={launchSpeed}
@@ -37,7 +36,7 @@ export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
       <Confetti
         x={1}
         y={1}
-        colors={colors}
+        colors={CONFETTI_COLORS}
         // Fire to the top left
         deg={240}
         launchSpeed={launchSpeed}
@@ -51,7 +50,7 @@ export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
           <Confetti
             x={0}
             y={0}
-            colors={colors}
+            colors={CONFETTI_COLORS}
             // Fire to the bottom right
             deg={60}
             launchSpeed={launchSpeed}
@@ -62,7 +61,7 @@ export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
           <Confetti
             x={1}
             y={0}
-            colors={colors}
+            colors={CONFETTI_COLORS}
             // Fire to the bottom left
             deg={120}
             launchSpeed={launchSpeed}
