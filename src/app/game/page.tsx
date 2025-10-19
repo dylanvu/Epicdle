@@ -1,7 +1,6 @@
 "use client";
 import { Button, Group, Text, Loader, Center } from "@mantine/core";
 import { useDisclosure, UseDisclosureHandlers } from "@mantine/hooks";
-import { useWindowSize } from "react-use";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Game.module.css";
 import Image from "next/image";
@@ -423,7 +422,7 @@ export default function Game() {
                 Submit Guess
               </Button>
             </div>
-            {gameState !== "win" && gameState !== "lose" ? (
+            {!isWinState(gameState) && gameState !== "lose" ? (
               <Button
                 leftSection={<IconQuestionMark />}
                 variant="default"

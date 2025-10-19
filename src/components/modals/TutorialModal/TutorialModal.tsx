@@ -45,7 +45,12 @@ export default function TutorialModal({
           <Text>You have a challenge, a test of skill</Text>
           <Text>A song to name that will contest your will</Text>
           <Text>
-            There are {MAX_GUESSES.toString()} tries to reach win's thrill
+            There are
+            <Text fw={700} span>
+              {" "}
+              {MAX_GUESSES.toString()} tries{" "}
+            </Text>
+            to reach win's thrill
           </Text>
           <Text>Each guess brings you close as the music spills</Text>
         </div>

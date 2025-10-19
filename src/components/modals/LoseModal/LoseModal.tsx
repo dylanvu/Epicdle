@@ -4,7 +4,6 @@ import styles from "./LoseModal.module.css";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton.tsx/ShareButton";
-import { MAX_GUESSES } from "@/constants";
 import ModalTitle from "../ModalTitle";
 import { Song } from "@/interfaces/interfaces";
 
@@ -25,11 +24,16 @@ export default function TutorialModal({
         modalHandler.close();
         playButtonSound();
       }}
-      title={<ModalTitle>You Lost...</ModalTitle>}
+      title={<ModalTitle>Thunder...</ModalTitle>}
       className={styles.game}
       lockScroll={false}
     >
-      <Text>RIP</Text>
+      <Text>Thunder, bring her through the wringer!</Text>
+
+      <Text fs={"italic"}>
+        Thanks for playing today! Please come back tomorrow for a new song!
+      </Text>
+
       <ShareButton guesses={guesses} win={false} />
       <Button
         onClick={() => {
@@ -40,7 +44,7 @@ export default function TutorialModal({
         w="100%"
         color={PRIMARY_COLOR}
       >
-        Let's Go!
+        Close
       </Button>
     </Modal>
   );
