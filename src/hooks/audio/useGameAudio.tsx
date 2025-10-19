@@ -60,7 +60,8 @@ export function useGameAudio(targetSeconds: number) {
   async function playAudioWithoutUseSound(audioPath: string) {
     // TODO: honestly can I just refactor the whole app to not use useSound?
     try {
-      await new Audio(audioPath).play();
+      const audio = new Audio(audioPath);
+      await audio.play();
     } catch (e) {
       console.error("native Audio failed:", e);
     }

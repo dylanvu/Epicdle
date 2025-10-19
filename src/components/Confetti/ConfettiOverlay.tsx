@@ -3,7 +3,7 @@ import styles from "./ConfettiOverlay.module.css";
 import Confetti from "react-confetti-boom";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
-export default function ConfettiOverlay() {
+export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
   // (0, 0) is top left
   // (1, 1) is bottom right
   // (0, 1) is bottom left
@@ -12,11 +12,13 @@ export default function ConfettiOverlay() {
 
   const isMobile = useIsMobile();
 
-  const colors = [PRIMARY_COLOR];
   const launchSpeed = 2;
   // reduce particle count on smaller screens just for performance reasons
-  const particleCount = isMobile ? 50 : 100;
-  const opacityDeltaMultiplier = 2;
+  const particleMultiplier = perfect ? 1.5 : 0.5;
+  const colors = [PRIMARY_COLOR];
+  const particleCount = particleMultiplier * (isMobile ? 50 : 100);
+  const opacityDeltaMultiplier = perfect ? 0.5 : 2;
+  const spreadDegree = perfect ? 30 : 60;
   return (
     <div className={styles.confettiOverlay}>
       {/* Bottom Left */}
@@ -29,18 +31,47 @@ export default function ConfettiOverlay() {
         launchSpeed={launchSpeed}
         particleCount={particleCount}
         opacityDeltaMultiplier={opacityDeltaMultiplier}
+        spreadDeg={spreadDegree}
       />
       {/* Bottom Right */}
       <Confetti
         x={1}
         y={1}
         colors={colors}
-        // Fire to the topp left
+        // Fire to the top left
         deg={225}
         launchSpeed={launchSpeed}
         particleCount={particleCount}
         opacityDeltaMultiplier={opacityDeltaMultiplier}
+        spreadDeg={spreadDegree}
       />
+      {/* Animate more if it is a perfect win */}
+      {perfect ? (
+        <>
+          <Confetti
+            x={0}
+            y={0}
+            colors={colors}
+            // Fire to the bottom right
+            deg={45}
+            launchSpeed={launchSpeed}
+            particleCount={particleCount}
+            opacityDeltaMultiplier={opacityDeltaMultiplier}
+            spreadDeg={spreadDegree}
+          />
+          <Confetti
+            x={1}
+            y={0}
+            colors={colors}
+            // Fire to the bottom left
+            deg={135}
+            launchSpeed={launchSpeed}
+            particleCount={particleCount}
+            opacityDeltaMultiplier={opacityDeltaMultiplier}
+            spreadDeg={spreadDegree}
+          />
+        </>
+      ) : null}
     </div>
   );
 }

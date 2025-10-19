@@ -35,16 +35,33 @@ import GameModals from "@/components/modals/GameModals";
 import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
 import ConfettiOverlay from "@/components/Confetti/ConfettiOverlay";
 
+const winStates = ["win", "perfect_win"] as const;
+
+type WinState = (typeof winStates)[number];
+
+type GameState =
+  | "initial_loading"
+  | WinState
+  | "lose"
+  | "submit"
+  | "loading"
+  | "play";
+
+/**
+ * isWinState typeguard
+ * @param state state to check
+ * @returns is a win state
+ */
+function isWinState(state: string): state is WinState {
+  return winStates.includes(state as WinState);
+}
+
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
   const [openedSearchModal, searchModalHandler] = useDisclosure(false);
   const [openedWinModal, winModalHandler] = useDisclosure(false);
   const [openedLoseModal, loseModalHandler] = useDisclosure(false);
-  const [gameState, setGameState] = useState<
-    "initial_loading" | "win" | "lose" | "submit" | "loading" | "play"
-  >("initial_loading");
-
-  const [showConfetti, setShowConfetti] = useState(true);
+  const [gameState, setGameState] = useState<GameState>("initial_loading");
 
   const [guesses, setGuesses] = useState<Song[]>([]);
   const [selectedSong, setSelectedSong] = useState<Song>();
@@ -52,14 +69,17 @@ export default function Game() {
   // keep the song that was submitted (so callbacks that run later use this exact song)
   const lastSubmittedSongRef = useRef<Song | undefined>(undefined);
   const screenFlashOverlayRef = useRef<HTMLDivElement | null>(null);
+  const guessesCountRef = useRef<number>(0);
+
+  useEffect(() => {
+    guessesCountRef.current = guesses.length;
+  }, [guesses]);
 
   useEffect(() => {
     // TODO: only show this if the user has not played ever
     helpHandler.open();
     setGameState("play");
   }, []);
-
-  const { width, height } = useWindowSize();
 
   // load the sounds
   const playButtonSound = useButtonSound();
@@ -85,7 +105,7 @@ export default function Game() {
   // the available audio will always be the number of guesses made + 1 additional audio segment
   const targetSeconds = useMemo(() => {
     // let the player hear the whole song if they win, and also prevent the game from showing too much audio if they have lost
-    if (guesses.length >= MAX_GUESSES || gameState === "win") {
+    if (guesses.length >= MAX_GUESSES || isWinState(gameState)) {
       return MAX_GUESSES * SECONDS_PER_GUESS;
     } else {
       // let the player hear the next segment
@@ -119,7 +139,12 @@ export default function Game() {
     // play the win sound
     playAudioWithoutUseSound("/sfx/triumphant_orchestra.mp3");
     // progress the UI (record the guess)
-    setGameState("win");
+    if (guessesCountRef.current === 0) {
+      // guessed in 1 try!
+      setGameState("perfect_win");
+    } else {
+      setGameState("win");
+    }
     progressGuessUI(false, false);
     winModalHandler.open();
     // play the rest of the song!
@@ -140,8 +165,6 @@ export default function Game() {
     );
 
     animateScreenFlash(WIN_COLOR);
-
-    setShowConfetti(true);
   }
 
   function handleLose() {
@@ -217,6 +240,7 @@ export default function Game() {
     // first, determine if the answer is right
     if (selectedSong.name === "Warrior of the Mind") {
       // correct
+      // Note: this does not add the correct guess to the guesses array
       playSubmitWinSound();
     } else if (guesses.length + 1 >= MAX_GUESSES) {
       // player will have used up the allowed guesses => loss
@@ -262,7 +286,7 @@ export default function Game() {
   }
 
   let endGameProgressColorOverride: string | null;
-  if (gameState === "win") {
+  if (isWinState(gameState)) {
     endGameProgressColorOverride = WIN_COLOR;
   } else if (gameState === "lose") {
     endGameProgressColorOverride = WRONG_COLOR;
@@ -270,12 +294,11 @@ export default function Game() {
     endGameProgressColorOverride = null;
   }
 
-  const gamePageStateStyle =
-    gameState === "win"
-      ? styles.gamePageWin
-      : gameState === "lose"
-      ? styles.gamePageLose
-      : "";
+  const gamePageStateStyle = isWinState(gameState)
+    ? styles.gamePageWin
+    : gameState === "lose"
+    ? styles.gamePageLose
+    : "";
 
   return (
     <>
@@ -289,6 +312,9 @@ export default function Game() {
       />
       <motion.div ref={scope} className={styles.gamePage}>
         {gameState === "win" ? <ConfettiOverlay /> : null}
+        {gameState === "perfect_win" ? (
+          <ConfettiOverlay perfect={true} />
+        ) : null}
 
         <EpicdleTitle />
         <GameModals
@@ -414,7 +440,7 @@ export default function Game() {
                 leftSection={<IconChartBarPopular />}
                 variant="default"
                 onClick={() => {
-                  if (gameState === "win") {
+                  if (isWinState(gameState)) {
                     openModalHandler(winModalHandler);
                   } else if (gameState === "lose") {
                     openModalHandler(loseModalHandler);

@@ -6,6 +6,8 @@
   --albumImageRadius: 1rem;
   --endGamePadding: 0.8rem;
   --gamePageWinBorderSize: 0.8rem;
+  --allBorderTransitions: border-color 0.2s ease-in-out,
+    border-width 0.2s ease-in-out;
 }
 
 .gameplayArea {
@@ -15,6 +17,7 @@
   align-items: center;
   width: fit-content;
   margin: auto;
+  transition: var(--allBorderTransitions);
 }
 
 .modal {
@@ -30,6 +33,7 @@
 
 .albumCoverArea {
   position: relative;
+  transition: var(--allBorderTransitions);
 }
 
 .albumCover {
