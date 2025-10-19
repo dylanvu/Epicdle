@@ -51,6 +51,7 @@ export default function Game() {
 
   // keep the song that was submitted (so callbacks that run later use this exact song)
   const lastSubmittedSongRef = useRef<Song | undefined>(undefined);
+  const screenFlashOverlayRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // TODO: only show this if the user has not played ever
@@ -138,6 +139,8 @@ export default function Game() {
       }
     );
 
+    animateScreenFlash(WIN_COLOR);
+
     setShowConfetti(true);
   }
 
@@ -152,6 +155,23 @@ export default function Game() {
     animateIncorrectGuess();
   }
 
+  function animateScreenFlash(
+    color: string,
+    intensity = 0.25,
+    duration = 0.45
+  ) {
+    if (!screenFlashOverlayRef.current) return;
+
+    // set color dynamically before animating
+    screenFlashOverlayRef.current.style.background = color;
+
+    animate(
+      screenFlashOverlayRef.current,
+      { opacity: [0, intensity, 0] },
+      { duration, ease: "easeInOut" }
+    );
+  }
+
   function animateIncorrectGuess() {
     const absXShakeMax = 0.8;
 
@@ -163,6 +183,7 @@ export default function Game() {
       },
       { duration: 0.4, ease: "easeInOut" }
     );
+    animateScreenFlash(WRONG_COLOR);
   }
 
   function handleWrong() {
@@ -257,148 +278,158 @@ export default function Game() {
       : "";
 
   return (
-    <motion.div ref={scope} className={styles.gamePage}>
-      {gameState === "win" ? <ConfettiOverlay /> : null}
-
-      <EpicdleTitle />
-      <GameModals
-        openedHelp={openedHelp}
-        helpHandler={helpHandler}
-        openedSearchModal={openedSearchModal}
-        searchModalHandler={searchModalHandler}
-        openedWinModal={openedWinModal}
-        winModalHandler={winModalHandler}
-        openedLoseModal={openedLoseModal}
-        loseModalHandler={loseModalHandler}
-        setSelectedSong={setSelectedSong}
-        guesses={guesses}
+    <>
+      <div
+        ref={screenFlashOverlayRef}
+        className={styles.flashOverlay}
+        aria-hidden="true"
+        style={{
+          background: WRONG_COLOR,
+        }}
       />
-      {gameState === "initial_loading" ? (
-        <Center h={"100vh"}>
-          <Loader color={PRIMARY_COLOR} />
-        </Center>
-      ) : (
-        <div
-          className={`${styles.gameplayArea} ${
-            !isMobile ? gamePageStateStyle : ""
-          }`}
-          style={{
-            borderColor: endGameProgressColorOverride ?? "",
-          }}
-        >
+      <motion.div ref={scope} className={styles.gamePage}>
+        {gameState === "win" ? <ConfettiOverlay /> : null}
+
+        <EpicdleTitle />
+        <GameModals
+          openedHelp={openedHelp}
+          helpHandler={helpHandler}
+          openedSearchModal={openedSearchModal}
+          searchModalHandler={searchModalHandler}
+          openedWinModal={openedWinModal}
+          winModalHandler={winModalHandler}
+          openedLoseModal={openedLoseModal}
+          loseModalHandler={loseModalHandler}
+          setSelectedSong={setSelectedSong}
+          guesses={guesses}
+        />
+        {gameState === "initial_loading" ? (
+          <Center h={"100vh"}>
+            <Loader color={PRIMARY_COLOR} />
+          </Center>
+        ) : (
           <div
-            className={`${styles.albumCoverArea} ${
-              isMobile ? gamePageStateStyle : ""
+            className={`${styles.gameplayArea} ${
+              !isMobile ? gamePageStateStyle : ""
             }`}
             style={{
               borderColor: endGameProgressColorOverride ?? "",
             }}
           >
-            <div className={styles.albumCover}>
-              <Image
-                src={
-                  selectedSong?.album
-                    ? ALBUM_NAME_TO_COVER_MAP[selectedSong.album]
-                    : "/Epic_The_Musical_Album_Cover.webp"
-                }
-                alt="Epicdle"
-                style={{ opacity: gameState !== "win" ? 0.5 : 1 }}
-                fill={true}
-              />
+            <div
+              className={`${styles.albumCoverArea} ${
+                isMobile ? gamePageStateStyle : ""
+              }`}
+              style={{
+                borderColor: endGameProgressColorOverride ?? "",
+              }}
+            >
+              <div className={styles.albumCover}>
+                <Image
+                  src={
+                    selectedSong?.album
+                      ? ALBUM_NAME_TO_COVER_MAP[selectedSong.album]
+                      : "/Epic_The_Musical_Album_Cover.webp"
+                  }
+                  alt="Epicdle"
+                  style={{ opacity: gameState !== "win" ? 0.5 : 1 }}
+                  fill={true}
+                />
+              </div>
+              <GuessHistoryOverlay guesses={guesses} />
             </div>
-            <GuessHistoryOverlay guesses={guesses} />
+            <Text className={styles.songTitle}>
+              {selectedSong?.name ?? "Select a song below..."}
+            </Text>
+            <AudioSlider
+              availableGuesses={MAX_GUESSES}
+              currentSongTime={progress}
+            />
+            <Group grow wrap="nowrap" gap={5} w="100%" mt="md" mb="md">
+              {/* // Generate a Progress Bar segment for each possible guess */}
+              {[...Array(MAX_GUESSES)].map((_, index) => (
+                // change the color to be red for past guesses and cyan for the current guess
+                <GuessProgress
+                  key={`guess-progress-${index}`}
+                  guessIndex={index}
+                  guessesCount={guesses.length}
+                  color={
+                    endGameProgressColorOverride
+                      ? endGameProgressColorOverride
+                      : index === guesses.length
+                      ? PRIMARY_COLOR
+                      : WRONG_COLOR
+                  }
+                />
+              ))}
+            </Group>
+            <div className={styles.mainButtonArea}>
+              <Button
+                leftSection={<IconSearch />}
+                variant={!selectedSong ? "default" : "light"}
+                onClick={() => openModalHandler(searchModalHandler)}
+                aria-label="Search for a Song"
+                disabled={gameState !== "play"}
+                classNames={{
+                  label: styles.gameButtonLabelSmall,
+                  root: isMobile ? styles.gameButtonOrder2 : "",
+                }}
+                w={isMobile ? "100%" : "auto"}
+              >
+                Choose Song
+              </Button>
+              {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
+              <audio ref={audioRef} src="/sample.mp3" preload="auto" />
+              <PlayAudioButton playing={playing} setPlaying={setPlaying} />
+              <Button
+                leftSection={isMobile ? <IconArrowRight /> : null}
+                rightSection={isMobile ? null : <IconArrowRight />}
+                variant={selectedSong ? "filled" : "default"}
+                onClick={handleSubmit}
+                aria-label="Submit Song Guess"
+                disabled={selectedSong === undefined || gameState !== "play"}
+                classNames={{
+                  label: styles.gameButtonLabelSmall,
+                  root: isMobile ? styles.gameButtonOrder3 : "",
+                }}
+                w={isMobile ? "100%" : "auto"}
+              >
+                Submit Guess
+              </Button>
+            </div>
+            {gameState !== "win" && gameState !== "lose" ? (
+              <Button
+                leftSection={<IconQuestionMark />}
+                variant="default"
+                onClick={() => openModalHandler(helpHandler)}
+                aria-label="How to Play"
+                w="100%"
+                mt="md"
+                disabled={gameState !== "play"}
+              >
+                How to Play
+              </Button>
+            ) : (
+              <Button
+                leftSection={<IconChartBarPopular />}
+                variant="default"
+                onClick={() => {
+                  if (gameState === "win") {
+                    openModalHandler(winModalHandler);
+                  } else if (gameState === "lose") {
+                    openModalHandler(loseModalHandler);
+                  }
+                }}
+                aria-label="View Today's Results"
+                w="100%"
+                mt="md"
+              >
+                View Today's Results
+              </Button>
+            )}
           </div>
-          <Text className={styles.songTitle}>
-            {selectedSong?.name ?? "Select a song below..."}
-          </Text>
-          <AudioSlider
-            availableGuesses={MAX_GUESSES}
-            currentSongTime={progress}
-          />
-          <Group grow wrap="nowrap" gap={5} w="100%" mt="md" mb="md">
-            {/* // Generate a Progress Bar segment for each possible guess */}
-            {[...Array(MAX_GUESSES)].map((_, index) => (
-              // change the color to be red for past guesses and cyan for the current guess
-              <GuessProgress
-                key={`guess-progress-${index}`}
-                guessIndex={index}
-                guessesCount={guesses.length}
-                color={
-                  endGameProgressColorOverride
-                    ? endGameProgressColorOverride
-                    : index === guesses.length
-                    ? PRIMARY_COLOR
-                    : WRONG_COLOR
-                }
-              />
-            ))}
-          </Group>
-          <div className={styles.mainButtonArea}>
-            <Button
-              leftSection={<IconSearch />}
-              variant={!selectedSong ? "default" : "light"}
-              onClick={() => openModalHandler(searchModalHandler)}
-              aria-label="Search for a Song"
-              disabled={gameState !== "play"}
-              classNames={{
-                label: styles.gameButtonLabelSmall,
-                root: isMobile ? styles.gameButtonOrder2 : "",
-              }}
-              w={isMobile ? "100%" : "auto"}
-            >
-              Choose Song
-            </Button>
-            {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
-            <audio ref={audioRef} src="/sample.mp3" preload="auto" />
-            <PlayAudioButton playing={playing} setPlaying={setPlaying} />
-            <Button
-              leftSection={isMobile ? <IconArrowRight /> : null}
-              rightSection={isMobile ? null : <IconArrowRight />}
-              variant={selectedSong ? "filled" : "default"}
-              onClick={handleSubmit}
-              aria-label="Submit Song Guess"
-              disabled={selectedSong === undefined || gameState !== "play"}
-              classNames={{
-                label: styles.gameButtonLabelSmall,
-                root: isMobile ? styles.gameButtonOrder3 : "",
-              }}
-              w={isMobile ? "100%" : "auto"}
-            >
-              Submit Guess
-            </Button>
-          </div>
-          {gameState !== "win" && gameState !== "lose" ? (
-            <Button
-              leftSection={<IconQuestionMark />}
-              variant="default"
-              onClick={() => openModalHandler(helpHandler)}
-              aria-label="How to Play"
-              w="100%"
-              mt="md"
-              disabled={gameState !== "play"}
-            >
-              How to Play
-            </Button>
-          ) : (
-            <Button
-              leftSection={<IconChartBarPopular />}
-              variant="default"
-              onClick={() => {
-                if (gameState === "win") {
-                  openModalHandler(winModalHandler);
-                } else if (gameState === "lose") {
-                  openModalHandler(loseModalHandler);
-                }
-              }}
-              aria-label="View Today's Results"
-              w="100%"
-              mt="md"
-            >
-              View Today's Results
-            </Button>
-          )}
-        </div>
-      )}
-    </motion.div>
+        )}
+      </motion.div>
+    </>
   );
 }

@@ -80,6 +80,14 @@
   border: var(--gamePageWinBorderSize) solid;
 }
 
+.flashOverlay {
+  position: fixed; /* cover viewport */
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 202;
+}
+
 /* Medium phones / large phones (portrait) */
 @media (max-width: 767px) {
   .gamePage {
