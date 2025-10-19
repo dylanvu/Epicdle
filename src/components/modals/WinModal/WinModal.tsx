@@ -6,6 +6,7 @@ import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 import ModalTitle from "../ModalTitle";
 import { Song } from "@/interfaces/interfaces";
+import ModalThanks from "../ModalThanks";
 
 export default function TutorialModal({
   openState,
@@ -29,6 +30,8 @@ export default function TutorialModal({
       lockScroll={false}
     >
       <Text>You are a warrior of the mind!</Text>
+
+      <ModalThanks />
       <ShareButton guesses={guesses} win={true} />
       <Button
         onClick={() => {

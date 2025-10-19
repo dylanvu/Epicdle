@@ -6,6 +6,7 @@ import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 import ModalTitle from "../ModalTitle";
 import { Song } from "@/interfaces/interfaces";
+import ModalThanks from "../ModalThanks";
 
 export default function TutorialModal({
   openState,
@@ -30,9 +31,7 @@ export default function TutorialModal({
     >
       <Text>Thunder, bring her through the wringer!</Text>
 
-      <Text fs={"italic"}>
-        Thanks for playing today! Please come back tomorrow for a new song!
-      </Text>
+      <ModalThanks />
 
       <ShareButton guesses={guesses} win={false} />
       <Button
