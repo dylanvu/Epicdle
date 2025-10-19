@@ -391,7 +391,7 @@ export default function Game() {
             <div className={styles.mainButtonArea}>
               <Button
                 leftSection={<IconSearch />}
-                variant={!selectedSong ? "default" : "light"}
+                variant="default"
                 onClick={() => openModalHandler(searchModalHandler)}
                 aria-label="Search for a Song"
                 disabled={gameState !== "play"}
