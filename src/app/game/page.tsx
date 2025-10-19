@@ -399,6 +399,7 @@ export default function Game() {
                   label: styles.gameButtonLabelSmall,
                   root: isMobile ? styles.gameButtonOrder2 : "",
                 }}
+                color={PRIMARY_COLOR}
                 w={isMobile ? "100%" : "auto"}
               >
                 Choose Song
@@ -417,6 +418,7 @@ export default function Game() {
                   label: styles.gameButtonLabelSmall,
                   root: isMobile ? styles.gameButtonOrder3 : "",
                 }}
+                color={PRIMARY_COLOR}
                 w={isMobile ? "100%" : "auto"}
               >
                 Submit Guess
