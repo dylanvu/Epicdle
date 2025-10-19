@@ -27,7 +27,7 @@ export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
         y={1}
         colors={colors}
         // Fire to the top right
-        deg={315}
+        deg={300}
         launchSpeed={launchSpeed}
         particleCount={particleCount}
         opacityDeltaMultiplier={opacityDeltaMultiplier}
@@ -39,7 +39,7 @@ export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
         y={1}
         colors={colors}
         // Fire to the top left
-        deg={225}
+        deg={240}
         launchSpeed={launchSpeed}
         particleCount={particleCount}
         opacityDeltaMultiplier={opacityDeltaMultiplier}
@@ -53,7 +53,7 @@ export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
             y={0}
             colors={colors}
             // Fire to the bottom right
-            deg={45}
+            deg={60}
             launchSpeed={launchSpeed}
             particleCount={particleCount}
             opacityDeltaMultiplier={opacityDeltaMultiplier}
@@ -64,7 +64,7 @@ export default function ConfettiOverlay({ perfect }: { perfect?: boolean }) {
             y={0}
             colors={colors}
             // Fire to the bottom left
-            deg={135}
+            deg={120}
             launchSpeed={launchSpeed}
             particleCount={particleCount}
             opacityDeltaMultiplier={opacityDeltaMultiplier}
