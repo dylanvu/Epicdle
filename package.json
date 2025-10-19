@@ -23,7 +23,7 @@
     "mp3-parser": "^0.3.0",
     "next": "15.5.2",
     "react": "19.1.0",
-    "react-confetti": "^6.4.0",
+    "react-confetti-boom": "^2.0.1",
     "react-dom": "19.1.0",
     "react-use": "^17.6.0",
     "seedrandom": "^3.0.5",

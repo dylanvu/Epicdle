@@ -53,9 +53,9 @@ importers:
       react:
         specifier: 19.1.0
         version: 19.1.0
-      react-confetti:
-        specifier: ^6.4.0
-        version: 6.4.0(react@19.1.0)
+      react-confetti-boom:
+        specifier: ^2.0.1
+        version: 2.0.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-dom:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
@@ -1903,11 +1903,12 @@ packages:
     resolution: {integrity: sha512-CvexbZtbov6jW2eXAvLukXjXUW1TzFaivC46BpWc/3BpcCysb5Vffu+B3XHMm8lVEuy2Mm4XGex8hBSg1yapPg==}
     engines: {node: '>=12.0.0'}
 
-  react-confetti@6.4.0:
-    resolution: {integrity: sha512-5MdGUcqxrTU26I2EU7ltkWPwxvucQTuqMm8dUz72z2YMqTD6s9vMcDUysk7n9jnC+lXuCPeJJ7Knf98VEYE9Rg==}
-    engines: {node: '>=16'}
+  react-confetti-boom@2.0.1:
+    resolution: {integrity: sha512-1Uy3JY8czl6yvIAICb+1xLCHLWtUqdNj16ebYBGc5YunGzR4yiP6wSvwYPBeEGZ6/ZjHWgXyVmdDW1ssbpC/Mg==}
+    engines: {node: '>=16.0.0'}
     peerDependencies:
-      react: ^16.3.0 || ^17.0.1 || ^18.0.0 || ^19.0.0
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-dom@19.1.0:
     resolution: {integrity: sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==}
@@ -2154,9 +2155,6 @@ packages:
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
-
-  tween-functions@1.2.0:
-    resolution: {integrity: sha512-PZBtLYcCLtEcjL14Fzb1gSxPBeL7nWvGhO5ZFPGqziCcr8uvHp0NDmdjBchp6KHL+tExcg0m3NISmKxhU394dA==}
 
   type-fest@4.41.0:
     resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
@@ -4581,10 +4579,10 @@ snapshots:
       long: 5.3.2
     optional: true
 
-  react-confetti@6.4.0(react@19.1.0):
+  react-confetti-boom@2.0.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       react: 19.1.0
-      tween-functions: 1.2.0
+      react-dom: 19.1.0(react@19.1.0)
 
   react-dom@19.1.0(react@19.1.0):
     dependencies:
@@ -4879,8 +4877,6 @@ snapshots:
   ts-easing@0.2.0: {}
 
   tslib@2.8.1: {}
-
-  tween-functions@1.2.0: {}
 
   type-fest@4.41.0: {}
 
