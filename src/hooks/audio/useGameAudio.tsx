@@ -53,6 +53,19 @@ export function useGameAudio(targetSeconds: number) {
     };
   }, [playing, targetSeconds]);
 
+  /**
+   * This function is necessary since useSound does not let me chain together sound effects
+   * @param audioPath
+   */
+  async function playAudioWithoutUseSound(audioPath: string) {
+    // TODO: honestly can I just refactor the whole app to not use useSound?
+    try {
+      await new Audio(audioPath).play();
+    } catch (e) {
+      console.error("native Audio failed:", e);
+    }
+  }
+
   return {
     audioRef,
     playing,
@@ -60,5 +73,6 @@ export function useGameAudio(targetSeconds: number) {
     progress,
     setProgress,
     lastProgressRef,
+    playAudioWithoutUseSound,
   };
 }
