@@ -7,6 +7,7 @@ import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 import ModalTitle from "../ModalTitle";
 import { Song } from "@/interfaces/interfaces";
 import ModalThanks from "../ModalThanks";
+import SongLyrics from "../SongLyrics";
 
 export default function TutorialModal({
   openState,
@@ -29,7 +30,15 @@ export default function TutorialModal({
       className={styles.game}
       lockScroll={false}
     >
-      <Text>You are a warrior of the mind!</Text>
+      <SongLyrics>
+        <Text>
+          You are a{" "}
+          <Text fw={700} span>
+            warrior of the mind
+          </Text>
+          !
+        </Text>
+      </SongLyrics>
 
       <ModalThanks />
       <ShareButton guesses={guesses} win={true} />

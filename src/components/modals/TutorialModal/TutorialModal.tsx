@@ -1,5 +1,5 @@
 "use client";
-import { Button, Modal, Text, Title } from "@mantine/core";
+import { Button, Modal, Text } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./TutorialModal.module.css";
 import { MAX_GUESSES } from "@/constants";
@@ -7,6 +7,7 @@ import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useState } from "react";
 import ModalTitle from "../ModalTitle";
+import SongLyrics from "../SongLyrics";
 
 export default function TutorialModal({
   openState,
@@ -16,7 +17,6 @@ export default function TutorialModal({
   modalHandler: UseDisclosureHandlers;
 }) {
   const playButtonSound = useButtonSound();
-  const [showRealTutorial, setShowRealTutorial] = useState(false);
   return (
     <Modal
       opened={openState}
@@ -28,20 +28,8 @@ export default function TutorialModal({
       className={styles.game}
       lockScroll={false}
     >
-      {showRealTutorial ? (
-        <div>
-          <Text>
-            Try to guess the song in{" "}
-            <Text fw={700} span>
-              {MAX_GUESSES.toString()} or fewer tries
-            </Text>
-            .
-          </Text>
-          <Text>Each attempt will reveal more of the song.</Text>
-          <Text>Good luck!</Text>
-        </div>
-      ) : (
-        <div>
+      <div>
+        <SongLyrics>
           <Text>You have a challenge, a test of skill</Text>
           <Text>A song to name that will contest your will</Text>
           <Text>
@@ -53,23 +41,18 @@ export default function TutorialModal({
             to reach win's thrill
           </Text>
           <Text>Each guess brings you close as the music spills</Text>
-        </div>
-      )}
+        </SongLyrics>
+        <Text mt="md">
+          Try to guess the song in{" "}
+          <Text fw={700} span>
+            {MAX_GUESSES.toString()} or fewer tries
+          </Text>
+          .
+        </Text>
+        <Text>Each attempt will reveal more of the song.</Text>
+        <Text>Good luck!</Text>
+      </div>
 
-      {!showRealTutorial ? (
-        <Button
-          onClick={() => {
-            playButtonSound();
-            setShowRealTutorial(true);
-          }}
-          mt="md"
-          w="100%"
-          variant="light"
-          color={PRIMARY_COLOR}
-        >
-          ...What?
-        </Button>
-      ) : null}
       <Button
         onClick={() => {
           playButtonSound();

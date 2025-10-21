@@ -7,6 +7,7 @@ import ShareButton from "@/components/ShareButton.tsx/ShareButton";
 import ModalTitle from "../ModalTitle";
 import { Song } from "@/interfaces/interfaces";
 import ModalThanks from "../ModalThanks";
+import SongLyrics from "../SongLyrics";
 
 export default function TutorialModal({
   openState,
@@ -29,7 +30,9 @@ export default function TutorialModal({
       className={styles.game}
       lockScroll={false}
     >
-      <Text>Thunder, bring her through the wringer!</Text>
+      <SongLyrics>
+        <Text>Thunder, bring her through the wringer!</Text>
+      </SongLyrics>
 
       <ModalThanks />
 
