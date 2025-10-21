@@ -31,6 +31,19 @@ export default function DisclaimerModal({
       <Text>
         <Anchor href={"https://zwistillustration.com/about-1"}>ZWIST</Anchor>
       </Text>
+      <Title order={5}>GIFs</Title>
+      <List>
+        <List.Item>
+          <Anchor href="https://www.youtube.com/watch?v=nMmrtgbFmOg">
+            WolfyTheWitch's "Warrior of the Mind" Animatic
+          </Anchor>
+        </List.Item>
+        <List.Item>
+          <Anchor href="https://www.youtube.com/watch?v=gtKNgFftV5Y">
+            Neal Illustrator's "Thunder Bringer" Animatic
+          </Anchor>
+        </List.Item>
+      </List>
       <Title order={5}>Sound Effects</Title>
       <List>
         <List.Item>
