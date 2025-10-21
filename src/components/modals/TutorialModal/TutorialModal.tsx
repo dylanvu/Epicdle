@@ -1,5 +1,5 @@
 "use client";
-import { Button, Modal, Text } from "@mantine/core";
+import { Button, List, Modal, Text, ThemeIcon } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./TutorialModal.module.css";
 import { MAX_GUESSES } from "@/constants";
@@ -8,6 +8,8 @@ import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ModalTitle from "../ModalTitle";
 import SongLyrics from "../SongLyrics";
 import ModalGif from "../ModalGif/ModalGif";
+import { IconSearch, IconArrowRight } from "@tabler/icons-react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function TutorialModal({
   openState,
@@ -17,6 +19,7 @@ export default function TutorialModal({
   modalHandler: UseDisclosureHandlers;
 }) {
   const playButtonSound = useButtonSound();
+  const isMobile = useIsMobile();
   return (
     <Modal
       opened={openState}
@@ -46,8 +49,34 @@ export default function TutorialModal({
           </Text>
           <Text>Each guess brings you close as the music spills</Text>
         </SongLyrics>
+        <List type="ordered" mt="md">
+          <List.Item>
+            <Text>
+              Search for a song using{" "}
+              {isMobile ? (
+                <ThemeIcon color={PRIMARY_COLOR}>
+                  <IconSearch />
+                </ThemeIcon>
+              ) : (
+                `the "Choose Song" button`
+              )}
+            </Text>
+          </List.Item>
+          <List.Item>
+            <Text>
+              Submit your guess using{" "}
+              {isMobile ? (
+                <ThemeIcon color={PRIMARY_COLOR}>
+                  <IconArrowRight />
+                </ThemeIcon>
+              ) : (
+                `the "Submit Guess" button`
+              )}
+            </Text>
+          </List.Item>
+        </List>
         <Text mt="md">
-          Try to guess the song in{" "}
+          Guess the song in{" "}
           <Text fw={700} span>
             {MAX_GUESSES.toString()} or fewer tries
           </Text>

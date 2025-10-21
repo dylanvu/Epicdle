@@ -22,7 +22,7 @@ import {
   ALBUM_NAME_TO_COVER_MAP,
 } from "@/constants";
 import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
-import PlayAudioButton from "@/components/PlayAudioButton/PlayAudioButton";
+import PlayAudioButton from "@/components/ActionButton/PlayAudioButton";
 import { PRIMARY_COLOR, WIN_COLOR, WRONG_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
@@ -34,6 +34,8 @@ import { useWaveAnimation } from "@/hooks/useWaveAnimation";
 import GameModals from "@/components/modals/GameModals";
 import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
 import ConfettiOverlay from "@/components/Confetti/ConfettiOverlay";
+import MobileSearchButton from "@/components/ActionButton/MobileSearchButton";
+import MobileSubmitButton from "@/components/ActionButton/MobileSubmitButton";
 
 const winStates = ["win", "perfect_win"] as const;
 
@@ -393,40 +395,52 @@ export default function Game() {
               ))}
             </Group>
             <div className={styles.mainButtonArea}>
-              <Button
-                leftSection={<IconSearch />}
-                variant="default"
-                onClick={() => openModalHandler(searchModalHandler)}
-                aria-label="Search for a Song"
-                disabled={gameState !== "play"}
-                classNames={{
-                  label: styles.gameButtonLabelSmall,
-                  root: isMobile ? styles.gameButtonOrder2 : "",
-                }}
-                color={PRIMARY_COLOR}
-                w={isMobile ? "100%" : "auto"}
-              >
-                Choose Song
-              </Button>
+              {isMobile ? (
+                <MobileSearchButton
+                  onClick={searchModalHandler.open}
+                  disabled={gameState !== "play"}
+                />
+              ) : (
+                <Button
+                  leftSection={<IconSearch />}
+                  variant="default"
+                  onClick={() => openModalHandler(searchModalHandler)}
+                  aria-label="Search for a Song"
+                  disabled={gameState !== "play"}
+                  classNames={{
+                    label: styles.gameButtonLabelSmall,
+                  }}
+                  color={PRIMARY_COLOR}
+                  w={"auto"}
+                >
+                  Choose Song
+                </Button>
+              )}
+
               {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
               <audio ref={audioRef} src="/sample.mp3" preload="auto" />
               <PlayAudioButton playing={playing} setPlaying={setPlaying} />
-              <Button
-                leftSection={isMobile ? <IconArrowRight /> : null}
-                rightSection={isMobile ? null : <IconArrowRight />}
-                variant={selectedSong ? "filled" : "default"}
-                onClick={handleSubmit}
-                aria-label="Submit Song Guess"
-                disabled={selectedSong === undefined || gameState !== "play"}
-                classNames={{
-                  label: styles.gameButtonLabelSmall,
-                  root: isMobile ? styles.gameButtonOrder3 : "",
-                }}
-                color={PRIMARY_COLOR}
-                w={isMobile ? "100%" : "auto"}
-              >
-                Submit Guess
-              </Button>
+              {isMobile ? (
+                <MobileSubmitButton
+                  onClick={handleSubmit}
+                  disabled={selectedSong === undefined || gameState !== "play"}
+                />
+              ) : (
+                <Button
+                  leftSection={<IconArrowRight />}
+                  variant={selectedSong ? "filled" : "default"}
+                  onClick={handleSubmit}
+                  aria-label="Submit Song Guess"
+                  disabled={selectedSong === undefined || gameState !== "play"}
+                  classNames={{
+                    label: styles.gameButtonLabelSmall,
+                  }}
+                  color={PRIMARY_COLOR}
+                  w={"auto"}
+                >
+                  Submit Guess
+                </Button>
+              )}
             </div>
             {!isWinState(gameState) && gameState !== "lose" ? (
               <Button
