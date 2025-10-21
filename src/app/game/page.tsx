@@ -397,7 +397,7 @@ export default function Game() {
             <div className={styles.mainButtonArea}>
               {isMobile ? (
                 <MobileSearchButton
-                  onClick={searchModalHandler.open}
+                  onClick={() => openModalHandler(searchModalHandler)}
                   disabled={gameState !== "play"}
                 />
               ) : (
