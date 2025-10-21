@@ -1,0 +1,13 @@
+.gif {
+  height: auto;
+  object-fit: contain;
+  width: 400px;
+  margin: auto;
+}
+
+/* Medium phones / large phones (portrait) */
+@media (max-width: 767px) {
+  .gif {
+    width: 80vw;
+  }
+}

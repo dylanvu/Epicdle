@@ -7,8 +7,7 @@ import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ModalTitle from "../ModalTitle";
 import SongLyrics from "../SongLyrics";
-import Image from "next/image";
-import ModalGif from "../ModalGif";
+import ModalGif from "../ModalGif/ModalGif";
 
 export default function TutorialModal({
   openState,

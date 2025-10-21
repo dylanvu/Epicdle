@@ -8,8 +8,7 @@ import ModalTitle from "../ModalTitle";
 import { Song } from "@/interfaces/interfaces";
 import ModalThanks from "../ModalThanks";
 import SongLyrics from "../SongLyrics";
-import Image from "next/image";
-import ModalGif from "../ModalGif";
+import ModalGif from "../ModalGif/ModalGif";
 
 export default function TutorialModal({
   openState,
