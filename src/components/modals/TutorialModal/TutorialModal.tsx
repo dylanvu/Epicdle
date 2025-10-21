@@ -1,5 +1,5 @@
 "use client";
-import { Button, List, Modal, Text, ThemeIcon } from "@mantine/core";
+import { Button, List, Modal, Stack, Text, ThemeIcon } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./TutorialModal.module.css";
 import { MAX_GUESSES } from "@/constants";
@@ -31,7 +31,7 @@ export default function TutorialModal({
       className={styles.game}
       lockScroll={false}
     >
-      <div>
+      <Stack gap="xs">
         <ModalGif
           src={"/gif/Boar.gif"}
           alt="Warrior of the Mind Animatic - Boar Scene"
@@ -80,11 +80,10 @@ export default function TutorialModal({
           <Text fw={700} span>
             {MAX_GUESSES.toString()} or fewer tries
           </Text>
-          .
+          . Each attempt will reveal more of the song.
         </Text>
-        <Text>Each attempt will reveal more of the song.</Text>
         <Text>Good luck!</Text>
-      </div>
+      </Stack>
 
       <Button
         onClick={() => {
