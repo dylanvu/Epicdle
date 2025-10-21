@@ -5,6 +5,7 @@ import TutorialModal from "./TutorialModal/TutorialModal";
 import SongListModal from "./SongListModal/SongListModal";
 import WinModal from "./WinModal/WinModal";
 import LoseModal from "./LoseModal/LoseModal";
+import DisclaimerModal from "./DisclaimerModal/DisclaimerModal";
 
 /**
  * Wrapper for all the game modals
@@ -18,6 +19,8 @@ export default function GameModals({
   winModalHandler,
   openedLoseModal,
   loseModalHandler,
+  openedDisclaimerModal,
+  disclaimerModalHandler,
   setSelectedSong,
   guesses,
 }: {
@@ -29,6 +32,8 @@ export default function GameModals({
   winModalHandler: UseDisclosureHandlers;
   openedLoseModal: boolean;
   loseModalHandler: UseDisclosureHandlers;
+  openedDisclaimerModal: boolean;
+  disclaimerModalHandler: UseDisclosureHandlers;
   setSelectedSong: Dispatch<SetStateAction<Song | undefined>>;
   guesses: Song[];
 }) {
@@ -50,6 +55,10 @@ export default function GameModals({
         openState={openedLoseModal}
         modalHandler={loseModalHandler}
         guesses={guesses}
+      />
+      <DisclaimerModal
+        openState={openedDisclaimerModal}
+        modalHandler={disclaimerModalHandler}
       />
     </>
   );

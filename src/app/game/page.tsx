@@ -9,6 +9,7 @@ import {
   IconSearch,
   IconQuestionMark,
   IconChartBarPopular,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 
 import { Song } from "@/interfaces/interfaces";
@@ -60,6 +61,7 @@ export default function Game() {
   const [openedSearchModal, searchModalHandler] = useDisclosure(false);
   const [openedWinModal, winModalHandler] = useDisclosure(false);
   const [openedLoseModal, loseModalHandler] = useDisclosure(false);
+  const [openedDisclaimerModal, disclaimerModalHandler] = useDisclosure(false);
   const [gameState, setGameState] = useState<GameState>("initial_loading");
 
   const [guesses, setGuesses] = useState<Song[]>([]);
@@ -325,6 +327,8 @@ export default function Game() {
           winModalHandler={winModalHandler}
           openedLoseModal={openedLoseModal}
           loseModalHandler={loseModalHandler}
+          openedDisclaimerModal={openedDisclaimerModal}
+          disclaimerModalHandler={disclaimerModalHandler}
           setSelectedSong={setSelectedSong}
           guesses={guesses}
         />
@@ -454,6 +458,16 @@ export default function Game() {
                 View Today's Results
               </Button>
             )}
+            <Button
+              leftSection={<IconInfoCircle />}
+              variant="default"
+              onClick={() => openModalHandler(disclaimerModalHandler)}
+              aria-label="Credits & Disclaimer"
+              w="100%"
+              mt="md"
+            >
+              Credits & Disclaimer
+            </Button>
           </div>
         )}
       </motion.div>
