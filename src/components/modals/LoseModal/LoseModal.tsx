@@ -8,6 +8,8 @@ import ModalTitle from "../ModalTitle";
 import { Song } from "@/interfaces/interfaces";
 import ModalThanks from "../ModalThanks";
 import SongLyrics from "../SongLyrics";
+import Image from "next/image";
+import ModalGif from "../ModalGif";
 
 export default function TutorialModal({
   openState,
@@ -30,9 +32,11 @@ export default function TutorialModal({
       className={styles.game}
       lockScroll={false}
     >
+      <ModalGif src={"/gif/ThunderBringer.gif"} alt="Thunder" />
       <SongLyrics>
         <Text>Thunder, bring her through the wringer!</Text>
       </SongLyrics>
+      <Text mt="lg">You didn't guess today's song...</Text>
 
       <ModalThanks />
 
