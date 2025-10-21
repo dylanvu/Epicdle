@@ -95,8 +95,8 @@
 /* Medium phones / large phones (portrait) */
 @media (max-width: 767px) {
   .gamePage {
-    padding-left: 4%;
-    padding-right: 4%;
+    padding-left: 8%;
+    padding-right: 8%;
     width: 100vw;
     padding-top: 0;
     margin: auto;
@@ -105,8 +105,8 @@
   }
 
   .albumCover {
-    width: 90vw;
-    height: 90vw;
+    width: 75vw;
+    height: 75vw;
   }
 
   .gameplayArea {
@@ -119,7 +119,7 @@
   }
 
   .mainButtonArea {
-    justify-content: space-evenly;
+    justify-content: space-around;
   }
 }
 
