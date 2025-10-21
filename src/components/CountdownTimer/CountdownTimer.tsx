@@ -77,7 +77,8 @@ export default function CountdownTimer() {
   return (
     // TODO: add a question mark, hover over it, and it should say "midnight US central time"
     <div>
-      Today's song resets in {formatMs(remainingMs)} (U.S. Central Time)
+      Today's song resets in {formatMs(remainingMs)} (Resets at Midnight U.S.
+      Central Time)
     </div>
   );
 }
