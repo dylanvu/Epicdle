@@ -4,8 +4,6 @@ import {
   IconPlayerPauseFilled,
 } from "@tabler/icons-react";
 import { PRIMARY_COLOR } from "@/theme";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import mainGamePageStyles from "@/app/game/Game.module.css";
 
 export default function PlayAudioButton({
   playing,
@@ -18,8 +16,6 @@ export default function PlayAudioButton({
     const next = !playing;
     setPlaying(next);
   }
-
-  const isMobile = useIsMobile();
 
   return (
     <ActionIcon
