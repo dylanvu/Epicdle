@@ -39,3 +39,8 @@ export type GameState =
 export function isWinState(state: string): state is WinState {
   return winStates.includes(state as WinState);
 }
+
+export interface IVolumeObject {
+  volume: number;
+  muted: boolean;
+}

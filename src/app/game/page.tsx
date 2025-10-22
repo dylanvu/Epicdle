@@ -12,15 +12,16 @@ import {
   IconInfoCircle,
 } from "@tabler/icons-react";
 
-import { Song, isWinState, GameState } from "@/interfaces/interfaces";
+import {
+  Song,
+  isWinState,
+  GameState,
+  IVolumeObject,
+} from "@/interfaces/interfaces";
 import GuessProgress from "@/components/GuessProgress/GuessProgress";
 import AudioSlider from "@/components/AudioSlider/AudioSlider";
 
-import {
-  MAX_GUESSES,
-  SECONDS_PER_GUESS,
-  ALBUM_NAME_TO_COVER_MAP,
-} from "@/constants";
+import { MAX_GUESSES, ALBUM_NAME_TO_COVER_MAP } from "@/constants";
 import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
 import PlayAudioButton from "@/components/ActionButton/PlayAudioButton";
 import { PRIMARY_COLOR, WIN_COLOR, WRONG_COLOR } from "@/theme";
@@ -47,7 +48,12 @@ export default function Game() {
   const [openedLoseModal, loseModalHandler] = useDisclosure(false);
   const [openedDisclaimerModal, disclaimerModalHandler] = useDisclosure(false);
   const [gameState, setGameState] = useState<GameState>("initial_loading");
-  const volumeRef = useRef(100);
+  // const volumeRef = useRef<VolumeObject>({ volume: 100, muted: false });
+
+  const [volumeObject, setVolumeObject] = useState<IVolumeObject>({
+    volume: 100,
+    muted: false,
+  });
 
   const [guesses, setGuesses] = useState<Song[]>([]);
   const [selectedSong, setSelectedSong] = useState<Song>();
@@ -65,6 +71,12 @@ export default function Game() {
     // TODO: only show this if the user has not played ever
     helpHandler.open();
     setGameState("play");
+
+    // load volume from localStorage
+    const volume = localStorage.getItem("volume");
+    if (volume) {
+      setVolumeObject(JSON.parse(volume));
+    }
   }, []);
 
   // load the sounds
@@ -127,7 +139,7 @@ export default function Game() {
     setProgress,
     lastProgressRef,
     playAudioWithoutUseSound,
-  } = useGameAudio(guesses, gameState, volumeRef);
+  } = useGameAudio(guesses, gameState, volumeObject);
 
   /**
    * Generic function for opening a modal with a sound effect attached
@@ -376,7 +388,10 @@ export default function Game() {
                 />
               ))}
             </Group>
-            <VolumeSlider volumeRef={volumeRef} />
+            <VolumeSlider
+              volumeObject={volumeObject}
+              setVolumeObject={setVolumeObject}
+            />
             <div className={styles.mainButtonArea}>
               {isMobile ? (
                 <MobileSearchButton

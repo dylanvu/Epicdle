@@ -1,5 +1,10 @@
 import { MAX_GUESSES, SECONDS_PER_GUESS } from "@/constants";
-import { GameState, isWinState, Song } from "@/interfaces/interfaces";
+import {
+  GameState,
+  isWinState,
+  IVolumeObject,
+  Song,
+} from "@/interfaces/interfaces";
 import { useState, useRef, useEffect } from "react";
 
 /**
@@ -12,7 +17,7 @@ import { useState, useRef, useEffect } from "react";
 export function useGameAudio(
   guesses: Song[],
   gameState: GameState,
-  volumeRef: React.RefObject<number>
+  volumeObject: IVolumeObject
 ) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -35,11 +40,13 @@ export function useGameAudio(
    */
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || !volumeRef) return;
+    if (!audio || !volumeObject) return;
+
+    const volume = volumeObject.muted ? 0 : volumeObject.volume;
 
     const loop = () => {
       // I fixed a bug here so I'm not JUST a vibecoder!
-      const desired = volumeRef.current / 100;
+      const desired = volume / 100;
       if (
         lastAppliedVolumeRef.current === null ||
         Math.abs(desired - (lastAppliedVolumeRef.current ?? 0)) > 0.0005
@@ -50,6 +57,9 @@ export function useGameAudio(
       }
       volumeRafRef.current = requestAnimationFrame(loop);
     };
+
+    // remember the volume in localStorage
+    localStorage.setItem("volume", JSON.stringify(volumeObject));
 
     volumeRafRef.current = requestAnimationFrame(loop);
 
@@ -65,7 +75,7 @@ export function useGameAudio(
       }
     };
     // run once on mount; poll loop reads volumeRef.current continuously
-  }, [audioRef, volumeRef.current]);
+  }, [audioRef, volumeObject]);
 
   /**
    * This is my original contribution:

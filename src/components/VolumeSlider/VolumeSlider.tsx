@@ -8,34 +8,27 @@ import {
   IconVolume3 as OffVolumeIcon,
   IconVolumeOff as MuteVolumeIcon,
 } from "@tabler/icons-react";
+import { IVolumeObject } from "@/interfaces/interfaces";
 
 export default function VolumeSlider({
-  volumeRef,
+  volumeObject,
+  setVolumeObject,
 }: {
-  volumeRef: React.RefObject<number>;
+  volumeObject: IVolumeObject;
+  setVolumeObject: React.Dispatch<React.SetStateAction<IVolumeObject>>;
 }) {
-  const [volume, setVolume] = useState(volumeRef.current);
-  const [muted, setMuted] = useState(false);
-
+  const { volume, muted } = volumeObject;
   const toggleMute = () => {
-    if (!muted) {
-      setMuted(true);
+    if (muted) {
+      setVolumeObject({ volume, muted: false });
     } else {
-      setMuted(false);
+      setVolumeObject({ volume, muted: true });
     }
   };
 
   const handleSliderChange = (value: number) => {
-    setVolume(value);
+    setVolumeObject({ volume: value, muted });
   };
-
-  useEffect(() => {
-    if (muted) {
-      volumeRef.current = 0;
-    } else {
-      volumeRef.current = volume;
-    }
-  }, [volume, muted]);
 
   const iconSize = 18;
 
