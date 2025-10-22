@@ -54,7 +54,7 @@ export default function TutorialModal({
             <Text>
               Search for a song using{" "}
               {isMobile ? (
-                <ThemeIcon color={PRIMARY_COLOR}>
+                <ThemeIcon color={PRIMARY_COLOR} component="span">
                   <IconSearch />
                 </ThemeIcon>
               ) : (
@@ -66,7 +66,7 @@ export default function TutorialModal({
             <Text>
               Submit your guess using{" "}
               {isMobile ? (
-                <ThemeIcon color={PRIMARY_COLOR}>
+                <ThemeIcon color={PRIMARY_COLOR} component="span">
                   <IconArrowRight />
                 </ThemeIcon>
               ) : (
