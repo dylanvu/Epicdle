@@ -1,15 +1,74 @@
 import { MAX_GUESSES, SECONDS_PER_GUESS } from "@/constants";
 import { GameState, isWinState, Song } from "@/interfaces/interfaces";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
 
-export function useGameAudio(guesses: Song[], gameState: GameState) {
+/**
+ * This is a vibecoded hook that encapsulates the audio logic for the game, but at least I thought of putting the logic into its own hook.
+ * @param guesses
+ * @param gameState
+ * @param volumeRef
+ * @returns
+ */
+export function useGameAudio(
+  guesses: Song[],
+  gameState: GameState,
+  volumeRef: React.RefObject<number>
+) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const rafRef = useRef<number | null>(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const lastProgressRef = useRef(0);
 
+  // keep last applied volume so we only touch audio.volume when needed
+  const lastAppliedVolumeRef = useRef<number | null>(null);
+  // raf for volume polling / fades
+  const volumeRafRef = useRef<number | null>(null);
+  const fadeRafRef = useRef<number | null>(null);
+
+  // I'm just a vibe coder...
+
   /**
+   * Poll volumeRef.current on every frame and apply it to the audio element.
+   * This lets us react instantly when the parent updates the ref, without
+   * needing React state updates in the parent.
+   */
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !volumeRef) return;
+
+    const loop = () => {
+      // I fixed a bug here so I'm not JUST a vibecoder!
+      const desired = volumeRef.current / 100;
+      if (
+        lastAppliedVolumeRef.current === null ||
+        Math.abs(desired - (lastAppliedVolumeRef.current ?? 0)) > 0.0005
+      ) {
+        audio.volume = desired;
+        // okay everything after this is just me being a vibecoder
+        lastAppliedVolumeRef.current = desired;
+      }
+      volumeRafRef.current = requestAnimationFrame(loop);
+    };
+
+    volumeRafRef.current = requestAnimationFrame(loop);
+
+    return () => {
+      if (volumeRafRef.current) {
+        cancelAnimationFrame(volumeRafRef.current);
+        volumeRafRef.current = null;
+      }
+      // also cancel any fade in progress
+      if (fadeRafRef.current) {
+        cancelAnimationFrame(fadeRafRef.current);
+        fadeRafRef.current = null;
+      }
+    };
+    // run once on mount; poll loop reads volumeRef.current continuously
+  }, [audioRef, volumeRef.current]);
+
+  /**
+   * This is my original contribution:
    * I don't really like this, but basically we add a ref that acts like a flag here to continue playing the audio when the win state is reached
    */
   const playSoundWhenWinRef = useRef(false);
@@ -121,6 +180,7 @@ export function useGameAudio(guesses: Song[], gameState: GameState) {
   }, [playing, guesses, gameState]);
 
   /**
+   * This is also my original contribution:
    * This function is necessary since useSound does not let me chain together sound effects
    * @param audioPath
    */

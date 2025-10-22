@@ -1,7 +1,7 @@
 "use client";
-import { Button, Group, Text, Loader, Center } from "@mantine/core";
+import { Button, Group, Text, Loader, Center, Stack } from "@mantine/core";
 import { useDisclosure, UseDisclosureHandlers } from "@mantine/hooks";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Game.module.css";
 import Image from "next/image";
 import {
@@ -36,6 +36,7 @@ import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
 import ConfettiOverlay from "@/components/Confetti/ConfettiOverlay";
 import MobileSearchButton from "@/components/ActionButton/MobileSearchButton";
 import MobileSubmitButton from "@/components/ActionButton/MobileSubmitButton";
+import VolumeSlider from "@/components/VolumeSlider/VolumeSlider";
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -46,6 +47,7 @@ export default function Game() {
   const [openedLoseModal, loseModalHandler] = useDisclosure(false);
   const [openedDisclaimerModal, disclaimerModalHandler] = useDisclosure(false);
   const [gameState, setGameState] = useState<GameState>("initial_loading");
+  const volumeRef = useRef(100);
 
   const [guesses, setGuesses] = useState<Song[]>([]);
   const [selectedSong, setSelectedSong] = useState<Song>();
@@ -125,7 +127,7 @@ export default function Game() {
     setProgress,
     lastProgressRef,
     playAudioWithoutUseSound,
-  } = useGameAudio(guesses, gameState);
+  } = useGameAudio(guesses, gameState, volumeRef);
 
   /**
    * Generic function for opening a modal with a sound effect attached
@@ -374,6 +376,7 @@ export default function Game() {
                 />
               ))}
             </Group>
+            <VolumeSlider volumeRef={volumeRef} />
             <div className={styles.mainButtonArea}>
               {isMobile ? (
                 <MobileSearchButton
