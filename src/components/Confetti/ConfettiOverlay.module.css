@@ -1,9 +1,6 @@
 .confettiOverlay {
   position: absolute;
   z-index: 201;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0; /* shorthand for top:0; right:0; bottom:0; left:0; */
   pointer-events: none;
 }
