@@ -38,10 +38,21 @@ export default function DisclaimerModal({
       <Stack gap="xs">
         {/* --- Attribution / Credits Section --- */}
         <Title order={4}>Attribution / Credits</Title>
+        <Title order={5}>Game/Coding</Title>
+        <Text>Yours Truly: Dylan</Text>
+        <Text>
+          Got any problems or questions? Shoot me an email:{" "}
+          <Anchor
+            href="mailto:epicdle.game@gmail.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            epicdle.game@gmail.com
+          </Anchor>
+        </Text>
 
         <Title order={5}>Music</Title>
         <Text>Jorge Rivera-Herrans, Winion Entertainment LLC</Text>
-
         <Title order={5}>Album Art</Title>
         <Text>
           <Anchor
@@ -52,7 +63,6 @@ export default function DisclaimerModal({
             ZWIST
           </Anchor>
         </Text>
-
         <Title order={5}>GIFs</Title>
         <List>
           <List.Item>
@@ -74,7 +84,6 @@ export default function DisclaimerModal({
             </Anchor>
           </List.Item>
         </List>
-
         <Title order={5}>Sound Effects</Title>
         <List>
           <List.Item>
@@ -123,19 +132,13 @@ export default function DisclaimerModal({
             </Anchor>
           </List.Item>
         </List>
-
         <Divider my="sm" />
-
         {/* --- Footer Content --- */}
         <Title order={4}>Disclaimer</Title>
-
-        <Text>An Epic: The Musical fan game coded by Dylan</Text>
-
         <Text>
           I'm just a humble developer who codes for fun. This is a completely
           free, fan-made project created out of love for the musical.
         </Text>
-
         <Text>
           If you enjoy the game and would like to support me to help cover the
           game server maintenance and other costs coming out of my own pocket,
@@ -150,20 +153,18 @@ export default function DisclaimerModal({
           </Anchor>
           !
         </Text>
-
         <Text>
           Support is never required to enjoy all features of the game! It's just
           a way to help keep the project running.
         </Text>
-
         <Text fw={700}>
           I am not affiliated with Jorge Rivera-Herrans, any members of the EPIC
           cast, or Winion Entertainment LLC in any way. All rights to the
-          original music and album art belong to their respective owners. If
-          you'd like to support the official creators, please support their
-          channels/socials and listen to Epic: The Musical!
+          original music, animatics, sound effects, and album art belong to
+          their respective owners. If you'd like to support the official
+          creators, please support their channels/socials and listen to Epic:
+          The Musical!
         </Text>
-
         <Button
           onClick={() => {
             modalHandler.close();
