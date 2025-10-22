@@ -12,7 +12,7 @@ import {
   IconInfoCircle,
 } from "@tabler/icons-react";
 
-import { Song } from "@/interfaces/interfaces";
+import { Song, isWinState, GameState } from "@/interfaces/interfaces";
 import GuessProgress from "@/components/GuessProgress/GuessProgress";
 import AudioSlider from "@/components/AudioSlider/AudioSlider";
 
@@ -37,26 +37,7 @@ import ConfettiOverlay from "@/components/Confetti/ConfettiOverlay";
 import MobileSearchButton from "@/components/ActionButton/MobileSearchButton";
 import MobileSubmitButton from "@/components/ActionButton/MobileSubmitButton";
 
-const winStates = ["win", "perfect_win"] as const;
-
-type WinState = (typeof winStates)[number];
-
-type GameState =
-  | "initial_loading"
-  | WinState
-  | "lose"
-  | "submit"
-  | "loading"
-  | "play";
-
-/**
- * isWinState typeguard
- * @param state state to check
- * @returns is a win state
- */
-function isWinState(state: string): state is WinState {
-  return winStates.includes(state as WinState);
-}
+const WIN_LOSS_TIMEOUT = 800;
 
 export default function Game() {
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -105,16 +86,36 @@ export default function Game() {
     maxGuesses: MAX_GUESSES,
   });
 
-  // the available audio will always be the number of guesses made + 1 additional audio segment
-  const targetSeconds = useMemo(() => {
-    // let the player hear the whole song if they win, and also prevent the game from showing too much audio if they have lost
-    if (guesses.length >= MAX_GUESSES || isWinState(gameState)) {
-      return MAX_GUESSES * SECONDS_PER_GUESS;
-    } else {
-      // let the player hear the next segment
-      return (guesses.length + 1) * SECONDS_PER_GUESS;
+  useEffect(() => {
+    if (isWinState(gameState)) {
+      // small timeout to bask in the glory
+      setTimeout(() => {
+        winModalHandler.open();
+      }, WIN_LOSS_TIMEOUT);
+
+      // win animation
+      animate(
+        scope.current,
+        {
+          y: [0, -20, 0], // up, then back down
+          scaleY: [1, 0.9, 1], // squash slightly on landing
+          scaleX: [1, 1.05, 1], // stretch slightly on landing
+        },
+        {
+          duration: 0.5,
+          ease: "easeOut",
+        }
+      );
+
+      animateScreenFlash(WIN_COLOR);
+    } else if (gameState === "lose") {
+      // small timeout to bask in shame
+      setTimeout(() => {
+        loseModalHandler.open();
+      }, WIN_LOSS_TIMEOUT);
+      animateIncorrectGuess();
     }
-  }, [guesses, gameState]);
+  }, [gameState]);
 
   const {
     audioRef,
@@ -124,7 +125,7 @@ export default function Game() {
     setProgress,
     lastProgressRef,
     playAudioWithoutUseSound,
-  } = useGameAudio(targetSeconds);
+  } = useGameAudio(guesses, gameState);
 
   /**
    * Generic function for opening a modal with a sound effect attached
@@ -149,25 +150,6 @@ export default function Game() {
       setGameState("win");
     }
     progressGuessUI(false, false);
-    winModalHandler.open();
-    // play the rest of the song!
-    setPlaying(true);
-
-    // win animation
-    animate(
-      scope.current,
-      {
-        y: [0, -20, 0], // up, then back down
-        scaleY: [1, 0.9, 1], // squash slightly on landing
-        scaleX: [1, 1.05, 1], // stretch slightly on landing
-      },
-      {
-        duration: 0.5,
-        ease: "easeOut",
-      }
-    );
-
-    animateScreenFlash(WIN_COLOR);
   }
 
   function handleLose() {
@@ -177,8 +159,6 @@ export default function Game() {
     progressGuessUI();
     // progress the UI state
     setGameState("lose");
-    loseModalHandler.open();
-    animateIncorrectGuess();
   }
 
   function animateScreenFlash(
