@@ -42,6 +42,21 @@ export default function Home() {
           setShowMainMenu(true);
         }}
       >
+        {now ? null : (
+          <motion.div
+            key={"loading-main-page"}
+            exit={{
+              opacity: 0,
+            }}
+          >
+            <Center>
+              <Stack justify="center" align="center">
+                <Loader color={PRIMARY_COLOR} size="xl" />
+                <Title>Welcome to Epicdle!</Title>
+              </Stack>
+            </Center>
+          </motion.div>
+        )}
         {showMainMenu && now ? (
           <motion.div
             key="main-menu"
@@ -58,28 +73,6 @@ export default function Home() {
             <Menu />
           </motion.div>
         ) : null}
-        {now ? null : (
-          <motion.div
-            key={"loading-main-page"}
-            exit={{
-              opacity: 0,
-            }}
-          >
-            <Center>
-              {isMobile ? (
-                <Stack justify="center" align="center">
-                  <Loader color={PRIMARY_COLOR} size="xl" />
-                  <Title>Welcome to Epicdle!</Title>
-                </Stack>
-              ) : (
-                <Group>
-                  <Title>Welcome to Epicdle!</Title>
-                  <Loader color={PRIMARY_COLOR} size="xl" />
-                </Group>
-              )}
-            </Center>
-          </motion.div>
-        )}
       </AnimatePresence>
     </main>
   );
