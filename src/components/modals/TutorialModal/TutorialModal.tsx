@@ -47,7 +47,7 @@ export default function TutorialModal({
             </Text>
             to reach win's thrill
           </Text>
-          <Text>Each guess brings you close as the music spills</Text>
+          <Text>An mistold guess allows the song to fill</Text>
         </SongLyrics>
         <List type="ordered" mt="md">
           <List.Item>
