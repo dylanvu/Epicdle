@@ -36,6 +36,7 @@ export default function RootLayout({
           type="image/gif"
           fetchPriority="high"
         />
+        <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
         <ColorSchemeScript />
       </Head>
       <body className={`${lato.className}`}>
