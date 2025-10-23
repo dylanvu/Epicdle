@@ -1,5 +1,5 @@
 "use client";
-import { Button, Text } from "@mantine/core";
+import { Button, Stack, Text } from "@mantine/core";
 import styles from "./Menu.module.css";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
@@ -15,39 +15,33 @@ export default function Menu() {
   });
   const playAboutButtonSound = useButtonSound();
   return (
-    <div className={styles.Menu}>
+    <Stack mt="md" justify="center" align="center" ml="auto" mr="auto">
       <DisclaimerModal openState={openedAbout} modalHandler={aboutHandler} />
-      <div>
-        <Button
-          onClick={() => playButtonSound()}
-          size="lg"
-          variant="filled"
-          fullWidth
-          component="a"
-          color={PRIMARY_COLOR}
-        >
-          Play
-        </Button>
-      </div>
-      <div>
-        <Button
-          size="lg"
-          variant="outline"
-          fullWidth
-          onClick={() => {
-            playAboutButtonSound();
-            aboutHandler.open();
-          }}
-          color={PRIMARY_COLOR}
-        >
-          Credits & Disclaimer
-        </Button>
-      </div>
+      <Button
+        onClick={() => playButtonSound()}
+        size="lg"
+        variant="filled"
+        component="a"
+        color={PRIMARY_COLOR}
+      >
+        Play
+      </Button>
+      <Button
+        size="lg"
+        variant="outline"
+        onClick={() => {
+          playAboutButtonSound();
+          aboutHandler.open();
+        }}
+        color={PRIMARY_COLOR}
+      >
+        Credits & Disclaimer
+      </Button>
       <Text>
         All rights to the original music, sound effects, and album art belong to
         their respective owners.
       </Text>
       <Text>Please see the credits section for attributions.</Text>
-    </div>
+    </Stack>
   );
 }
