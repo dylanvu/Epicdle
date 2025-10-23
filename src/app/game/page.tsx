@@ -48,7 +48,6 @@ export default function Game() {
   const [openedLoseModal, loseModalHandler] = useDisclosure(false);
   const [openedDisclaimerModal, disclaimerModalHandler] = useDisclosure(false);
   const [gameState, setGameState] = useState<GameState>("initial_loading");
-  // const volumeRef = useRef<VolumeObject>({ volume: 100, muted: false });
 
   const [volumeObject, setVolumeObject] = useState<IVolumeObject>({
     volume: 100,
@@ -363,7 +362,7 @@ export default function Game() {
               </div>
               <GuessHistoryOverlay guesses={guesses} />
             </div>
-            <Text className={styles.songTitle}>
+            <Text className={styles.songTitle} mt="xs">
               {selectedSong?.name ?? "Select a song below..."}
             </Text>
             <AudioSlider
