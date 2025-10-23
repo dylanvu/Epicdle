@@ -7,14 +7,17 @@ import CountdownTimer from "@/components/CountdownTimer/CountdownTimer";
 import { useEffect, useState } from "react";
 import { getCentralNow } from "@/util/time";
 import { MAX_GUESSES } from "@/constants";
-import { Center, Group, Loader, Title } from "@mantine/core";
+import { Center, Group, Loader, Stack, Title } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/theme";
 import { AnimatePresence, motion } from "motion/react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function Home() {
   const [now, setNow] = useState<Date | null>(null);
   const [showMainMenu, setShowMainMenu] = useState(false);
   const [remainingMs, setRemainingMs] = useState(0);
+
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const tick = () => {
@@ -34,7 +37,11 @@ export default function Home() {
   }, []);
   return (
     <main className={styles.page}>
-      <AnimatePresence onExitComplete={() => setShowMainMenu(true)}>
+      <AnimatePresence
+        onExitComplete={() => {
+          setShowMainMenu(true);
+        }}
+      >
         {showMainMenu && now ? (
           <motion.div
             key="main-menu"
@@ -59,10 +66,17 @@ export default function Home() {
             }}
           >
             <Center>
-              <Group>
-                <Title>Loading Epicdle...</Title>
-                <Loader color={PRIMARY_COLOR} />
-              </Group>
+              {isMobile ? (
+                <Stack justify="center" align="center">
+                  <Loader color={PRIMARY_COLOR} size="xl" />
+                  <Title>Welcome to Epicdle!</Title>
+                </Stack>
+              ) : (
+                <Group>
+                  <Title>Welcome to Epicdle!</Title>
+                  <Loader color={PRIMARY_COLOR} size="xl" />
+                </Group>
+              )}
             </Center>
           </motion.div>
         )}
