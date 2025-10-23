@@ -14,6 +14,7 @@ export default function GuessHistoryOverlay({ guesses }: { guesses: Song[] }) {
             style={{
               color: WRONG_COLOR,
             }}
+            className={styles.guessIcon}
           />
           <Text className={styles.guessText}>{guess.name}</Text>
         </div>

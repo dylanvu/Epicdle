@@ -2,30 +2,34 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  max-width: 100%;
-  min-width: 100%;
   /* Center the overlay */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 0.8rem;
-  margin: 0.8rem;
+  padding: 0.8rem;
 }
 
 .guess {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  justify-items: start;
   align-items: center;
   gap: 0.5rem;
-  width: 80%;
+  width: 95%;
   margin-left: auto;
   margin-right: auto;
-  /* background-color: black;
-  padding: 0.4rem;
-  border: 0.2rem solid black;
-  border-radius: 0.5rem; */
+}
+
+.guessIcon {
+  justify-self: center;
+}
+
+/* Medium phones / large phones (portrait) */
+@media (max-width: 767px) {
+  .guessHistory {
+    gap: 0.4rem;
+  }
 }
