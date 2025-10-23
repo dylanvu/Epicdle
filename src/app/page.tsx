@@ -7,17 +7,14 @@ import CountdownTimer from "@/components/CountdownTimer/CountdownTimer";
 import { useEffect, useState } from "react";
 import { getCentralNow } from "@/util/time";
 import { MAX_GUESSES } from "@/constants";
-import { Center, Group, Loader, Stack, Title } from "@mantine/core";
+import { Center, Loader, Title } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/theme";
 import { AnimatePresence, motion } from "motion/react";
-import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function Home() {
   const [now, setNow] = useState<Date | null>(null);
   const [showMainMenu, setShowMainMenu] = useState(false);
   const [remainingMs, setRemainingMs] = useState(0);
-
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     const tick = () => {
@@ -50,10 +47,10 @@ export default function Home() {
             }}
           >
             <Center>
-              <Stack justify="center" align="center">
-                <Loader color={PRIMARY_COLOR} size="xl" />
+              <div className={styles.responsiveLoader}>
                 <Title>Welcome to Epicdle!</Title>
-              </Stack>
+                <Loader color={PRIMARY_COLOR} size="xl" />
+              </div>
             </Center>
           </motion.div>
         )}
