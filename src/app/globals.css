@@ -37,3 +37,14 @@ a {
     color-scheme: dark;
   }
 }
+
+:root {
+  --PRIMARY_COLOR: #3b7a8c;
+}
+
+.focus {
+  &:focus-visible {
+    outline: 2px solid var(--PRIMARY_COLOR);
+    outline-offset: 2px;
+  }
+}
