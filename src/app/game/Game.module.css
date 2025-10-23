@@ -39,8 +39,11 @@
 
 .albumCover {
   position: relative;
-  width: 400px;
-  height: 400px;
+  min-width: 300px;
+  min-height: 300px;
+
+  width: 350px;
+  height: 350px;
 }
 
 .albumCover > img {
