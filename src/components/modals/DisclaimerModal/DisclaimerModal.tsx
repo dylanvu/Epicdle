@@ -131,6 +131,15 @@ export default function DisclaimerModal({
               https://pixabay.com/sound-effects/click-for-game-menu-131903/
             </Anchor>
           </List.Item>
+          <List.Item>
+            <Anchor
+              href="https://pixabay.com/sound-effects/sword-slash-and-swing-185432/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              https://pixabay.com/sound-effects/sword-slash-and-swing-185432/
+            </Anchor>
+          </List.Item>
         </List>
         <Divider my="sm" />
         {/* --- Footer Content --- */}
