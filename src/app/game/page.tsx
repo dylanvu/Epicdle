@@ -370,7 +370,7 @@ export default function Game() {
                       : "/Epic_The_Musical_Album_Cover.webp"
                   }
                   alt="Epicdle"
-                  style={{ opacity: gameState !== "win" ? 0.5 : 1 }}
+                  style={{ opacity: gameState === "perfect_win" ? 1 : 0.5 }}
                   fill={true}
                 />
               </div>
