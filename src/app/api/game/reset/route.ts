@@ -208,6 +208,30 @@ export async function PATCH(req: NextRequest) {
     `Successfully deleted the old snippet file ${oldSnippetFileKey} from the CDN`
   );
 
+  // now increment the days the game has been alive
+
+  // fetch the current number of days the game has been alive from the game-stats document
+  const gameStatsDocRef = firestore
+    .collection(FIREBASE_DATABASE_COLLECTION_NAME)
+    .doc("game-stats");
+
+  let gameStatsDocData = (await gameStatsDocRef.get()).data();
+
+  if (!gameStatsDocData) {
+    gameStatsDocData = {
+      lifetime_day_count: 0,
+    };
+  }
+
+  gameStatsDocData["lifetime_day_count"]++;
+
+  await gameStatsDocRef.set(gameStatsDocData);
+
+  console.log(
+    "Successfully incremented the totalDaysAlive in the game-stats document to be",
+    gameStatsDocData.totalDaysAlive
+  );
+
   return NextResponse.json(
     {
       message: updateMessage,
