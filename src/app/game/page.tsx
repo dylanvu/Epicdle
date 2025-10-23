@@ -29,15 +29,19 @@ import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { motion, useAnimate } from "motion/react";
-import { useGameAudio } from "@/hooks/audio/useGameAudio";
+import {
+  useGameAudio,
+  playAudioWithoutUseSound,
+} from "@/hooks/audio/useGameAudio";
 import { useWaveAnimation } from "@/hooks/useWaveAnimation";
 
 import GameModals from "@/components/modals/GameModals";
-import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
+import EpicdleTitle from "@/components/Text/Epicdle/EpicdleTitle";
 import ConfettiOverlay from "@/components/Confetti/ConfettiOverlay";
 import MobileSearchButton from "@/components/ActionButton/MobileSearchButton";
 import MobileSubmitButton from "@/components/ActionButton/MobileSubmitButton";
 import VolumeSlider from "@/components/VolumeSlider/VolumeSlider";
+import PerfectText from "@/components/Text/PerfectTextOverlay/PerfectTextOverlay";
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -48,6 +52,7 @@ export default function Game() {
   const [openedLoseModal, loseModalHandler] = useDisclosure(false);
   const [openedDisclaimerModal, disclaimerModalHandler] = useDisclosure(false);
   const [gameState, setGameState] = useState<GameState>("initial_loading");
+  const [showPerfectText, setShowPerfectText] = useState(false);
 
   const [volumeObject, setVolumeObject] = useState<IVolumeObject>({
     volume: 100,
@@ -101,10 +106,17 @@ export default function Game() {
 
   useEffect(() => {
     if (isWinState(gameState)) {
+      let win_timeout = WIN_LOSS_TIMEOUT;
+      if (gameState === "perfect_win") {
+        win_timeout = win_timeout * 2;
+        setTimeout(() => {
+          setShowPerfectText(true);
+        }, WIN_LOSS_TIMEOUT);
+      }
       // small timeout to bask in the glory
       setTimeout(() => {
         winModalHandler.open();
-      }, WIN_LOSS_TIMEOUT);
+      }, win_timeout);
 
       // win animation
       animate(
@@ -121,7 +133,9 @@ export default function Game() {
       );
 
       animateScreenFlash(WIN_COLOR);
-    } else if (gameState === "lose") {
+    }
+
+    if (gameState === "lose") {
       // small timeout to bask in shame
       setTimeout(() => {
         loseModalHandler.open();
@@ -137,7 +151,6 @@ export default function Game() {
     progress,
     setProgress,
     lastProgressRef,
-    playAudioWithoutUseSound,
   } = useGameAudio(guesses, gameState, volumeObject);
 
   /**
@@ -306,6 +319,7 @@ export default function Game() {
           background: WRONG_COLOR,
         }}
       />
+      <PerfectText show={showPerfectText} />
       <motion.div ref={scope} className={styles.gamePage}>
         {gameState === "win" ? <ConfettiOverlay /> : null}
         {gameState === "perfect_win" ? (

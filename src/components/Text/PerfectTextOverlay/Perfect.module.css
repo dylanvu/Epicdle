@@ -1,0 +1,11 @@
+.perfectTextOverlay {
+  position: fixed; /* cover viewport */
+  inset: 0;
+  pointer-events: none;
+  z-index: 199;
+}
+
+.perfectText {
+  font-size: 8rem;
+  transform: rotate(20deg);
+}

@@ -1,6 +1,6 @@
 import styles from "./page.module.css";
 import Menu from "@/components/Menu/Menu";
-import EpicdleTitle from "@/components/Epicdle/EpicdleTitle";
+import EpicdleTitle from "@/components/Text/Epicdle/EpicdleTitle";
 import CountdownTimer from "@/components/CountdownTimer/CountdownTimer";
 
 export default function Home() {

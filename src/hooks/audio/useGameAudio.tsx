@@ -189,20 +189,6 @@ export function useGameAudio(
     };
   }, [playing, guesses, gameState]);
 
-  /**
-   * This is also my original contribution:
-   * This function is necessary since useSound does not let me chain together sound effects
-   * @param audioPath
-   */
-  async function playAudioWithoutUseSound(audioPath: string) {
-    try {
-      const audio = new Audio(audioPath);
-      await audio.play();
-    } catch (e) {
-      console.error("native Audio failed:", e);
-    }
-  }
-
   return {
     audioRef,
     playing,
@@ -210,6 +196,19 @@ export function useGameAudio(
     progress,
     setProgress,
     lastProgressRef,
-    playAudioWithoutUseSound,
   };
+}
+
+/**
+ * This is also my original contribution:
+ * This function is necessary since useSound does not let me chain together sound effects
+ * @param audioPath
+ */
+export async function playAudioWithoutUseSound(audioPath: string) {
+  try {
+    const audio = new Audio(audioPath);
+    await audio.play();
+  } catch (e) {
+    console.error("native Audio failed:", e);
+  }
 }
