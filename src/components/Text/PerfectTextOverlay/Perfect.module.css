@@ -2,7 +2,7 @@
   position: fixed; /* cover viewport */
   inset: 0;
   pointer-events: none;
-  z-index: 199;
+  z-index: 202;
 }
 
 .perfectText {
