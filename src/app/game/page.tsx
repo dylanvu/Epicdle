@@ -320,7 +320,7 @@ export default function Game() {
         }}
       />
       <PerfectText show={showPerfectText} />
-      <motion.div ref={scope} className={styles.gamePage}>
+      <div className={styles.gamePage}>
         {gameState === "win" ? <ConfettiOverlay /> : null}
         {gameState === "perfect_win" ? (
           <ConfettiOverlay perfect={true} />
@@ -346,7 +346,8 @@ export default function Game() {
             <Loader color={PRIMARY_COLOR} />
           </Center>
         ) : (
-          <div
+          <motion.div
+            ref={scope}
             className={`${styles.gameplayArea} ${
               !isMobile ? gamePageStateStyle : ""
             }`}
@@ -493,9 +494,9 @@ export default function Game() {
             >
               Credits & Disclaimer
             </Button>
-          </div>
+          </motion.div>
         )}
-      </motion.div>
+      </div>
     </>
   );
 }
