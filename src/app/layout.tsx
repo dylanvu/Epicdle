@@ -29,6 +29,13 @@ export default function RootLayout({
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <Head>
         <title>Epicdle</title>
+        <link
+          rel="preload"
+          href="/gif/Boar.gif"
+          as="image"
+          type="image/gif"
+          fetchPriority="high"
+        />
         <ColorSchemeScript />
       </Head>
       <body className={`${lato.className}`}>

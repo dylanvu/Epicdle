@@ -419,6 +419,7 @@ export default function Game() {
                     alt="Epicdle"
                     style={{ opacity: gameState === "perfect_win" ? 1 : 0.5 }}
                     fill={true}
+                    priority
                   />
                 </div>
                 <GuessHistoryOverlay guesses={guesses} />
