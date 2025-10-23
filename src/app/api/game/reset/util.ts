@@ -118,7 +118,9 @@ export async function createAudioSnippet(
   console.log("Got audio duration in seconds:", songLength);
 
   // choose snippet start
-  const snippetLength = SECONDS_PER_GUESS * (MAX_GUESSES + 1);
+  const extraSnippetLengthBuffer = 2;
+  const snippetLength =
+    SECONDS_PER_GUESS * (MAX_GUESSES + extraSnippetLengthBuffer);
   const validSongLength = Math.max(0, songLength - snippetLength);
   const startSeconds =
     validSongLength > 0 ? Math.floor(seedrandom(seed)() * validSongLength) : 0;
