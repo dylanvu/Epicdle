@@ -64,7 +64,7 @@ export default function Home() {
           >
             <EpicdleTitle />
             <div>
-              Guess the Epic: The Musical song in {MAX_GUESSES} chances!
+              Guess today's <strong>Epic: The Musical</strong> song!
             </div>
             <CountdownTimer time={now} remainingMs={remainingMs} />
             <Menu />
