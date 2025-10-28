@@ -50,6 +50,7 @@ import MobileSearchButton from "@/components/ActionButton/MobileSearchButton";
 import MobileSubmitButton from "@/components/ActionButton/MobileSubmitButton";
 import VolumeSlider from "@/components/VolumeSlider/VolumeSlider";
 import PerfectText from "@/components/Text/PerfectTextOverlay/PerfectTextOverlay";
+import { checkAnswer } from "@/app/services/gameService";
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -233,9 +234,10 @@ export default function Game() {
     animateIncorrectGuess();
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     // guard: make sure there is a selected song
     if (!selectedSong) {
+      // this shouldn't happen generally... since the button should be disabled if there is no song selected
       console.warn("Attempted to submit with no song selected.");
       return;
     }
@@ -249,11 +251,20 @@ export default function Game() {
       onlyFilled: false,
     });
 
+    let isCorrect: boolean = false;
+    try {
+      isCorrect = await checkAnswer(selectedSong.name);
+    } catch (err) {
+      console.error("Error checking answer:", err);
+      // TODO: create a toast to show the error
+      return;
+    }
+
     // store the submitted song in a ref so callbacks (which run after sound) use the exact submitted song
     lastSubmittedSongRef.current = selectedSong;
 
     // first, determine if the answer is right
-    if (selectedSong.name === "Warrior of the Mind") {
+    if (isCorrect) {
       // correct
       // Note: this does not add the correct guess to the guesses array
       playSubmitWinSound();

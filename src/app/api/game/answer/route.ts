@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { firestore } from "@/app/api/firebase";
 import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
+import { ICheckAnswerResult } from "@/interfaces/interfaces";
 
 /**
- * Check if the answer is correct
+ * Check if the answer is correct.
+ * Checks the answer in the database in the "today" document.
  * @param req
  */
-export async function PATCH(req: NextRequest) {
+export async function PATCH(
+  req: NextRequest
+): Promise<NextResponse<ICheckAnswerResult>> {
   const reqJSON = await req.json();
   console.log("Request body:", reqJSON);
   console.log("answer:", !reqJSON.answer);
@@ -15,6 +19,7 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json(
       {
         message: `Missing answer in request body`,
+        correct: false,
       },
       { status: 400 }
     );

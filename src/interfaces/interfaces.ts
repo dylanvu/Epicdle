@@ -44,3 +44,28 @@ export interface IVolumeObject {
   volume: number;
   muted: boolean;
 }
+
+export interface ICheckAnswerResult {
+  message: string;
+  correct: boolean;
+}
+
+export function isICheckAnswerResult(v: unknown): v is ICheckAnswerResult {
+  return (
+    typeof v === "object" &&
+    v !== null &&
+    typeof (v as any).message === "string" &&
+    typeof (v as any).correct === "boolean"
+  );
+}
+
+export class HttpError extends Error {
+  statusCode: number;
+  name: string;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.name = "HttpError";
+    this.statusCode = statusCode;
+  }
+}
