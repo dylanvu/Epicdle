@@ -50,7 +50,8 @@ import MobileSearchButton from "@/components/ActionButton/MobileSearchButton";
 import MobileSubmitButton from "@/components/ActionButton/MobileSubmitButton";
 import VolumeSlider from "@/components/VolumeSlider/VolumeSlider";
 import PerfectText from "@/components/Text/PerfectTextOverlay/PerfectTextOverlay";
-import { checkAnswer } from "@/app/services/gameService";
+import { checkAnswer, getDailySnippet } from "@/app/services/gameService";
+import { audio } from "motion/react-client";
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -63,6 +64,7 @@ export default function Game() {
   const [openedDisclaimerModal, disclaimerModalHandler] = useDisclosure(false);
   const [gameState, setGameState] = useState<GameState>("initial_loading");
   const [showPerfectText, setShowPerfectText] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
   const [volumeObject, setVolumeObject] = useState<IVolumeObject>({
     volume: 100,
@@ -87,7 +89,15 @@ export default function Game() {
     if (volume) {
       setVolumeObject(JSON.parse(volume));
     }
-    setGameState("play");
+
+    // get the daily snippet
+    getDailySnippet().then((blob) => {
+      if (blob) {
+        const dailyAudioUrl = URL.createObjectURL(blob);
+        setAudioUrl(dailyAudioUrl);
+      }
+      setGameState("play");
+    });
   }, []);
 
   // load the sounds
@@ -368,7 +378,7 @@ export default function Game() {
           exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: 0.45 }}
           onAnimationComplete={() => {
-            // TODO: only show this if the user has not played ever
+            // TODO: only show this if the user has not played today
             helpHandler.open();
           }}
         >
@@ -488,7 +498,11 @@ export default function Game() {
                 )}
 
                 {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
-                <audio ref={audioRef} src="/sample.mp3" preload="auto" />
+                <audio
+                  ref={audioRef}
+                  src={audioUrl ?? "/sample.mp3"}
+                  preload="auto"
+                />
                 <PlayAudioButton playing={playing} setPlaying={setPlaying} />
                 {isMobile ? (
                   <MobileSubmitButton

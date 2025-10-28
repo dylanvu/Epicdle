@@ -1,7 +1,8 @@
 import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
 import { S3 } from "@/app/api/cloudflare";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { createSnippetKey, getTodaysDate } from "./util";
+import { createSnippetKey } from "./util";
+import { getCentralNow, getNextCentralMidnight } from "@/util/time";
 
 /**
  * retrieve the daily song snippet from the storage
@@ -10,8 +11,10 @@ import { createSnippetKey, getTodaysDate } from "./util";
  */
 export async function GET() {
   try {
-    const today = getTodaysDate();
+    const today = getCentralNow();
     const snippetFileKey = createSnippetKey(today);
+
+    console.log("Getting snippet for", snippetFileKey);
 
     const { Body, ContentType, ContentLength, LastModified, ETag } =
       await S3.send(
@@ -25,7 +28,27 @@ export async function GET() {
       return new Response("File not found", { status: 404 });
     }
 
-    // Cloudflare R2 gives you a Web ReadableStream
+    // compute seconds until next master midnight
+    const nextMidnight = getNextCentralMidnight(today); // implement to return Date at next central midnight
+    let secondsUntilReset = Math.max(
+      0,
+      Math.floor((nextMidnight.getTime() - today.getTime()) / 1000)
+    );
+
+    // safety buffer so we don't race exactly at midnight
+    const SAFETY_BUFFER_SECONDS = 90;
+    secondsUntilReset = Math.max(5, secondsUntilReset - SAFETY_BUFFER_SECONDS);
+
+    // Choose headers: s-maxage for CDN, max-age for browsers
+    const cacheControl = [
+      `public`,
+      `max-age=${secondsUntilReset}`,
+      `s-maxage=${secondsUntilReset}`,
+      `must-revalidate`,
+      `stale-while-revalidate=30`,
+    ].join(", ");
+
+    // Cloudflare R2 returns a ReadableStream
     const stream = Body as ReadableStream;
 
     return new Response(stream, {
@@ -35,7 +58,9 @@ export async function GET() {
         ...(ContentLength
           ? { "Content-Length": ContentLength.toString() }
           : {}),
-        "Cache-Control": "public, max-age=86400, immutable",
+        "Cache-Control": cacheControl,
+        Expires: nextMidnight.toUTCString(),
+        "X-Resolved-Date": today.toISOString(),
         ...(ETag ? { ETag } : {}),
         ...(LastModified
           ? { "Last-Modified": LastModified.toUTCString() }
@@ -47,6 +72,7 @@ export async function GET() {
     return new Response("Internal Server Error", { status: 500 });
   }
 }
+
 /**
  * Check if the answer is correct
  * @param request

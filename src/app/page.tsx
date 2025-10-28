@@ -6,7 +6,6 @@ import EpicdleTitle from "@/components/Text/Epicdle/EpicdleTitle";
 import CountdownTimer from "@/components/CountdownTimer/CountdownTimer";
 import { useEffect, useState } from "react";
 import { getCentralNow } from "@/util/time";
-import { MAX_GUESSES } from "@/constants";
 import { Center, Loader, Title } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/theme";
 import { AnimatePresence, motion } from "motion/react";
