@@ -16,7 +16,37 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: "Epicdle",
-  description: "Guess the Epic: The Musical song!",
+  description: "Guess the daily Epic: The Musical song!",
+  keywords:
+    "epic the musical, wordle, heardle, musical, music, song, guessing game",
+  openGraph: {
+    title: "Epicdle",
+    description: "Guess the daily Epic: The Musical song!",
+    // TODO: fix the link
+    url: "https://epicdle.com",
+    siteName: "Epicdle",
+    images: [
+      {
+        url: "/Epic_The_Musical_Album_Cover.webp",
+        width: 630,
+        height: 630,
+        alt: "Epicdle",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://epicdle.com",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 export default function RootLayout({
