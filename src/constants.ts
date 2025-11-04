@@ -17,8 +17,10 @@ export const SECONDS_PER_GUESS = 0.5;
  * "America/Chicago"	Central Time (US & Canada)
  * "America/Denver"	Mountain Time (US & Canada)
  * "America/Los_Angeles"	Pacific Time (US & Canada)
+ *
+ * Pheonix is used here because there is no daylight savings time and I really don't want to deal with that HAHAHAHA
  */
-export const RESET_TIMEZONE = "America/Chicago";
+export const RESET_TIMEZONE = "America/Phoenix";
 
 const ASSET_BASE_PATH = "";
 
@@ -95,8 +97,3 @@ export const FIREBASE_DATABASE_COLLECTION_NAME = "epic-the-musical";
  * https://firebase.google.com/docs/storage/web/start#add-sdk-and-initialize
  */
 export const FIREBASE_STORAGE_BUCKET_NAME = "epicdle.firebasestorage.app";
-
-/**
- * The hours in 24 hour time to reset the daily Wordle
- */
-export const RESET_TIME_PST = 0;

@@ -29,6 +29,12 @@ export async function PATCH(req: NextRequest) {
   // TODO: make this secure so that only the Vercel scheduled function can run it
   // Do this by probably giving a special object to stick onto the request?
   // vercel is so smart: https://vercel.com/docs/cron-jobs/manage-cron-jobs#securing-cron-jobs
+  const authHeader = req.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
 
   // TODO: should I turn this into a transaction?
 

@@ -2,7 +2,7 @@ import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
 import { S3 } from "@/app/api/cloudflare";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { createSnippetKey } from "./util";
-import { getCentralNow, getNextCentralMidnight } from "@/util/time";
+import { getNowInResetTimezone, getNextResetTime } from "@/util/time";
 
 /**
  * retrieve the daily song snippet from the storage
@@ -11,7 +11,7 @@ import { getCentralNow, getNextCentralMidnight } from "@/util/time";
  */
 export async function GET() {
   try {
-    const today = getCentralNow();
+    const today = getNowInResetTimezone();
     const snippetFileKey = createSnippetKey(today);
 
     console.log("Getting snippet for", snippetFileKey);
@@ -29,7 +29,7 @@ export async function GET() {
     }
 
     // compute seconds until next master midnight
-    const nextMidnight = getNextCentralMidnight(today); // implement to return Date at next central midnight
+    const nextMidnight = getNextResetTime(today); // implement to return Date at next central midnight
     let secondsUntilReset = Math.max(
       0,
       Math.floor((nextMidnight.getTime() - today.getTime()) / 1000)

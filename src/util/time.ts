@@ -17,23 +17,21 @@ export function formatMs(ms: number) {
 }
 
 /**
- * this function returns the current date in the central time zone
+ * this function returns the current date in the master time zone
  * @returns
  */
-export function getCentralNow(): Date {
-  const today = new Date(2025, 8, 9);
-  return toZonedTime(today, RESET_TIMEZONE);
+export function getNowInResetTimezone(): Date {
   return toZonedTime(new Date(), RESET_TIMEZONE);
 }
 
-// returns YYYY-MM-DD for the master Central date
+// returns YYYY-MM-DD for the master reset timezone date
 export function getTodaysDate(now = new Date()): string {
   const zonedNow = toZonedTime(now, RESET_TIMEZONE);
   return format(zonedNow, "yyyy-MM-dd");
 }
 
-// returns a Date (UTC instant) corresponding to the next Central midnight
-export function getNextCentralMidnight(now = new Date()): Date {
+// returns a Date (UTC instant) corresponding to the next reset timezone midnight
+export function getNextResetTime(now = new Date()): Date {
   const zonedNow = toZonedTime(now, RESET_TIMEZONE);
   const y = zonedNow.getFullYear();
   const m = zonedNow.getMonth();
