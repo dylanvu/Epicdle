@@ -1,6 +1,5 @@
 import { RESET_TIMEZONE } from "@/constants";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
-import { format } from "date-fns";
 
 export function formatMs(ms: number) {
   const totalSeconds = Math.floor(ms / 1000);
@@ -24,10 +23,8 @@ export function getNowInResetTimezone(): Date {
   return toZonedTime(new Date(), RESET_TIMEZONE);
 }
 
-// returns YYYY-MM-DD for the master reset timezone date
-export function getTodaysDate(now = new Date()): string {
-  const zonedNow = toZonedTime(now, RESET_TIMEZONE);
-  return format(zonedNow, "yyyy-MM-dd");
+export function getTodaysDate(now = new Date()): Date {
+  return toZonedTime(now, RESET_TIMEZONE);
 }
 
 // returns a Date (UTC instant) corresponding to the next reset timezone midnight

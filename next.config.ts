@@ -36,6 +36,9 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  experimental: {
+    optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
+  },
 };
 
 export default nextConfig;

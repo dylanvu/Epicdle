@@ -11,7 +11,8 @@ import {
   S3ServiceException,
 } from "@aws-sdk/client-s3";
 import fs from "fs";
-import { createSnippetKey, getTodaysDate } from "../util";
+import { createSnippetKey } from "../util";
+import { getTodaysDate } from "@/util/time";
 
 /**
  * Function that runs daily to reset the state of the game
@@ -105,8 +106,13 @@ export async function PATCH(req: NextRequest) {
 
   const today = getTodaysDate();
 
+  console.log("Today is ", today);
+
   const tomorrow = new Date(today);
+
   tomorrow.setDate(tomorrow.getDate() + 1);
+
+  console.log("Tomorrow is ", tomorrow);
 
   // step 2 is in the createAudioSnippet function
   const tomorrowSnippetResult = await createAudioSnippet(today, "mp3");
@@ -133,6 +139,7 @@ export async function PATCH(req: NextRequest) {
   }
 
   const newSnippetFileKey = createSnippetKey(tomorrow);
+  console.log("New snippet key is ", newSnippetFileKey);
 
   await S3.send(
     new PutObjectCommand({
@@ -158,7 +165,7 @@ export async function PATCH(req: NextRequest) {
   console.log(updateMessage);
 
   // now clean up the old snippet file from the CDN
-  const oldSnippetFileKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}.mp3`;
+  const oldSnippetFileKey = createSnippetKey(today);
 
   let deleteResult;
   try {
@@ -235,7 +242,7 @@ export async function PATCH(req: NextRequest) {
 
   console.log(
     "Successfully incremented the totalDaysAlive in the game-stats document to be",
-    gameStatsDocData.totalDaysAlive
+    gameStatsDocData.lifetime_day_count
   );
 
   return NextResponse.json(

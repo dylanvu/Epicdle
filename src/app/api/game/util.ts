@@ -1,10 +1,9 @@
-export function getTodaysDate() {
-  // create a fixed date for testing
-  const today = new Date(2025, 8, 8);
-  return today;
-}
-
 export function createSnippetKey(date: Date): string {
-  const newSnippetFileKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}.mp3`;
+  console.log("Creating snippet key for ", date);
+
+  // !!! getMonth returns a zero-based index, so we need to add 1
+  // yes this indeed did burn me for a nice few minutes...
+  const month = date.getMonth() + 1;
+  const newSnippetFileKey = `${date.getFullYear()}-${month}-${date.getDate()}.mp3`;
   return newSnippetFileKey;
 }
