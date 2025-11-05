@@ -50,3 +50,21 @@ export async function getDailySnippet(): Promise<Blob> {
 
   return blob;
 }
+
+export async function getLifetimeGameDay(): Promise<number> {
+  const response = await fetch(`${GAME_API_BASE_ENDPOINT}/lifetime-game-day`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    let errorMessage = await response.text();
+    if (response.status === 429) {
+      errorMessage = "Too many attempts, try again in a minute.";
+    }
+    throw new HttpError(errorMessage, response.status);
+  }
+
+  const data = await response.json();
+
+  return data.days;
+}

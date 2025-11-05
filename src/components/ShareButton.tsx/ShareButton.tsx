@@ -1,11 +1,13 @@
+"use client";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { MAX_GUESSES } from "@/constants";
 import { PRIMARY_COLOR } from "@/theme";
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconShare, IconCopy } from "@tabler/icons-react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Song } from "@/interfaces/interfaces";
+import { getLifetimeGameDay } from "@/app/services/gameService";
 
 function CommonShareButton({
   text,
@@ -37,6 +39,12 @@ export default function ShareButton({
   guesses: Song[];
   win: boolean;
 }) {
+  useEffect(() => {
+    getLifetimeGameDay().then(setLifetimeGameDay);
+  }, []);
+
+  const [lifetimeGameDay, setLifetimeGameDay] = useState(0);
+
   const playButtonSound = useButtonSound();
 
   const guessEmoji = "🎵";
@@ -58,7 +66,7 @@ export default function ShareButton({
   const guessCount = win ? (guesses.length + 1).toString() : "X";
 
   // TODO: update the link
-  const shareText = `Epicdle XYZ ${guessCount}/${MAX_GUESSES}
+  const shareText = `Epicdle #${lifetimeGameDay} ${guessCount}/${MAX_GUESSES}
 ${guessesString}
 https://epicdle.vercel.app/`;
 
