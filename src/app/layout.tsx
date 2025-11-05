@@ -8,6 +8,7 @@ import { FirebaseAnalyticsProvider } from "@/contexts/firebaseContext";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import Head from "next/head";
+import { GAME_URL } from "@/constants";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -23,11 +24,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Epicdle",
     description: "Guess the daily Epic: The Musical song!",
-    url: "https://epicdle.com",
+    url: GAME_URL,
     siteName: "Epicdle",
     images: [
       {
-        url: "/Epic_The_Musical_Album_Cover.webp",
+        url: `${GAME_URL}/Epic_The_Musical_Album_Cover.webp`,
         width: 630,
         height: 630,
         alt: "Epicdle",
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   alternates: {
-    canonical: "https://epicdle.com",
+    canonical: GAME_URL,
   },
   robots: {
     index: true,

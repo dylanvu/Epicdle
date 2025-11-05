@@ -1,6 +1,6 @@
 "use client";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
-import { MAX_GUESSES } from "@/constants";
+import { GAME_URL, MAX_GUESSES } from "@/constants";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -73,14 +73,14 @@ export default function ShareButton({
   // TODO: update the link
   const shareText = `Epicdle #${lifetimeGameDay} ${guessCount}/${MAX_GUESSES}
 ${guessesString}
-https://epicdle.vercel.app/`;
+${GAME_URL}`;
 
   function share(text: string, mobile: boolean) {
     if (mobile) {
       navigator.share({
         title: "Epicdle",
         text: text,
-        url: "https://epicdle.vercel.app/",
+        url: GAME_URL,
       });
     } else {
       // need to add 1 to the guesses length since winning guesses are not counted in the guess history array

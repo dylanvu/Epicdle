@@ -101,3 +101,5 @@ export const FIREBASE_STORAGE_BUCKET_NAME = "epicdle.firebasestorage.app";
 export const SUPPORT_EMAIL = "epicdle.game@gmail.com";
 
 export const RESET_HOUR_UTC = 7;
+
+export const GAME_URL = "https://epicdle.vercel.app";
