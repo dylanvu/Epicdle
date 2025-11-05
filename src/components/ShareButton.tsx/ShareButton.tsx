@@ -55,10 +55,13 @@ export default function ShareButton({
   const guessEmoji = "🎵";
   const winEmoji = "🏆";
   const loseEmoji = "🌩️";
-  // for each incorrect guess, create a black square
+  // for each incorrect guess, create a music note
+  // I HAVE NO IDEA WHY THIS CODE IS SO HORRENDOUSLY BAD???? FOR SOMETHING SO SIMPLE?
   let guessesString = "";
-
-  for (let i = 0; i < guesses.length - 1; i++) {
+  // there is a bug where if you win, you are missing a music note
+  // but if you lose, you have one extra?
+  const totalGuesses = win ? guesses.length : guesses.length - 1;
+  for (let i = 0; i < totalGuesses; i++) {
     guessesString += `${guessEmoji} `;
   }
 
