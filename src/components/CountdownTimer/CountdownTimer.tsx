@@ -1,4 +1,8 @@
-import { formatMs } from "@/util/time";
+import {
+  formatMsVerbose,
+  formatGameDateForDisplay,
+  getGameDate,
+} from "@/util/time";
 
 export default function CountdownTimer({
   time,
@@ -9,8 +13,13 @@ export default function CountdownTimer({
 }) {
   return (
     <div>
-      <div>Today is {time.toDateString()}</div>
-      <div>The song resets in {formatMs(remainingMs)}</div>
+      <div>
+        Today's song is for{" "}
+        <strong>{formatGameDateForDisplay(getGameDate(time))}</strong>
+      </div>
+      <div>
+        You have <strong>{formatMsVerbose(remainingMs)} left!</strong>
+      </div>
     </div>
   );
 }

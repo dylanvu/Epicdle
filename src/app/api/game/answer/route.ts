@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { firestore } from "@/app/api/firebase";
 import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
 import { ICheckAnswerResult } from "@/interfaces/interfaces";
+import { getGameDate, getYearMonthDay } from "@/util/time";
 
 /**
  * Check if the answer is correct.
@@ -13,8 +14,6 @@ export async function PATCH(
 ): Promise<NextResponse<ICheckAnswerResult>> {
   const reqJSON = await req.json();
   console.log("Request body:", reqJSON);
-  console.log("answer:", !reqJSON.answer);
-  console.log("answer.length:", !reqJSON.answer.length);
   if (!reqJSON.answer || !reqJSON.answer.length) {
     return NextResponse.json(
       {
@@ -25,19 +24,27 @@ export async function PATCH(
     );
   }
   console.log("Fetching today's answer from the database");
+  const now = getGameDate();
+  console.log("Today is ", now);
+  const answerKey = getYearMonthDay(now);
+  console.log("Getting answer for ", answerKey);
   const answerDocRef = firestore
     .collection(FIREBASE_DATABASE_COLLECTION_NAME)
-    .doc("today");
+    .doc("answers")
+    .collection("answers")
+    .doc(answerKey);
 
   const answerDocData = (await answerDocRef.get()).data();
 
   console.log("Answer doc data:", answerDocData);
 
   // if the answer is not in the database, return an error
-  if (!answerDocData || !answerDocData.song) {
+  // runbook: if this happens, the reset did NOT happen correctly
+  if (!answerDocData || !answerDocData.song || !answerDocData.song.length) {
+    console.error("Answer not found in the database for date", answerKey);
     return NextResponse.json(
       {
-        message: `Answer not found in the database. Please contact the creator of this game.`,
+        message: `Answer not found in the database for date ${answerKey}`,
         correct: false,
       },
       { status: 500 }
@@ -48,6 +55,7 @@ export async function PATCH(
   console.log(
     "Comparing answer with the answer in the database",
     answerDocData.song,
+    "vs user submitted answer",
     reqJSON.answer
   );
   if (answerDocData.song !== reqJSON.answer) {

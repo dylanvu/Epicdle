@@ -29,6 +29,12 @@ function resolveFfprobeStatic(): string {
   }
 }
 
+/**
+ * Creates a random audio snippet seeded by the given date's day, month, and year for both the song selection and timestamp
+ * @param dateSeed
+ * @param audioFileExtension
+ * @returns
+ */
 export async function createAudioSnippet(
   dateSeed: Date,
   audioFileExtension: "mp3"
@@ -97,7 +103,6 @@ export async function createAudioSnippet(
     };
   }
 
-  // Use your existing getAudioDuration function (do not re-implement)
   let songLength = 0;
   try {
     songLength = await getAudioDuration(tempAudioFilePath);

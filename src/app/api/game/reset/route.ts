@@ -2,31 +2,33 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAudioSnippet } from "./util";
 import { firestore } from "@/app/api/firebase";
 import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
-import { DailyAnswerDoc, isDailyAnswerDoc } from "@/interfaces/interfaces";
-import { UpdateData } from "firebase-admin/firestore";
 import { S3 } from "@/app/api/cloudflare";
-import {
-  PutObjectCommand,
-  DeleteObjectCommand,
-  S3ServiceException,
-} from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 import { createSnippetKey } from "../util";
-import { getTodaysDate } from "@/util/time";
+import { getGameDate, getYearMonthDay } from "@/util/time";
 
-/**
- * Function that runs daily to reset the state of the game
- * ONLY ACCESSIBLE BY THE SERVER. DO NOT EXPOSE TO THE PUBLIC.
- *
- * 1. Update the database from the "tomorrow" song to the "today" song
- * 2. Create a new snippet for "tomorrow"
- * 3. Upload the new snippet to the CDN
- * 4. Update the new answer to the database
- * 5. Delete the old snippet from the CDN
- * @param request
- * @returns
- */
-export async function PATCH(req: NextRequest) {
+export async function GET(req: NextRequest) {
+  // vercel cron only makes GET requests
+  // so just call the POST route as a workaround
+  return POST(req);
+}
+
+export async function POST(req: NextRequest) {
+  // this function is not guaranteed to run at the exact time of the cron job
+  // there is a delay of up to 1 hour
+  // how we will handle song submission and scoring is that we will rely on the universal UTC reset time, 7 AM UTC (11 PM PST)
+  // when someone submits a song, we will check if it is within the 7 AM UTC time window and grab the corresponding date
+  // but that is for the answer route
+  // in the reset route, we will generate tomorrow's song
+  // I have set up an automatic lifecycle rule to delete the old snippet file from the CDN after 7 days
+  // https://developers.cloudflare.com/r2/buckets/object-lifecycles/#dashboard
+  // so we don't need to worry about deleting the old snippet file
+  //
+  //
+  //
+  // so here's the plan:
+  // security ofc
   // make this secure so that only the Vercel scheduled function can run it
   // vercel is so smart: https://vercel.com/docs/cron-jobs/manage-cron-jobs#securing-cron-jobs
   const authHeader = req.headers.get("authorization");
@@ -36,85 +38,29 @@ export async function PATCH(req: NextRequest) {
     });
   }
 
-  // TODO: should I turn this into a transaction?
+  // when this API is called
+  // get the date in the UTC
+  const now = getGameDate();
+  console.log("Today is ", now);
 
-  // first, let's delete the "today" song with the "tomorrow" song information
+  // the clients have already shifted to the premade snippet, so we need to generate tomorrow's snippet
 
-  // find out what was tomorrow's answer
-  const tomorrowDocRef = firestore
-    .collection(FIREBASE_DATABASE_COLLECTION_NAME)
-    .doc("tomorrow");
-
-  let tomorrowDocData = (await tomorrowDocRef.get()).data();
-
-  if (
-    !tomorrowDocData ||
-    !isDailyAnswerDoc(tomorrowDocData) ||
-    !tomorrowDocData.song
-  ) {
-    // TODO: make a fallback snippet and answer just in case
-    console.error(
-      "No tomorrow's song data found. Here is the data:",
-      JSON.stringify(tomorrowDocData)
-    );
-    tomorrowDocData = (
-      await firestore
-        .collection(FIREBASE_DATABASE_COLLECTION_NAME)
-        .doc("fallback")
-        .get()
-    ).data();
-
-    console.log("Fallback song data:", JSON.stringify(tomorrowDocData));
-  }
-
-  // fallback in case something goes horribly wrong
-  if (!tomorrowDocData || !tomorrowDocData.song) {
-    return NextResponse.json(
-      {
-        message: `Failed to update the database because tomorrow's song could not be found`,
-      },
-      {
-        status: 500,
-      }
-    );
-  }
-
-  const todaysData: UpdateData<DailyAnswerDoc> = {
-    song: tomorrowDocData.song,
-  };
-
-  // overwrite the "today" song answer on firebase with the "tomorrow" song
-  await firestore
-    .collection(FIREBASE_DATABASE_COLLECTION_NAME)
-    .doc("today")
-    .set(todaysData);
-
-  // no need to worry about any race conditions; the snippet for "tomorrow" (now today) is already on the CDN
-  console.log("Successfully updated the database with the new song");
-
-  // now we need to prepare tomorrow's song ahead of time
-
-  // 1. Access a random song from the bucket
-
-  // generate a random number using the date as the seed, using the month, day, and year in a string format
-  // honestly this makes it really easy to cheat since you can predict the future answers
-  // but if someone made it this far for a fun little game... well I hope they had as much fun reaching this point as they did playing my game
-  // in theory, you could also create an algorithm to generate past answers which is kind of neat
-
-  // now let's get the next day's song
-
-  const today = getTodaysDate();
-
-  console.log("Today is ", today);
-
-  const tomorrow = new Date(today);
-
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  let tomorrow = new Date(now);
+  tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
 
   console.log("Tomorrow is ", tomorrow);
 
-  // step 2 is in the createAudioSnippet function
-  const tomorrowSnippetResult = await createAudioSnippet(today, "mp3");
+  // DEBUG MODE: use a provided body for the date to override the date to create the snippet
+  // I expect this to be in the format of YYYY-MM-DD
+  const debug_body = await req.text();
+  if (debug_body) {
+    console.log("[DEBUG] Debug Body:", debug_body);
+    tomorrow = new Date(debug_body);
+    console.log("[DEBUG] Overriding date to ", tomorrow);
+  }
+
+  // create the snippet
+  const tomorrowSnippetResult = await createAudioSnippet(tomorrow, "mp3");
   if (!tomorrowSnippetResult.result) {
     console.error(tomorrowSnippetResult.message);
     return NextResponse.json(
@@ -123,8 +69,7 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  // 3. Put the audio snippets into a CDN
-  // we will keep a small snippet of the song into a CDN to reduce audio streaming latency and cost, because this is out of my own pocket!
+  // create the snippet file path
   const snippetFilePath = tomorrowSnippetResult.audioOutputPath;
 
   if (!snippetFilePath) {
@@ -136,6 +81,8 @@ export async function PATCH(req: NextRequest) {
       { status: 404 }
     );
   }
+
+  // upload the snippet to CDN
 
   const newSnippetFileKey = createSnippetKey(tomorrow);
   console.log("New snippet key is ", newSnippetFileKey);
@@ -149,79 +96,29 @@ export async function PATCH(req: NextRequest) {
     })
   );
 
-  // 4. Replace the daily song name to the database
-  // the database will be what is used to determine the right/wrong answer
-  const newTomorrowDocData: DailyAnswerDoc = {
-    song: tomorrowSnippetResult.songName,
-  };
-
-  await tomorrowDocRef.set(newTomorrowDocData);
-
   const updateMessage = {
-    message: `Update successful! Today's song is ${tomorrowDocData.song} while the new song for tomorrow is ${tomorrowSnippetResult.songName}`,
+    message: `Update successful! Tomorrow's song is ${tomorrowSnippetResult.songName}.`,
   };
 
-  console.log(updateMessage);
+  // publish the answer as a new document in the database
 
-  // now clean up the old snippet file from the CDN
-  const oldSnippetFileKey = createSnippetKey(today);
+  // retrieve the document with all the answers
+  const answersDocRef = firestore
+    .collection(FIREBASE_DATABASE_COLLECTION_NAME)
+    .doc("answers");
 
-  let deleteResult;
-  try {
-    deleteResult = await S3.send(
-      new DeleteObjectCommand({
-        Bucket: FIREBASE_DATABASE_COLLECTION_NAME,
-        Key: oldSnippetFileKey,
-      })
-    );
-  } catch (err) {
-    if (err instanceof S3ServiceException) {
-      console.error(
-        "Error deleting the old snippet file from the CDN. Error:",
-        err.name,
-        err.message,
-        "Cause:",
-        err.cause
-      );
+  // inside of the document, there is a collection of answers
+  const answersCollectionRef = answersDocRef.collection("answers");
 
-      return NextResponse.json(
-        {
-          message: `Failed to delete the old snippet file due to AWS S3 Error: ${err.message}`,
-        },
-        { status: 500 }
-      );
-    } else {
-      console.error("Something else went wrong", err);
-    }
+  // create a new answer document keyed by the date (tomorrow) and value of the song name
+  const newAnswerDocKey = getYearMonthDay(tomorrow);
+  const newAnswerDocRef = answersCollectionRef.doc(newAnswerDocKey);
 
-    return NextResponse.json(
-      {
-        message: `Failed to delete the old snippet file due to an unknown error: ${err}`,
-      },
-      { status: 500 }
-    );
-  }
-
-  // I actually don't know what the httpStatusCode would mean if it's missingg
-  if (!deleteResult.$metadata.httpStatusCode) {
-    console.error(
-      "Error deleting the old snippet file from the CDN. Request ID:",
-      deleteResult.$metadata.requestId
-    );
-    return NextResponse.json(
-      {
-        message: `Failed to delete the old snippet file due to an unknown error. Request ID: ${deleteResult.$metadata.requestId}`,
-      },
-      { status: 500 }
-    );
-  }
-
-  console.log(
-    `Successfully deleted the old snippet file ${oldSnippetFileKey} from the CDN`
-  );
+  await newAnswerDocRef.set({
+    song: tomorrowSnippetResult.songName,
+  });
 
   // now increment the days the game has been alive
-
   // fetch the current number of days the game has been alive from the game-stats document
   const gameStatsDocRef = firestore
     .collection(FIREBASE_DATABASE_COLLECTION_NAME)
@@ -250,4 +147,10 @@ export async function PATCH(req: NextRequest) {
     },
     { status: 200 }
   );
+  // no deletions needed
+  // no race conditions
+  // it's gucci
+  // a TTL in firebase for the answers collection is not free, but would make things cleaner
+  // https://cloud.google.com/firestore/pricing
+  // https://firebase.google.com/docs/firestore/ttl
 }

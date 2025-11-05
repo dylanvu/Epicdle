@@ -2,7 +2,7 @@ import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
 import { S3 } from "@/app/api/cloudflare";
 import { GetObjectCommand, S3ServiceException } from "@aws-sdk/client-s3";
 import { createSnippetKey } from "./util";
-import { getNowInResetTimezone, getNextResetTime } from "@/util/time";
+import { getNextResetTime, getGameDate } from "@/util/time";
 
 /**
  * retrieve the daily song snippet from the storage
@@ -11,7 +11,8 @@ import { getNowInResetTimezone, getNextResetTime } from "@/util/time";
  */
 export async function GET() {
   try {
-    const today = getNowInResetTimezone();
+    const today = getGameDate();
+    console.log("Today is ", today);
     const snippetFileKey = createSnippetKey(today);
 
     console.log("Getting snippet for", snippetFileKey);

@@ -1,5 +1,5 @@
 import { HttpError, ICheckAnswerResult } from "@/interfaces/interfaces";
-import { getNextResetTime, getNowInResetTimezone } from "@/util/time";
+import { getNextResetTime, getGameDate } from "@/util/time";
 
 const GAME_API_BASE_ENDPOINT = "/api/game";
 
@@ -29,7 +29,7 @@ export async function checkAnswer(guess: string): Promise<boolean> {
 
 export async function getDailySnippet(): Promise<Blob> {
   // calculate the number of seconds left until the next central time midnight for caching
-  const now = getNowInResetTimezone();
+  const now = getGameDate();
   const nextMidnight = getNextResetTime(now);
   const remainingMs = nextMidnight.getTime() - now.getTime();
   // something is nagging at me... like what if something happens, the seconds are too close, and then you fetch audio and then like, you are behind an ENTIRE DAY

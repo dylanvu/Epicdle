@@ -5,7 +5,7 @@ import Menu from "@/components/Menu/Menu";
 import EpicdleTitle from "@/components/Text/Epicdle/EpicdleTitle";
 import CountdownTimer from "@/components/CountdownTimer/CountdownTimer";
 import { useEffect, useState } from "react";
-import { getNowInResetTimezone, getNextResetTime } from "@/util/time";
+import { getNextResetTime } from "@/util/time";
 import { Center, Loader, Title } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/theme";
 import { AnimatePresence, motion } from "motion/react";
@@ -17,7 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     const tick = () => {
-      const newNow = getNowInResetTimezone();
+      const newNow = new Date();
       setNow(newNow);
       const nextMidnight = getNextResetTime(newNow);
       setRemainingMs(nextMidnight.getTime() - newNow.getTime());

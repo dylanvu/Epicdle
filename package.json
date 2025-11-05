@@ -16,8 +16,6 @@
     "@mantine/spotlight": "^8.3.5",
     "@tabler/icons-react": "^3.35.0",
     "cross-spawn": "^7.0.6",
-    "date-fns": "^4.1.0",
-    "date-fns-tz": "^3.2.0",
     "ffmpeg-static": "^5.2.0",
     "ffprobe-static": "^3.1.0",
     "firebase-admin": "^13.5.0",
