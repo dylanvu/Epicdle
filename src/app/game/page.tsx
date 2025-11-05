@@ -7,8 +7,10 @@ import {
   Center,
   Title,
   Stack,
+  Anchor,
 } from "@mantine/core";
 import { useDisclosure, UseDisclosureHandlers } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { useEffect, useRef, useState } from "react";
 import styles from "./Game.module.css";
 import Image from "next/image";
@@ -25,11 +27,16 @@ import {
   isWinState,
   GameState,
   IVolumeObject,
+  HttpError,
 } from "@/interfaces/interfaces";
 import GuessProgress from "@/components/GuessProgress/GuessProgress";
 import AudioSlider from "@/components/AudioSlider/AudioSlider";
 
-import { MAX_GUESSES, ALBUM_NAME_TO_COVER_MAP } from "@/constants";
+import {
+  MAX_GUESSES,
+  ALBUM_NAME_TO_COVER_MAP,
+  SUPPORT_EMAIL,
+} from "@/constants";
 import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
 import PlayAudioButton from "@/components/ActionButton/PlayAudioButton";
 import { PRIMARY_COLOR, WIN_COLOR, WRONG_COLOR } from "@/theme";
@@ -51,7 +58,7 @@ import MobileSubmitButton from "@/components/ActionButton/MobileSubmitButton";
 import VolumeSlider from "@/components/VolumeSlider/VolumeSlider";
 import PerfectText from "@/components/Text/PerfectTextOverlay/PerfectTextOverlay";
 import { checkAnswer, getDailySnippet } from "@/app/services/gameService";
-import { audio } from "motion/react-client";
+import SongLyrics from "@/components/modals/SongLyrics";
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -91,13 +98,43 @@ export default function Game() {
     }
 
     // get the daily snippet
-    getDailySnippet().then((blob) => {
-      if (blob) {
-        const dailyAudioUrl = URL.createObjectURL(blob);
-        setAudioUrl(dailyAudioUrl);
-      }
-      setGameState("play");
-    });
+    getDailySnippet()
+      .then((blob) => {
+        if (blob) {
+          const dailyAudioUrl = URL.createObjectURL(blob);
+          setAudioUrl(dailyAudioUrl);
+        }
+        setGameState("play");
+      })
+      .catch((error) => {
+        console.error("Error loading daily snippet:", error);
+        notifications.show({
+          title: (
+            <Text size="xl" fw={400}>
+              Something feels off here...
+            </Text>
+          ),
+          message: (
+            <Stack>
+              <Text>{error.message}</Text>
+              <Text>
+                If the issue persists, please email{" "}
+                <Anchor
+                  href={`mailto:${SUPPORT_EMAIL}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {SUPPORT_EMAIL}
+                </Anchor>{" "}
+                with the error message and screenshot!
+              </Text>
+            </Stack>
+          ),
+          position: "bottom-center",
+          color: WRONG_COLOR,
+          autoClose: false,
+        });
+      });
   }, []);
 
   // load the sounds
@@ -266,6 +303,34 @@ export default function Game() {
       isCorrect = await checkAnswer(selectedSong.name);
     } catch (err) {
       console.error("Error checking answer:", err);
+      if (err instanceof HttpError) {
+        notifications.show({
+          title: (
+            <Text size="xl" fw={400}>
+              Something feels off here...
+            </Text>
+          ),
+          message: (
+            <Stack>
+              <Text>{err.message}</Text>
+              <Text>
+                If the issue persists, please email{" "}
+                <Anchor
+                  href={`mailto:${SUPPORT_EMAIL}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {SUPPORT_EMAIL}
+                </Anchor>{" "}
+                with the error message and screenshot!
+              </Text>
+            </Stack>
+          ),
+          position: "bottom-center",
+          color: WRONG_COLOR,
+          autoClose: false,
+        });
+      }
       // TODO: create a toast to show the error
       return;
     }

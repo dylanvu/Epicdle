@@ -1,6 +1,6 @@
 import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
 import { S3 } from "@/app/api/cloudflare";
-import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectCommand, S3ServiceException } from "@aws-sdk/client-s3";
 import { createSnippetKey } from "./util";
 import { getNowInResetTimezone, getNextResetTime } from "@/util/time";
 
@@ -68,6 +68,39 @@ export async function GET() {
       } as HeadersInit,
     });
   } catch (err) {
+    if (err instanceof S3ServiceException) {
+      switch (err.name) {
+        case "NoSuchKey":
+          return new Response("Today's snippet could not be found.", {
+            status: 404,
+          });
+        case "AccessDenied":
+          return new Response("Server was denied to today's snippet.", {
+            status: 403,
+          });
+        case "InvalidObjectState":
+          return new Response("Snippet cannot be retrieved (archived).", {
+            status: 409,
+          });
+        case "SlowDown":
+        case "ServiceUnavailable":
+          return new Response("S3 service is busy, try again later.", {
+            status: 503,
+          });
+        case "InternalError":
+          return new Response("S3 internal error occurred.", { status: 500 });
+        case "SignatureDoesNotMatch":
+        case "InvalidAccessKeyId":
+          return new Response("Server credentials misconfigured.", {
+            status: 401,
+          });
+        default:
+          return new Response(
+            `S3 error occurred: ${err.name} - ${err.message}`,
+            { status: 500 }
+          );
+      }
+    }
     console.error("Error retrieving audio snippet:", err);
     return new Response("Internal Server Error", { status: 500 });
   }

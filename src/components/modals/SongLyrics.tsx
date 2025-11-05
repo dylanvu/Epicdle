@@ -1,13 +1,17 @@
 import { Blockquote } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/theme";
 
+type SongLyricsProps = {
+  children: React.ReactNode;
+  color?: string;
+};
+
 export default function SongLyrics({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  color = PRIMARY_COLOR,
+}: Readonly<SongLyricsProps>) {
   return (
-    <Blockquote color={PRIMARY_COLOR} mt="xl">
+    <Blockquote color={color} mt="xl">
       {children}
     </Blockquote>
   );

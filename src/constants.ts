@@ -97,3 +97,5 @@ export const FIREBASE_DATABASE_COLLECTION_NAME = "epic-the-musical";
  * https://firebase.google.com/docs/storage/web/start#add-sdk-and-initialize
  */
 export const FIREBASE_STORAGE_BUCKET_NAME = "epicdle.firebasestorage.app";
+
+export const SUPPORT_EMAIL = "epicdle.game@gmail.com";

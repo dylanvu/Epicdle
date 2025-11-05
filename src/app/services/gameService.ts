@@ -15,7 +15,11 @@ export async function checkAnswer(guess: string): Promise<boolean> {
   });
 
   if (!response.ok) {
-    throw new HttpError(response.statusText, response.status);
+    let errorMessage = await response.text();
+    if (response.status === 429) {
+      errorMessage = "Too many submissions, try again in a minute.";
+    }
+    throw new HttpError(errorMessage, response.status);
   }
 
   const data: ICheckAnswerResult = await response.json();
@@ -38,7 +42,8 @@ export async function getDailySnippet(): Promise<Blob> {
   });
 
   if (!response.ok || !response.body) {
-    throw new HttpError(response.statusText, response.status);
+    const errorMessage = await response.text();
+    throw new HttpError(errorMessage, response.status);
   }
 
   const blob = await response.blob();

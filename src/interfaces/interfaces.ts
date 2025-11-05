@@ -29,7 +29,8 @@ export type GameState =
   | "lose"
   | "submit"
   | "loading"
-  | "play";
+  | "play"
+  | "error";
 
 /**
  * isWinState typeguard

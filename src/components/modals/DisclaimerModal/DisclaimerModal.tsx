@@ -13,6 +13,7 @@ import styles from "./DisclaimerModal.module.css";
 import { PRIMARY_COLOR } from "@/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ModalTitle from "../ModalTitle";
+import { SUPPORT_EMAIL } from "@/constants";
 
 export default function DisclaimerModal({
   openState,
@@ -43,11 +44,11 @@ export default function DisclaimerModal({
         <Text>
           Got any problems or questions? Shoot me an email:{" "}
           <Anchor
-            href="mailto:epicdle.game@gmail.com"
+            href={`mailto:${SUPPORT_EMAIL}`}
             target="_blank"
             rel="noreferrer"
           >
-            epicdle.game@gmail.com
+            {SUPPORT_EMAIL}
           </Anchor>
         </Text>
 
