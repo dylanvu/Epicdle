@@ -27,8 +27,7 @@ import { getTodaysDate } from "@/util/time";
  * @returns
  */
 export async function PATCH(req: NextRequest) {
-  // TODO: make this secure so that only the Vercel scheduled function can run it
-  // Do this by probably giving a special object to stick onto the request?
+  // make this secure so that only the Vercel scheduled function can run it
   // vercel is so smart: https://vercel.com/docs/cron-jobs/manage-cron-jobs#securing-cron-jobs
   const authHeader = req.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
