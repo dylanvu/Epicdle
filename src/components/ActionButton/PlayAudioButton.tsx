@@ -3,7 +3,7 @@ import {
   IconPlayerPlayFilled,
   IconPlayerPauseFilled,
 } from "@tabler/icons-react";
-import { PRIMARY_COLOR } from "@/theme";
+import { PRIMARY_COLOR } from "@/config/theme";
 
 export default function PlayAudioButton({
   playing,

@@ -1,13 +1,16 @@
 "use client";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { MAX_GUESSES } from "@/constants";
-import { PRIMARY_COLOR } from "@/theme";
+import { PRIMARY_COLOR } from "@/config/theme";
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconShare, IconCopy } from "@tabler/icons-react";
 import { ReactNode, useEffect, useState } from "react";
 import { Song } from "@/interfaces/interfaces";
 import { getLifetimeGameDay } from "@/app/services/gameService";
+
+import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
+import { logEvent } from "firebase/analytics";
 
 function CommonShareButton({
   text,
@@ -42,6 +45,8 @@ export default function ShareButton({
   useEffect(() => {
     getLifetimeGameDay().then(setLifetimeGameDay);
   }, []);
+
+  const { logEvent } = useFirebaseAnalytics();
 
   const [lifetimeGameDay, setLifetimeGameDay] = useState(0);
 
@@ -99,6 +104,7 @@ https://epicdle.vercel.app/`;
         onClick={() => {
           playButtonSound();
           share(shareText, true);
+          logEvent("share_results");
         }}
       />
       <CommonShareButton
@@ -107,6 +113,7 @@ https://epicdle.vercel.app/`;
         onClick={() => {
           playButtonSound();
           share(shareText, false);
+          logEvent("copy_results");
         }}
       />
     </>

@@ -3,10 +3,11 @@ import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
-import { theme } from "@/theme";
-import Head from "next/head";
+import { theme } from "@/config/theme";
+import { FirebaseAnalyticsProvider } from "@/contexts/firebaseContext";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
+import Head from "next/head";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -22,7 +23,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Epicdle",
     description: "Guess the daily Epic: The Musical song!",
-    // TODO: fix the link
     url: "https://epicdle.com",
     siteName: "Epicdle",
     images: [
@@ -47,6 +47,13 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
+  icons: {
+    icon: "/favicon/favicon.ico",
+    // optional: can specify multiple sizes if needed
+    shortcut: "/favicon/favicon.ico",
+  },
+  // Preload images
+  metadataBase: new URL("https://epicdle.com"),
 };
 
 export default function RootLayout({
@@ -58,7 +65,6 @@ export default function RootLayout({
     <html lang="en">
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <Head>
-        <title>Epicdle</title>
         <link
           rel="preload"
           href="/gif/Boar.gif"
@@ -71,8 +77,10 @@ export default function RootLayout({
       </Head>
       <body className={`${lato.className}`}>
         <MantineProvider theme={theme}>
-          <Notifications />
-          {children}
+          <FirebaseAnalyticsProvider>
+            <Notifications />
+            {children}
+          </FirebaseAnalyticsProvider>
         </MantineProvider>
       </body>
     </html>

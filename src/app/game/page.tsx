@@ -39,7 +39,7 @@ import {
 } from "@/constants";
 import GuessHistoryOverlay from "@/components/GuessHistoryOverlay/GuessHistoryOverlay";
 import PlayAudioButton from "@/components/ActionButton/PlayAudioButton";
-import { PRIMARY_COLOR, WIN_COLOR, WRONG_COLOR } from "@/theme";
+import { PRIMARY_COLOR, WIN_COLOR, WRONG_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -58,7 +58,10 @@ import MobileSubmitButton from "@/components/ActionButton/MobileSubmitButton";
 import VolumeSlider from "@/components/VolumeSlider/VolumeSlider";
 import PerfectText from "@/components/Text/PerfectTextOverlay/PerfectTextOverlay";
 import { checkAnswer, getDailySnippet } from "@/app/services/gameService";
-import SongLyrics from "@/components/modals/SongLyrics";
+
+import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
+import { usePathname } from "next/navigation";
+import { logEvent } from "firebase/analytics";
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -86,11 +89,18 @@ export default function Game() {
   const screenFlashOverlayRef = useRef<HTMLDivElement | null>(null);
   const guessesCountRef = useRef<number>(0);
 
+  const { logEvent } = useFirebaseAnalytics();
+  const pathname = usePathname();
+
   useEffect(() => {
     guessesCountRef.current = guesses.length;
   }, [guesses]);
 
   useEffect(() => {
+    logEvent("page_view", {
+      page_path: pathname,
+    });
+
     // load volume from localStorage
     const volume = localStorage.getItem("volume");
     if (volume) {
@@ -172,6 +182,7 @@ export default function Game() {
         winModalHandler.open();
       }, win_timeout);
 
+      logEvent(gameState);
       // win animation
       animate(
         scope.current,
@@ -190,6 +201,7 @@ export default function Game() {
     }
 
     if (gameState === "lose") {
+      logEvent(gameState);
       // small timeout to bask in shame
       setTimeout(() => {
         loseModalHandler.open();
@@ -290,6 +302,7 @@ export default function Game() {
     }
 
     setGameState("submit");
+    logEvent("submit_guess");
 
     performWaveAnimation({
       amplitude: 20,
@@ -348,6 +361,7 @@ export default function Game() {
       playSubmitLossSound();
     } else {
       // wrong guess (will trigger handleWrong after submit sound finishes)
+      logEvent("wrong_guess");
       playSubmitWrongSound();
     }
   }

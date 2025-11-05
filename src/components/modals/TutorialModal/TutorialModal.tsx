@@ -3,7 +3,7 @@ import { Button, List, Modal, Stack, Text, ThemeIcon } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./TutorialModal.module.css";
 import { MAX_GUESSES } from "@/constants";
-import { PRIMARY_COLOR } from "@/theme";
+import { PRIMARY_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ModalTitle from "../ModalTitle";
 import SongLyrics from "../SongLyrics";

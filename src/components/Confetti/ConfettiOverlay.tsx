@@ -1,4 +1,4 @@
-import { CONFETTI_COLORS } from "@/theme";
+import { CONFETTI_COLORS } from "@/config/theme";
 import styles from "./ConfettiOverlay.module.css";
 import Confetti from "react-confetti-boom";
 import { useIsMobile } from "@/hooks/useIsMobile";

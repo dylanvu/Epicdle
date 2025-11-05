@@ -18,6 +18,7 @@
     "cross-spawn": "^7.0.6",
     "ffmpeg-static": "^5.2.0",
     "ffprobe-static": "^3.1.0",
+    "firebase": "^12.5.0",
     "firebase-admin": "^13.5.0",
     "motion": "^12.23.24",
     "mp3-parser": "^0.3.0",

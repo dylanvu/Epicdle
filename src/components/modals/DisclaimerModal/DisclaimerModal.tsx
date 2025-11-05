@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./DisclaimerModal.module.css";
-import { PRIMARY_COLOR } from "@/theme";
+import { PRIMARY_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ModalTitle from "../ModalTitle";
 import { SUPPORT_EMAIL } from "@/constants";

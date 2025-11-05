@@ -7,15 +7,27 @@ import CountdownTimer from "@/components/CountdownTimer/CountdownTimer";
 import { useEffect, useState } from "react";
 import { getNextResetTime } from "@/util/time";
 import { Center, Loader, Title } from "@mantine/core";
-import { PRIMARY_COLOR } from "@/theme";
+import { PRIMARY_COLOR } from "@/config/theme";
 import { AnimatePresence, motion } from "motion/react";
+import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
+import { logEvent } from "firebase/analytics";
+import { usePathname } from "next/navigation";
 
 export default function Home() {
   const [now, setNow] = useState<Date | null>(null);
   const [showMainMenu, setShowMainMenu] = useState(false);
   const [remainingMs, setRemainingMs] = useState(0);
 
+  const { logEvent } = useFirebaseAnalytics();
+  const pathname = usePathname();
+
   useEffect(() => {
+    // log that someone visited the page
+    logEvent("page_view", {
+      page_path: pathname,
+    });
+
+    // set up the interval to update the remaining time for the day
     const tick = () => {
       const newNow = new Date();
       setNow(newNow);

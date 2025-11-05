@@ -1,5 +1,5 @@
 import { Blockquote } from "@mantine/core";
-import { PRIMARY_COLOR } from "@/theme";
+import { PRIMARY_COLOR } from "@/config/theme";
 
 type SongLyricsProps = {
   children: React.ReactNode;

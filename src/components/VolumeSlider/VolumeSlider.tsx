@@ -1,6 +1,6 @@
 "use client";
 import { Slider, ActionIcon, Group } from "@mantine/core";
-import { PRIMARY_COLOR } from "@/theme";
+import { PRIMARY_COLOR } from "@/config/theme";
 import { useEffect, useState } from "react";
 import {
   IconVolume as FullVolumeIcon,

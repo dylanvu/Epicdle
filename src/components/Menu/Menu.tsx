@@ -1,7 +1,7 @@
 "use client";
 import { Button, Stack, Text } from "@mantine/core";
 import styles from "./Menu.module.css";
-import { PRIMARY_COLOR } from "@/theme";
+import { PRIMARY_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useDisclosure } from "@mantine/hooks";
 import DisclaimerModal from "@/components/modals/DisclaimerModal/DisclaimerModal";
