@@ -2,7 +2,7 @@ import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
 import { S3 } from "@/app/api/cloudflare";
 import { GetObjectCommand, S3ServiceException } from "@aws-sdk/client-s3";
 import { createSnippetKey } from "./util";
-import { getNextResetTime, getGameDate } from "@/util/time";
+import { getNextResetTime } from "@/util/time";
 
 /**
  * retrieve the daily song snippet from the storage
@@ -11,7 +11,7 @@ import { getNextResetTime, getGameDate } from "@/util/time";
  */
 export async function GET() {
   try {
-    const today = getGameDate();
+    const today = new Date();
     console.log("Today is ", today);
     const snippetFileKey = createSnippetKey(today);
 
@@ -31,6 +31,7 @@ export async function GET() {
 
     // compute seconds until next master midnight
     const nextMidnight = getNextResetTime(today); // implement to return Date at next central midnight
+    console.log("Next reset time is", nextMidnight);
     let secondsUntilReset = Math.max(
       0,
       Math.floor((nextMidnight.getTime() - today.getTime()) / 1000)
@@ -59,8 +60,8 @@ export async function GET() {
         ...(ContentLength
           ? { "Content-Length": ContentLength.toString() }
           : {}),
-        "Cache-Control": cacheControl,
-        Expires: nextMidnight.toUTCString(),
+        "Cache-Control": cacheControl, // this is wrong, lasts for not a lot of time
+        Expires: nextMidnight.toUTCString(), // expires a day earlier, but the time is right
         "X-Resolved-Date": today.toISOString(),
         ...(ETag ? { ETag } : {}),
         ...(LastModified

@@ -1,6 +1,6 @@
 import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
 import { firestore } from "../../firebase";
-import { getGameDate, getNextResetTime } from "@/util/time";
+import { getNextResetTime } from "@/util/time";
 
 export async function GET() {
   // fetch the current number of days the game has been alive from the game-stats document
@@ -21,7 +21,7 @@ export async function GET() {
   };
 
   // attach cache control headers
-  const today = getGameDate();
+  const today = new Date();
 
   // compute seconds until next master midnight
   const nextMidnight = getNextResetTime(today); // implement to return Date at next central midnight

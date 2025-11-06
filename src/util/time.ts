@@ -18,21 +18,22 @@ export function formatMsVerbose(ms: number): string {
   return parts.slice(0, -1).join(", ") + ", and " + parts.at(-1);
 }
 
-export function getNextResetTime(now: Date = new Date()): Date {
-  const year = now.getUTCFullYear();
-  const month = now.getUTCMonth();
-  const day = now.getUTCDate();
+export function getNextResetTime(now = new Date()) {
+  const y = now.getUTCFullYear();
+  const m = now.getUTCMonth();
+  const d = now.getUTCDate();
 
-  // Today’s reset in UTC
-  const todayReset = new Date(Date.UTC(year, month, day, RESET_HOUR_UTC, 0, 0));
+  // timestamp (ms) for today's reset at RESET_HOUR_UTC in UTC
+  const todayResetTs = Date.UTC(y, m, d, RESET_HOUR_UTC, 0, 0);
 
-  // If now is before today’s reset, return today’s reset
-  // Otherwise, return tomorrow’s reset
-  if (now < todayReset) {
-    return todayReset;
+  const nowTs = now.getTime();
+
+  if (nowTs < todayResetTs) {
+    return new Date(todayResetTs);
   } else {
-    // Tomorrow’s reset
-    return new Date(Date.UTC(year, month, day + 1, RESET_HOUR_UTC, 0, 0));
+    // add exactly 24 hours (in ms) to get tomorrow's reset
+    const oneDayMs = 24 * 60 * 60 * 1000;
+    return new Date(todayResetTs + oneDayMs);
   }
 }
 
