@@ -39,6 +39,7 @@ export default function SongListModal({
     <Modal
       opened={openState}
       onClose={() => {
+        setSearchTerm("");
         playButtonSound();
         modalHandler.close();
       }}

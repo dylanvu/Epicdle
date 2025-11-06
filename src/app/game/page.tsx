@@ -524,7 +524,7 @@ export default function Game() {
                 <GuessHistoryOverlay guesses={guesses} />
               </div>
               <Text className={styles.songTitle} mt="xs">
-                {selectedSong?.name ?? "Select a song below..."}
+                {selectedSong?.name ?? "Choose a song to guess"}
               </Text>
               <AudioSlider
                 availableGuesses={MAX_GUESSES}

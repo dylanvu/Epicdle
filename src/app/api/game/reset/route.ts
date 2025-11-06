@@ -6,7 +6,7 @@ import { S3 } from "@/app/api/cloudflare";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 import { createSnippetKey } from "../util";
-import { getGameDate, getYearMonthDay } from "@/util/time";
+import { getYearMonthDay } from "@/util/time";
 
 export async function GET(req: NextRequest) {
   // vercel cron only makes GET requests
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
   // when this API is called
   // get the date in the UTC
-  const now = getGameDate();
+  const now = new Date();
   console.log("Today is ", now);
 
   // the clients have already shifted to the premade snippet, so we need to generate tomorrow's snippet
