@@ -11,7 +11,7 @@ import { useState, useRef, useEffect } from "react";
  * This is a vibecoded hook that encapsulates the audio logic for the game, but at least I thought of putting the logic into its own hook.
  * @param guesses
  * @param gameState
- * @param volumeRef
+ * @param volumeObject
  * @returns
  */
 export function useGameAudio(
@@ -31,35 +31,105 @@ export function useGameAudio(
   const volumeRafRef = useRef<number | null>(null);
   const fadeRafRef = useRef<number | null>(null);
 
+  // Web Audio API refs
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
+
   // I'm just a vibe coder...
 
   /**
-   * Poll volumeRef.current on every frame and apply it to the audio element.
+   * Poll volumeObject on every frame and apply it to the audio element.
    * This lets us react instantly when the parent updates the ref, without
    * needing React state updates in the parent.
+   * Also fixes iOS Safari quirk by using GainNode safely.
    */
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !volumeObject) return;
 
-    const volume = volumeObject.muted ? 0 : volumeObject.volume;
+    // remember the volume in localStorage
+    try {
+      localStorage.setItem("volume", JSON.stringify(volumeObject));
+    } catch {}
 
-    const loop = () => {
-      // I fixed a bug here so I'm not JUST a vibecoder!
-      const desired = volume / 100;
-      if (
-        lastAppliedVolumeRef.current === null ||
-        Math.abs(desired - (lastAppliedVolumeRef.current ?? 0)) > 0.0005
-      ) {
-        audio.volume = desired;
-        // okay everything after this is just me being a vibecoder
-        lastAppliedVolumeRef.current = desired;
+    let usingGainNode = false;
+
+    const setupWebAudio = async () => {
+      // Ensure AudioContext exists and resume if suspended (iOS)
+      if (!audioCtxRef.current) {
+        const Ctor =
+          (window as any).AudioContext || (window as any).webkitAudioContext;
+        if (!Ctor) {
+          return;
+        }
+        audioCtxRef.current = new Ctor();
       }
-      volumeRafRef.current = requestAnimationFrame(loop);
+
+      if (!audioCtxRef.current) {
+        return;
+      }
+
+      if (audioCtxRef.current.state === "suspended") {
+        try {
+          await audioCtxRef.current.resume();
+        } catch {
+          // ignore if resume fails; may need user gesture
+        }
+      }
+
+      // Only create MediaElementSource once per element (avoids InvalidStateError)
+      if (!sourceNodeRef.current) {
+        try {
+          sourceNodeRef.current =
+            audioCtxRef.current.createMediaElementSource(audio);
+          gainNodeRef.current = audioCtxRef.current.createGain();
+          sourceNodeRef.current.connect(gainNodeRef.current);
+          gainNodeRef.current.connect(audioCtxRef.current.destination);
+          usingGainNode = true;
+        } catch (e) {
+          console.warn("WebAudio setup failed:", e);
+          usingGainNode = false;
+        }
+      } else {
+        usingGainNode = !!gainNodeRef.current;
+      }
     };
 
-    // remember the volume in localStorage
-    localStorage.setItem("volume", JSON.stringify(volumeObject));
+    setupWebAudio();
+
+    const loop = () => {
+      // Read current volume live on each frame (avoids frozen value bug)
+      const desiredLinear = volumeObject.muted ? 0 : volumeObject.volume / 100;
+
+      if (usingGainNode && gainNodeRef.current && audioCtxRef.current) {
+        try {
+          gainNodeRef.current.gain.setValueAtTime(
+            desiredLinear,
+            audioCtxRef.current.currentTime
+          );
+          lastAppliedVolumeRef.current = desiredLinear;
+        } catch {
+          try {
+            (gainNodeRef.current.gain as any).value = desiredLinear;
+            lastAppliedVolumeRef.current = desiredLinear;
+          } catch {}
+        }
+      } else {
+        // fallback: set audio.volume (may be ignored on iOS)
+        if (
+          lastAppliedVolumeRef.current === null ||
+          Math.abs(desiredLinear - (lastAppliedVolumeRef.current ?? 0)) > 0.0005
+        ) {
+          try {
+            audio.volume = desiredLinear;
+            lastAppliedVolumeRef.current = desiredLinear;
+          } catch {}
+        }
+      }
+
+      volumeRafRef.current = requestAnimationFrame(loop);
+    };
 
     volumeRafRef.current = requestAnimationFrame(loop);
 
@@ -74,7 +144,7 @@ export function useGameAudio(
         fadeRafRef.current = null;
       }
     };
-    // run once on mount; poll loop reads volumeRef.current continuously
+    // run once on mount; poll loop reads volumeObject continuously
   }, [audioRef, volumeObject]);
 
   /**
@@ -149,9 +219,16 @@ export function useGameAudio(
     audio.addEventListener("timeupdate", onTimeUpdate);
     audio.addEventListener("ended", onEnded);
 
-    if (playing || (isWinState(gameState) && !playSoundWhenWinRef.current)) {
-      if (isWinState(gameState)) {
+    const startPlayback = async () => {
+      if (isWinState(gameState) && !playSoundWhenWinRef.current) {
         playSoundWhenWinRef.current = true;
+      }
+
+      // Resume AudioContext on iOS if suspended
+      if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
+        try {
+          await audioCtxRef.current.resume();
+        } catch {}
       }
 
       // If we are starting playback, ensure we are not past the limit
@@ -164,11 +241,16 @@ export function useGameAudio(
       // ensure loop false again before play (defensive)
       audio.loop = false;
 
-      audio.play().catch((e) => {
+      try {
+        await audio.play();
+        startRafLoop();
+      } catch (e) {
         console.warn("Audio play() failed", e);
-      });
+      }
+    };
 
-      startRafLoop();
+    if (playing || (isWinState(gameState) && !playSoundWhenWinRef.current)) {
+      startPlayback();
     } else {
       audio.pause();
       if (rafRef.current) {
