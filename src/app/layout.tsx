@@ -82,6 +82,7 @@ export default function RootLayout({
           <FirebaseAnalyticsProvider>
             <Notifications />
             {children}
+            <Analytics />
           </FirebaseAnalyticsProvider>
         </MantineProvider>
       </body>
