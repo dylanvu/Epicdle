@@ -61,7 +61,6 @@ import { checkAnswer, getDailySnippet } from "@/app/services/gameService";
 
 import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
 import { usePathname } from "next/navigation";
-import { logEvent } from "firebase/analytics";
 
 const WIN_LOSS_TIMEOUT = 800;
 

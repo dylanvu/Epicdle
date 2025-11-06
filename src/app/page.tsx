@@ -10,7 +10,6 @@ import { Center, Loader, Title } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { AnimatePresence, motion } from "motion/react";
 import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
-import { logEvent } from "firebase/analytics";
 import { usePathname } from "next/navigation";
 
 export default function Home() {

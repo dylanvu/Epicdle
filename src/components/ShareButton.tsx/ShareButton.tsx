@@ -10,7 +10,6 @@ import { Song } from "@/interfaces/interfaces";
 import { getLifetimeGameDay } from "@/app/services/gameService";
 
 import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
-import { logEvent } from "firebase/analytics";
 
 function CommonShareButton({
   text,
