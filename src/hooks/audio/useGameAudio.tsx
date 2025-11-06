@@ -31,7 +31,38 @@ export function useGameAudio(
   const volumeRafRef = useRef<number | null>(null);
   const fadeRafRef = useRef<number | null>(null);
 
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
+
   // I'm just a vibe coder...
+
+  // Helper: ensure AudioContext exists and is resumed
+  const ensureAudioContext = async () => {
+    if (audioCtxRef.current && audioCtxRef.current.state !== "closed") {
+      if (audioCtxRef.current.state === "suspended") {
+        try {
+          await audioCtxRef.current.resume();
+        } catch (e) {
+          // resume may fail if not in user gesture; caller should call on user gesture if needed
+          console.warn("AudioContext resume failed:", e);
+        }
+      }
+      return audioCtxRef.current;
+    }
+
+    try {
+      const Ctor =
+        (window as any).AudioContext || (window as any).webkitAudioContext;
+      if (!Ctor) return null;
+      const ctx = new Ctor();
+      audioCtxRef.current = ctx;
+      return ctx;
+    } catch (e) {
+      console.warn("No WebAudio available:", e);
+      return null;
+    }
+  };
 
   /**
    * Poll volumeRef.current on every frame and apply it to the audio element.
@@ -42,24 +73,107 @@ export function useGameAudio(
     const audio = audioRef.current;
     if (!audio || !volumeObject) return;
 
-    const volume = volumeObject.muted ? 0 : volumeObject.volume;
+    // store in localStorage (keeps your existing behavior)
+    try {
+      localStorage.setItem("volume", JSON.stringify(volumeObject));
+    } catch (e) {
+      // ignore storage errors
+    }
 
-    const loop = () => {
-      // I fixed a bug here so I'm not JUST a vibecoder!
-      const desired = volume / 100;
-      if (
-        lastAppliedVolumeRef.current === null ||
-        Math.abs(desired - (lastAppliedVolumeRef.current ?? 0)) > 0.0005
-      ) {
-        audio.volume = desired;
-        // okay everything after this is just me being a vibecoder
-        lastAppliedVolumeRef.current = desired;
+    let usingGainNode = false;
+
+    const setupWebAudio = async () => {
+      const ctx = await ensureAudioContext();
+      if (!ctx) {
+        usingGainNode = false;
+        return;
       }
-      volumeRafRef.current = requestAnimationFrame(loop);
+
+      // If source not set up for this audio element, create and connect
+      if (
+        !sourceNodeRef.current ||
+        sourceNodeRef.current.mediaElement !== audio
+      ) {
+        // If there is an old source for a different element, disconnect it
+        try {
+          sourceNodeRef.current?.disconnect();
+        } catch {
+          /* ignore */
+        }
+
+        try {
+          // create MediaElement source and GainNode
+          const source = ctx.createMediaElementSource(audio);
+          const gain = ctx.createGain();
+          source.connect(gain);
+          gain.connect(ctx.destination);
+
+          sourceNodeRef.current = source;
+          gainNodeRef.current = gain;
+          usingGainNode = true;
+
+          // initialize gain to match volumeObject
+          const desired = volumeObject.muted ? 0 : volumeObject.volume / 100;
+          gain.gain.setValueAtTime(desired, ctx.currentTime);
+          lastAppliedVolumeRef.current = desired;
+        } catch (e) {
+          console.warn("WebAudio setup failed:", e);
+          usingGainNode = false;
+        }
+      } else {
+        usingGainNode = !!gainNodeRef.current;
+      }
     };
 
-    // remember the volume in localStorage
-    localStorage.setItem("volume", JSON.stringify(volumeObject));
+    // attempt web audio setup; we don't await here to keep effect sync,
+    // but we will use whatever gets configured.
+    setupWebAudio();
+
+    const loop = () => {
+      const desiredLinear = volumeObject.muted ? 0 : volumeObject.volume / 100;
+
+      if (usingGainNode && gainNodeRef.current && audioCtxRef.current) {
+        const gainNode = gainNodeRef.current;
+        // only update if there's a meaningful change
+        if (
+          lastAppliedVolumeRef.current === null ||
+          Math.abs(desiredLinear - (lastAppliedVolumeRef.current ?? 0)) > 0.0005
+        ) {
+          // set the gain (works reliably on iOS Safari)
+          try {
+            // use setValueAtTime for smoothness / compatibility
+            gainNode.gain.setValueAtTime(
+              desiredLinear,
+              audioCtxRef.current.currentTime
+            );
+            lastAppliedVolumeRef.current = desiredLinear;
+          } catch (e) {
+            // If gain.setValueAtTime throws, fall back to direct assignment
+            try {
+              (gainNode.gain as any).value = desiredLinear;
+              lastAppliedVolumeRef.current = desiredLinear;
+            } catch {}
+          }
+        }
+      } else {
+        // fallback: set the element volume (may be ignored on iOS)
+        const desired = desiredLinear;
+        if (
+          lastAppliedVolumeRef.current === null ||
+          Math.abs(desired - (lastAppliedVolumeRef.current ?? 0)) > 0.0005
+        ) {
+          try {
+            audio.volume = desired;
+            lastAppliedVolumeRef.current = desired;
+          } catch (e) {
+            // setting audio.volume can throw in some browsers in weird states
+            // swallow but keep loop running.
+          }
+        }
+      }
+
+      volumeRafRef.current = requestAnimationFrame(loop);
+    };
 
     volumeRafRef.current = requestAnimationFrame(loop);
 
@@ -68,13 +182,17 @@ export function useGameAudio(
         cancelAnimationFrame(volumeRafRef.current);
         volumeRafRef.current = null;
       }
-      // also cancel any fade in progress
-      if (fadeRafRef.current) {
-        cancelAnimationFrame(fadeRafRef.current);
-        fadeRafRef.current = null;
-      }
+      // do not close audio context here — keep it for app lifetime; if you want to close, do it elsewhere
+      // but we will NOT leave dangling gain nodes pointing at an element that may be removed:
+      // (disconnect source if it was created for this element)
+      try {
+        if (sourceNodeRef.current) {
+          sourceNodeRef.current.disconnect();
+          sourceNodeRef.current = null;
+        }
+      } catch {}
     };
-    // run once on mount; poll loop reads volumeRef.current continuously
+    // NOTE: we intentionally depend on volumeObject (object identity) here like you passed it in.
   }, [audioRef, volumeObject]);
 
   /**
