@@ -1,5 +1,7 @@
 # Epicdle
 
+Play now at https://epicdle.com
+
 ## Tech Stack
 
 - Next.js
