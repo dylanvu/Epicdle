@@ -38,7 +38,7 @@ export default function TutorialModal({
         />
         <SongLyrics>
           <Text>You have a challenge, a test of skill</Text>
-          <Text>A song to name that will contest your will</Text>
+          <Text>A song to name that will assess your will</Text>
           <Text>
             There are
             <Text fw={700} span>
