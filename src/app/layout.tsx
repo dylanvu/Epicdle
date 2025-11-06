@@ -9,6 +9,7 @@ import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import Head from "next/head";
 import { GAME_URL } from "@/constants";
+import { Analytics } from "@vercel/analytics/next";
 
 const lato = Lato({
   subsets: ["latin"],
