@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { firestore } from "@/app/api/firebase";
 import { FIREBASE_DATABASE_COLLECTION_NAME } from "@/constants";
 import { ICheckAnswerResult } from "@/interfaces/interfaces";
-import { getYearMonthDay } from "@/util/time";
+import { getDailyKey } from "@/util/time";
 
 /**
  * Check if the answer is correct.
@@ -26,7 +26,7 @@ export async function PATCH(
   console.log("Fetching today's answer from the database");
   const now = new Date();
   console.log("Today is ", now);
-  const answerKey = getYearMonthDay(now);
+  const answerKey = getDailyKey(now);
   console.log("Getting answer for ", answerKey);
   const answerDocRef = firestore
     .collection(FIREBASE_DATABASE_COLLECTION_NAME)

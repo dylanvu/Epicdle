@@ -81,3 +81,32 @@ export function formatGameDateForDisplay(date: Date): string {
     day: "numeric",
   }).format(date);
 }
+
+/**
+ * Return the DB key (YYYY-MM-DD) for the quiz answer given a reset hour in UTC.
+ * @param now optional Date to calculate against
+ * @param resetHourUTC hour of day in UTC when the answer resets (0-23)
+ * @returns key in "YYYY-MM-DD" format
+ */
+export function getDailyKey(now = new Date()) {
+  // Work in UTC to avoid timezone issues
+  const d = new Date(now.getTime()); // clone
+
+  console.log("Checking daily key for ", d);
+
+  const utcHour = d.getUTCHours();
+  if (utcHour < RESET_HOUR_UTC) {
+    // Still before reset: use previous UTC day
+    d.setUTCDate(d.getUTCDate() - 1);
+  }
+
+  console.log("Processed time is ", d);
+
+  // Build YYYY-MM-DD
+  const year = d.getUTCFullYear();
+  const month = String(d.getUTCMonth() + 1); // months are 0-based
+  const day = String(d.getUTCDate());
+  const dailyKey = `${year}-${month}-${day}`;
+  console.log("Daily key is ", dailyKey);
+  return dailyKey;
+}

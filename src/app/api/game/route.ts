@@ -26,6 +26,7 @@ export async function GET() {
       );
 
     if (!Body) {
+      console.error("File not found");
       return new Response("File not found", { status: 404 });
     }
 
