@@ -1,10 +1,10 @@
 "use client";
 import { Button, Stack, Text } from "@mantine/core";
-import styles from "./Menu.module.css";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useDisclosure } from "@mantine/hooks";
 import DisclaimerModal from "@/components/modals/DisclaimerModal/DisclaimerModal";
+import { IconBow, IconSword } from "@tabler/icons-react";
 
 export default function Menu() {
   const [openedAbout, aboutHandler] = useDisclosure(false);
@@ -23,8 +23,21 @@ export default function Menu() {
         variant="filled"
         component="a"
         color={PRIMARY_COLOR}
+        leftSection={<IconBow />}
       >
         Play
+      </Button>
+
+      <Button
+        onClick={() => {}}
+        size="lg"
+        variant="filled"
+        component="a"
+        color={PRIMARY_COLOR}
+        leftSection={<IconSword />}
+        disabled
+      >
+        COMING SOON: Instrumental Mode
       </Button>
       <Button
         size="lg"

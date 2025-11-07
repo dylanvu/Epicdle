@@ -8,7 +8,11 @@ import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ModalTitle from "../ModalTitle";
 import SongLyrics from "../SongLyrics";
 import ModalGif from "../ModalGif/ModalGif";
-import { IconSearch, IconArrowRight } from "@tabler/icons-react";
+import {
+  IconSearch,
+  IconArrowRight,
+  IconPlayerPlayFilled,
+} from "@tabler/icons-react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function TutorialModal({
@@ -52,6 +56,14 @@ export default function TutorialModal({
         <List type="ordered" mt="md">
           <List.Item>
             <Text>
+              Listen to the snippet using{" "}
+              <ThemeIcon color={PRIMARY_COLOR} component="span">
+                <IconPlayerPlayFilled />
+              </ThemeIcon>
+            </Text>
+          </List.Item>
+          <List.Item>
+            <Text>
               Search for a song using{" "}
               {isMobile ? (
                 <ThemeIcon color={PRIMARY_COLOR} component="span">
@@ -73,6 +85,9 @@ export default function TutorialModal({
                 `the "Submit Guess" button`
               )}
             </Text>
+          </List.Item>
+          <List.Item>
+            <Text>Repeat until you get it!</Text>
           </List.Item>
         </List>
         <Text mt="md">
