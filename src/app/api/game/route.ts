@@ -108,11 +108,3 @@ export async function GET() {
     return new Response("Internal Server Error", { status: 500 });
   }
 }
-
-/**
- * Check if the answer is correct
- * @param request
- */
-export async function POST(request: Request) {
-  //
-}
