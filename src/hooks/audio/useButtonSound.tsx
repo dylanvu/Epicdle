@@ -5,6 +5,14 @@ export function useButtonSound(onend?: () => void) {
   const [play] = useSound("/sfx/button_click.mp3", {
     onend,
     playbackRate: 1.1,
+    volume: 0.025,
   });
+
+  // const play = () => {
+  //   if (onend) {
+  //     onend();
+  //   }
+  // };
+
   return play;
 }

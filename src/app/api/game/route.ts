@@ -61,14 +61,14 @@ export async function GET() {
         ...(ContentLength
           ? { "Content-Length": ContentLength.toString() }
           : {}),
-        "Cache-Control": cacheControl, // this is wrong, lasts for not a lot of time
-        Expires: nextMidnight.toUTCString(), // expires a day earlier, but the time is right
+        "Cache-Control": cacheControl,
+        Expires: nextMidnight.toUTCString(),
         "X-Resolved-Date": today.toISOString(),
         ...(ETag ? { ETag } : {}),
         ...(LastModified
           ? { "Last-Modified": LastModified.toUTCString() }
           : {}),
-      } as HeadersInit,
+      },
     });
   } catch (err) {
     if (err instanceof S3ServiceException) {
@@ -107,12 +107,4 @@ export async function GET() {
     console.error("Error retrieving audio snippet:", err);
     return new Response("Internal Server Error", { status: 500 });
   }
-}
-
-/**
- * Check if the answer is correct
- * @param request
- */
-export async function POST(request: Request) {
-  //
 }
