@@ -37,7 +37,7 @@ export default function TutorialModal({
     >
       <Stack gap="xs">
         <ModalGif
-          endpoint="/api/assets/boar"
+          fileName="Boar"
           alt="Warrior of the Mind Animatic - Boar Scene"
         />
         <SongLyrics>

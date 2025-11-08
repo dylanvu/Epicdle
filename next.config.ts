@@ -36,6 +36,9 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  images: {
+    remotePatterns: [new URL("https://assets.epicdle.com/**")],
+  },
   async headers() {
     return [
       {

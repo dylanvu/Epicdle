@@ -7,11 +7,19 @@ import { Loader, Stack, Title } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/config/theme";
 
 interface ModalGifProps {
+  /**
+   * name of the file, you do not need the .gif extension in the name
+   * example: "Boar"
+   */
+  fileName: string;
   alt: string;
-  endpoint: string; // api endpoint to get the gif, e.g. "/api/assets/boar"
 }
 
-export default function ModalGif({ alt, endpoint }: ModalGifProps) {
+export default function ModalGif({ alt, fileName }: ModalGifProps) {
+  // validate the fileName
+  if (fileName && fileName.endsWith(".gif")) {
+    throw new Error("don't need the .gif extension for file" + fileName);
+  }
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -23,7 +31,8 @@ export default function ModalGif({ alt, endpoint }: ModalGifProps) {
         </Stack>
       )}
       <Image
-        src={endpoint}
+        // src={endpoint}
+        src={`https://assets.epicdle.com/${fileName}.gif`}
         alt={alt}
         width={0}
         height={0}
