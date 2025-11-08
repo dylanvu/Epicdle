@@ -19,11 +19,10 @@ export async function getStaticGifAsset(bucket: string, key: string) {
 
     // Choose headers: s-maxage for CDN, max-age for browsers
     const cacheControl = [
-      `public`,
-      `max-age=${31536000}`,
-      `s-maxage=${31536000}`,
-      `must-revalidate`,
-      `stale-while-revalidate=604800`,
+      "public",
+      "max-age=31536000", // 1 year in browser
+      "s-maxage=31536000", // 1 year for CDN (optional)
+      "immutable", // never changes
     ].join(", ");
 
     // TODO: return the gif object with proper cache control headers
