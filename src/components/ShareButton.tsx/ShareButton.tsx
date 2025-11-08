@@ -72,7 +72,6 @@ export default function ShareButton({
 
   const guessCount = win ? (guesses.length + 1).toString() : "X";
 
-  // TODO: update the link
   const shareText = `Epicdle #${lifetimeGameDay} ${guessCount}/${MAX_GUESSES}
 ${guessesString}
 ${GAME_URL}`;
