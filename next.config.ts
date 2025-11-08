@@ -36,6 +36,20 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  async headers() {
+    return [
+      {
+        source: "/gif/:path*",
+        headers: [
+          // long-lived, immutable cache for content-hashed files
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, stale-while-revalidate=604800",
+          },
+        ],
+      },
+    ];
+  },
   experimental: {
     optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
   },
