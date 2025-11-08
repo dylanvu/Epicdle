@@ -67,13 +67,6 @@ export default function RootLayout({
     <html lang="en">
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <Head>
-        <link
-          rel="preload"
-          href="/gif/Boar.gif"
-          as="image"
-          type="image/gif"
-          fetchPriority="high"
-        />
         <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
         <ColorSchemeScript />
       </Head>

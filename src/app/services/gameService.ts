@@ -68,3 +68,21 @@ export async function getLifetimeGameDay(): Promise<number> {
 
   return data.days;
 }
+
+export async function getGifAsset(endpoint: string): Promise<Blob> {
+  const response = await fetch(endpoint, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    let errorMessage = await response.text();
+    if (response.status === 429) {
+      errorMessage = "Too many attempts, try again in a minute.";
+    }
+    throw new HttpError(errorMessage, response.status);
+  }
+
+  const blob = await response.blob();
+
+  return blob;
+}

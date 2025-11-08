@@ -31,7 +31,7 @@ export default function TutorialModal({
       className={styles.game}
       lockScroll={false}
     >
-      <ModalGif src={"/gif/ThunderBringer.gif"} alt="Thunder" />
+      <ModalGif endpoint={"/api/assets/zeus"} alt="Thunder" />
       <SongLyrics>
         <Text>Thunder, bring her through the wringer!</Text>
       </SongLyrics>
