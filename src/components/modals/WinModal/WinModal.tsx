@@ -32,7 +32,7 @@ export default function TutorialModal({
       lockScroll={false}
     >
       <ModalGif
-        src={"/gif/WarriorOfTheMind.gif"}
+        endpoint={"/api/assets/warrior"}
         alt="Warrior of the Mind Animatic"
       />
       <SongLyrics>
