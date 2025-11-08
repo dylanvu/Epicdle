@@ -132,6 +132,8 @@ export async function performReset(
 
   await newAnswerDocRef.set({
     song: tomorrowSnippetResult.songName,
+    startTimeStamp: tomorrowSnippetResult.timeStamp?.start ?? "",
+    endTimeStamp: tomorrowSnippetResult.timeStamp?.end ?? "",
   });
 
   // now increment the days the game has been alive
