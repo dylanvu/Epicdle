@@ -7,11 +7,7 @@ import seedrandom from "seedrandom";
 import path from "path";
 import os from "os";
 import { firebaseStorage } from "@/app/api/firebase";
-import {
-  FIREBASE_DATABASE_COLLECTION_NAME,
-  SONG_LIST,
-  FIREBASE_STORAGE_BUCKET_NAME,
-} from "@/constants";
+import { Song } from "@/interfaces/interfaces";
 import mp3Parser from "mp3-parser";
 import { SECONDS_PER_GUESS, MAX_GUESSES } from "@/constants";
 
@@ -33,11 +29,27 @@ function resolveFfprobeStatic(): string {
  * Creates a random audio snippet seeded by the given date's day, month, and year for both the song selection and timestamp
  * @param dateSeed
  * @param audioFileExtension
+ * @param seedSalt optional string to add to the seed to make it more random
+ * @returns
+ */
+
+/**
+ *
+ * @param dateSeed the date to use for the seed
+ * @param audioFileExtension the file extension to use for the snippet in cloud storage
+ * @param seedSalt an optional string to add to the seed to make it more random
+ * @param database_collection_name this is the google cloud storage folder name that contains the complete audio file
+ * @param storage_bucket_name the name of the firebase storage bucket to use for the file path
+ * @param song_list the list of songs to choose from, used to just choose a random song so only the count is needed
  * @returns
  */
 export async function createAudioSnippet(
   dateSeed: Date,
-  audioFileExtension: "mp3"
+  audioFileExtension: "mp3",
+  database_collection_name: string,
+  storage_bucket_name: string,
+  song_list: Song[],
+  seedSalt: string = ""
 ): Promise<{
   result: boolean;
   message: string;
@@ -48,24 +60,24 @@ export async function createAudioSnippet(
   const fs = await import("fs");
 
   // seed format
-  const seed = `${dateSeed.getFullYear()}-${dateSeed.getMonth()}-${dateSeed.getDate()}`;
+  const seed = `${dateSeed.getFullYear()}-${dateSeed.getMonth()}-${dateSeed.getDate()}${seedSalt}`;
 
   // choose song
-  const songCount = SONG_LIST.length;
+  const songCount = song_list.length;
   const randomIndex = Math.floor(seedrandom(seed)() * songCount);
-  const audioFileName = SONG_LIST[randomIndex].name;
+  const audioFileName = song_list[randomIndex].name;
   console.log("Currently selected random song is", audioFileName);
 
   // fetch from GCS
   const fileName = audioFileName + "." + audioFileExtension;
-  const filePath = `${FIREBASE_DATABASE_COLLECTION_NAME}/${fileName}`;
-  const audioFileBucket = firebaseStorage.bucket(FIREBASE_STORAGE_BUCKET_NAME);
+  const filePath = `${database_collection_name}/${fileName}`;
+  const audioFileBucket = firebaseStorage.bucket(storage_bucket_name);
 
   const [audioFileBucketExists] = await audioFileBucket.exists();
   if (!audioFileBucketExists) {
     return {
       result: false,
-      message: `Google Cloud Storage Bucket ${FIREBASE_STORAGE_BUCKET_NAME} does not exist in the storage`,
+      message: `Google Cloud Storage Bucket ${storage_bucket_name} does not exist in the storage`,
       songName: audioFileName,
       audioOutputPath: null,
     };

@@ -92,6 +92,9 @@ export const SONG_LIST: Song[] = [
  */
 export const FIREBASE_DATABASE_COLLECTION_NAME = "epic-the-musical";
 
+export const FIREBASE_DATABASE_COLLECTION_NAME_INSTRUMENTAL_MODE =
+  "epic-the-musical-instrumental";
+
 /**
  * The name of the Firebase Storage bucket
  * https://firebase.google.com/docs/storage/web/start#add-sdk-and-initialize

@@ -6,10 +6,23 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 import { createSnippetKey } from "../util";
 import { getYearMonthDay } from "@/util/time";
+import { Song } from "@/interfaces/interfaces";
 
+/**
+ * Core reset logic function to be performed daily
+ * @param req NextJS request, used to gatekeep the endpoint to be performed by the cron job onl
+ * @param database_collection_name database name to write the answer to, and to also pull the audio file from the bucket
+ * @param storage_bucket_name overall firebase bucket name to pull the audio file from, this should always be the same irregardless of the mode
+ * @param song_list list of songs, mostly used as a count to pull the random index from
+ * @param seedSalt optional string to add to the seed to make it more random, used to distinguish normal mode vs other modes
+ * @returns
+ */
 export async function performReset(
   req: NextRequest,
-  database_collection_name: string
+  database_collection_name: string,
+  storage_bucket_name: string,
+  song_list: Song[],
+  seedSalt: string = ""
 ) {
   // this function is not guaranteed to run at the exact time of the cron job
   // there is a delay of up to 1 hour
@@ -56,7 +69,14 @@ export async function performReset(
   }
 
   // create the snippet
-  const tomorrowSnippetResult = await createAudioSnippet(tomorrow, "mp3");
+  const tomorrowSnippetResult = await createAudioSnippet(
+    tomorrow,
+    "mp3",
+    database_collection_name,
+    storage_bucket_name,
+    song_list,
+    seedSalt
+  );
   if (!tomorrowSnippetResult.result) {
     console.error(tomorrowSnippetResult.message);
     return NextResponse.json(

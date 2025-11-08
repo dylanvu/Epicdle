@@ -343,7 +343,6 @@ export default function Game() {
           autoClose: false,
         });
       }
-      // TODO: create a toast to show the error
       return;
     }
 
@@ -575,7 +574,6 @@ export default function Game() {
                   </Button>
                 )}
 
-                {/* TODO: load the mp3 from the backend, or download it and then put it as a blob and reference it here...? */}
                 <audio
                   ref={audioRef}
                   src={audioUrl ?? "/sample.mp3"}
