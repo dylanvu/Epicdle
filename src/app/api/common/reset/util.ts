@@ -11,6 +11,16 @@ import { Song } from "@/interfaces/interfaces";
 import mp3Parser from "mp3-parser";
 import { SECONDS_PER_GUESS, MAX_GUESSES } from "@/constants";
 
+function formatSecondsToMMSS(s: number): string {
+  if (!isFinite(s) || s < 0) s = 0;
+  const total = Math.floor(s);
+  const mm = Math.floor(total / 60)
+    .toString()
+    .padStart(2, "0");
+  const ss = (total % 60).toString().padStart(2, "0");
+  return `${mm}:${ss}`;
+}
+
 /** Resolve ffprobe-static at runtime and return path */
 function resolveFfprobeStatic(): string {
   try {
@@ -25,16 +35,13 @@ function resolveFfprobeStatic(): string {
   }
 }
 
-/**
- * Creates a random audio snippet seeded by the given date's day, month, and year for both the song selection and timestamp
- * @param dateSeed
- * @param audioFileExtension
- * @param seedSalt optional string to add to the seed to make it more random
- * @returns
- */
+interface TimestampObject {
+  start: string;
+  end: string;
+}
 
 /**
- *
+ * Creates a random audio snippet seeded by the given date's day, month, and year for both the song selection and timestamp
  * @param dateSeed the date to use for the seed
  * @param audioFileExtension the file extension to use for the snippet in cloud storage
  * @param seedSalt an optional string to add to the seed to make it more random
@@ -54,6 +61,7 @@ export async function createAudioSnippet(
   result: boolean;
   message: string;
   songName: string;
+  timeStamp: TimestampObject | null;
   audioOutputPath: string | null;
 }> {
   // dynamic import of fs so we don't need to change top-level imports
@@ -80,6 +88,7 @@ export async function createAudioSnippet(
       message: `Google Cloud Storage Bucket ${storage_bucket_name} does not exist in the storage`,
       songName: audioFileName,
       audioOutputPath: null,
+      timeStamp: null,
     };
   }
 
@@ -91,6 +100,7 @@ export async function createAudioSnippet(
       message: `Audio file ${filePath} does not exist in the storage`,
       songName: audioFileName,
       audioOutputPath: null,
+      timeStamp: null,
     };
   }
 
@@ -112,6 +122,7 @@ export async function createAudioSnippet(
       }`,
       songName: audioFileName,
       audioOutputPath: null,
+      timeStamp: null,
     };
   }
 
@@ -129,6 +140,7 @@ export async function createAudioSnippet(
       message: `Could not determine duration of ${filePath}`,
       songName: audioFileName,
       audioOutputPath: null,
+      timeStamp: null,
     };
   }
 
@@ -154,6 +166,7 @@ export async function createAudioSnippet(
       }`,
       songName: audioFileName,
       audioOutputPath: null,
+      timeStamp: null,
     };
   }
 
@@ -254,11 +267,13 @@ export async function createAudioSnippet(
       message: `Failed to locate any MP3 frames after ID3v2 tag for ${filePath}. Try increasing scan window or check file format.`,
       songName: audioFileName,
       audioOutputPath: null,
+      timeStamp: null,
     };
   }
 
   // Now find sliceStartByte by accumulating frame durations until startSeconds is reached
   let sliceStartByte = firstFrameOffset;
+  let actualStartSeconds = 0;
   try {
     let offset = firstFrameOffset;
     let accumulated = 0;
@@ -268,6 +283,7 @@ export async function createAudioSnippet(
       const dur = computeFrameDuration(frame);
       if (accumulated + dur > startSeconds) {
         sliceStartByte = frame._section.offset;
+        actualStartSeconds = accumulated;
         break;
       }
       accumulated += dur;
@@ -280,6 +296,7 @@ export async function createAudioSnippet(
 
   // find slice end byte by accumulating frames until duration reached
   let sliceEndByte = buf.length;
+  let actualSnippetDuration = 0;
   try {
     let offset = sliceStartByte;
     let accumulated = 0;
@@ -294,6 +311,7 @@ export async function createAudioSnippet(
       offset = frame._section.offset + frame._section.byteLength;
       if (accumulated >= snippetLength) {
         sliceEndByte = frame._section.offset + frame._section.byteLength;
+        actualSnippetDuration = accumulated;
         break;
       }
     }
@@ -310,6 +328,13 @@ export async function createAudioSnippet(
     buf.length
   );
 
+  let actualEndSeconds = actualStartSeconds + actualSnippetDuration;
+
+  const timeStampFormatted = {
+    start: formatSecondsToMMSS(actualStartSeconds),
+    end: formatSecondsToMMSS(actualEndSeconds),
+  };
+
   // Validate slice bounds
   if (sliceStartByte >= sliceEndByte || sliceStartByte >= buf.length) {
     return {
@@ -317,6 +342,7 @@ export async function createAudioSnippet(
       message: `Failed to compute a valid MP3 frame slice for ${filePath} (start=${sliceStartByte}, end=${sliceEndByte}, len=${buf.length})`,
       songName: audioFileName,
       audioOutputPath: null,
+      timeStamp: null,
     };
   }
 
@@ -343,6 +369,7 @@ export async function createAudioSnippet(
       }`,
       songName: audioFileName,
       audioOutputPath: null,
+      timeStamp: null,
     };
   }
 
@@ -351,6 +378,7 @@ export async function createAudioSnippet(
     message: `Successfully created audio snippet at ${snippetOutputPath}`,
     songName: audioFileName,
     audioOutputPath: snippetOutputPath,
+    timeStamp: timeStampFormatted,
   };
 }
 
