@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/gif/:path*",
+        source: "/:path*\\.(?:gif|webp)", // match any .gif or .webp anywhere under /public
         headers: [
           // long-lived, immutable cache for content-hashed files
           {
