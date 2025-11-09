@@ -335,6 +335,8 @@ export async function createAudioSnippet(
     end: formatSecondsToMMSS(actualEndSeconds),
   };
 
+  console.log("timeStampFormatted:", timeStampFormatted);
+
   // Validate slice bounds
   if (sliceStartByte >= sliceEndByte || sliceStartByte >= buf.length) {
     return {

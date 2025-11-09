@@ -11,7 +11,7 @@ interface ModalGifProps {
    * name of the file, you do not need the .gif extension in the name
    * example: "Boar"
    */
-  fileName: string;
+  fileName: "Boar" | "ThunderBringer" | "WarriorOfTheMind";
   alt: string;
 }
 
