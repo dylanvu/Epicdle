@@ -130,11 +130,16 @@ export async function performReset(
   const newAnswerDocKey = getYearMonthDay(tomorrow);
   const newAnswerDocRef = answersCollectionRef.doc(newAnswerDocKey);
 
-  await newAnswerDocRef.set({
+  console.log("New answer doc key is", newAnswerDocKey);
+
+  const newDocContents = {
     song: tomorrowSnippetResult.songName,
     startTimeStamp: tomorrowSnippetResult.timeStamp?.start ?? "",
     endTimeStamp: tomorrowSnippetResult.timeStamp?.end ?? "",
-  });
+  };
+  console.log("Writing this to the answer doc:", newDocContents);
+
+  await newAnswerDocRef.set(newDocContents);
 
   // now increment the days the game has been alive
   // fetch the current number of days the game has been alive from the game-stats document
