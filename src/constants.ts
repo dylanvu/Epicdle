@@ -37,54 +37,193 @@ export const ALBUM_NAME_TO_COVER_MAP: Record<string, string> = {
 };
 
 export const SONG_LIST: Song[] = [
-  { name: "The Horse and the Infant", album: "The Troy Saga" },
-  { name: "Just a Man", album: "The Troy Saga" },
-  { name: "Full Speed Ahead", album: "The Troy Saga" },
-  { name: "Open Arms", album: "The Troy Saga" },
-  { name: "Warrior of the Mind", album: "The Troy Saga" },
+  {
+    name: "The Horse and the Infant",
+    album: "The Troy Saga",
+    perfect_win_text: "Conquered",
+  },
+  { name: "Just a Man", album: "The Troy Saga", perfect_win_text: "Yeet" },
+  {
+    name: "Full Speed Ahead",
+    album: "The Troy Saga",
+    perfect_win_text: "Sail On",
+  },
+  { name: "Open Arms", album: "The Troy Saga", perfect_win_text: "Amazing" },
+  {
+    name: "Warrior of the Mind",
+    album: "The Troy Saga",
+    perfect_win_text: "Warrior of the Mind",
+  },
 
-  { name: "Polyphemus", album: "The Cyclops Saga" },
-  { name: "Survive", album: "The Cyclops Saga" },
-  { name: "Remember Them", album: "The Cyclops Saga" },
-  { name: "My Goodbye", album: "The Cyclops Saga" },
+  {
+    name: "Polyphemus",
+    album: "The Cyclops Saga",
+    perfect_win_text: "Cunning",
+  },
+  { name: "Survive", album: "The Cyclops Saga", perfect_win_text: "Survived" },
+  {
+    name: "Remember Them",
+    album: "The Cyclops Saga",
+    perfect_win_text: "You remembered",
+  },
+  {
+    name: "My Goodbye",
+    album: "The Cyclops Saga",
+    perfect_win_text: "Farewell for Today",
+  },
 
-  { name: "Storm", album: "The Ocean Saga" },
-  { name: "Luck Runs Out", album: "The Ocean Saga" },
-  { name: "Keep Your Friends Close", album: "The Ocean Saga" },
-  { name: "Ruthlessness", album: "The Ocean Saga" },
+  { name: "Storm", album: "The Ocean Saga", perfect_win_text: "Unyielding" },
+  {
+    name: "Luck Runs Out",
+    album: "The Ocean Saga",
+    perfect_win_text: "Luck? Or wit?",
+  },
+  {
+    name: "Keep Your Friends Close",
+    album: "The Ocean Saga",
+    perfect_win_text: "Outplayed",
+  },
+  {
+    name: "Ruthlessness",
+    album: "The Ocean Saga",
+    perfect_win_text: "Ruthless",
+  },
 
-  { name: "Puppeteer", album: "The Circe Saga" },
-  { name: "Wouldn't You Like", album: "The Circe Saga" },
-  { name: "Done For", album: "The Circe Saga" },
-  { name: "There Are Other Ways", album: "The Circe Saga" },
+  {
+    name: "Puppeteer",
+    album: "The Circe Saga",
+    perfect_win_text: "Enchanting",
+  },
+  {
+    name: "Wouldn't You Like",
+    album: "The Circe Saga",
+    perfect_win_text: "Holy Moly",
+  },
+  {
+    name: "Done For",
+    album: "The Circe Saga",
+    perfect_win_text: "Bewitched",
+  },
+  {
+    name: "There Are Other Ways",
+    album: "The Circe Saga",
+    perfect_win_text: "Crew saved",
+  },
+  {
+    name: "The Underworld",
+    album: "The Underworld Saga",
+    perfect_win_text: "Haunting",
+  },
+  {
+    name: "No Longer You",
+    album: "The Underworld Saga",
+    perfect_win_text: "Prophetic",
+  },
+  {
+    name: "Monster",
+    album: "The Underworld Saga",
+    perfect_win_text: "Monstrous",
+  },
 
-  { name: "The Underworld", album: "The Underworld Saga" },
-  { name: "No Longer You", album: "The Underworld Saga" },
-  { name: "Monster", album: "The Underworld Saga" },
+  {
+    name: "Suffering",
+    album: "The Thunder Saga",
+    perfect_win_text: "Enthralling",
+  },
+  {
+    name: "Different Beast",
+    album: "The Thunder Saga",
+    perfect_win_text: "Beastly",
+  },
+  {
+    name: "Scylla",
+    album: "The Thunder Saga",
+    perfect_win_text: "Escaped Scylla",
+  },
+  { name: "Mutiny", album: "The Thunder Saga", perfect_win_text: "Un-doomed" },
+  {
+    name: "Thunder Bringer",
+    album: "The Thunder Saga",
+    perfect_win_text: "Sublime",
+  },
 
-  { name: "Suffering", album: "The Thunder Saga" },
-  { name: "Different Beast", album: "The Thunder Saga" },
-  { name: "Scylla", album: "The Thunder Saga" },
-  { name: "Mutiny", album: "The Thunder Saga" },
-  { name: "Thunder Bringer", album: "The Thunder Saga" },
+  {
+    name: "Legendary",
+    album: "The Wisdom Saga",
+    perfect_win_text: "Legendary",
+  },
+  {
+    name: "Little Wolf",
+    album: "The Wisdom Saga",
+    perfect_win_text: "Little Wolf",
+  },
+  {
+    name: "We'll Be Fine",
+    album: "The Wisdom Saga",
+    perfect_win_text: "Splendid",
+  },
+  {
+    name: "Love in Paradise",
+    album: "The Wisdom Saga",
+    perfect_win_text: "Euphoric",
+  },
+  {
+    name: "God Games",
+    album: "The Wisdom Saga",
+    perfect_win_text: "Game Won",
+  },
 
-  { name: "Legendary", album: "The Wisdom Saga" },
-  { name: "Little Wolf", album: "The Wisdom Saga" },
-  { name: "We'll Be Fine", album: "The Wisdom Saga" },
-  { name: "Love in Paradise", album: "The Wisdom Saga" },
-  { name: "God Games", album: "The Wisdom Saga" },
+  {
+    name: "Not Sorry for Loving You",
+    album: "The Vengeance Saga",
+    perfect_win_text: "Escaped",
+  },
+  {
+    name: "Dangerous",
+    album: "The Vengeance Saga",
+    perfect_win_text: "Dangerous",
+  },
+  {
+    name: "Charybdis",
+    album: "The Vengeance Saga",
+    perfect_win_text: "Held on",
+  },
+  {
+    name: "Get in the Water",
+    album: "The Vengeance Saga",
+    perfect_win_text: "Tides Turned",
+  },
+  {
+    name: "Six Hundred Strike",
+    album: "The Vengeance Saga",
+    perfect_win_text: "Crew avenged",
+  },
 
-  { name: "Not Sorry for Loving You", album: "The Vengeance Saga" },
-  { name: "Dangerous", album: "The Vengeance Saga" },
-  { name: "Charybdis", album: "The Vengeance Saga" },
-  { name: "Get in the Water", album: "The Vengeance Saga" },
-  { name: "Six Hundred Strike", album: "The Vengeance Saga" },
-
-  { name: "The Challenge", album: "The Ithaca Saga" },
-  { name: "Hold Them Down", album: "The Ithaca Saga" },
-  { name: "Odysseus", album: "The Ithaca Saga" },
-  { name: "I Can't Help but Wonder", album: "The Ithaca Saga" },
-  { name: "Would You Fall in Love with Me Again", album: "The Ithaca Saga" },
+  {
+    name: "The Challenge",
+    album: "The Ithaca Saga",
+    perfect_win_text: "Challenge won",
+  },
+  {
+    name: "Hold Them Down",
+    album: "The Ithaca Saga",
+    perfect_win_text: "Plot Discovered",
+  },
+  {
+    name: "Odysseus",
+    album: "The Ithaca Saga",
+    perfect_win_text: "Kingdom recovered",
+  },
+  {
+    name: "I Can't Help but Wonder",
+    album: "The Ithaca Saga",
+    perfect_win_text: "Reunited",
+  },
+  {
+    name: "Would You Fall in Love with Me Again",
+    album: "The Ithaca Saga",
+    perfect_win_text: "Penelope",
+  },
 ];
 
 /**
@@ -106,3 +245,5 @@ export const SUPPORT_EMAIL = "epicdle.game@gmail.com";
 export const RESET_HOUR_UTC = 7;
 
 export const GAME_URL = "https://epicdle.com";
+
+export const GAME_API_BASE_ENDPOINT = "/api/game";

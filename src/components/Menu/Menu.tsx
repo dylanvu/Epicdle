@@ -1,5 +1,5 @@
 "use client";
-import { Button, Stack, Text } from "@mantine/core";
+import { Box, Button, Flex, Stack, Text } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useDisclosure } from "@mantine/hooks";
@@ -13,6 +13,12 @@ export default function Menu() {
     // navigate to the game page
     window.location.href = "/game";
   });
+
+  const playButtonSoundLegend = useButtonSound(() => {
+    // navigate to the game page
+    window.location.href = "/legend";
+  });
+
   const playAboutButtonSound = useButtonSound();
   return (
     <Stack mt="md" justify="center" align="center" ml="auto" mr="auto">
@@ -27,9 +33,10 @@ export default function Menu() {
       >
         Play
       </Button>
-
       <Button
-        onClick={() => {}}
+        onClick={() => {
+          playButtonSoundLegend();
+        }}
         size="lg"
         variant="filled"
         component="a"
@@ -37,7 +44,7 @@ export default function Menu() {
         leftSection={<IconSword />}
         disabled
       >
-        COMING SOON: Instrumental Mode
+        Legend Mode
       </Button>
       <Button
         size="lg"

@@ -4,9 +4,11 @@
   min-height: 100vh;
   position: relative;
 
-  --albumImageRadius: 1rem;
   --endGamePadding: 0.8rem;
   --gamePageWinBorderSize: 0.8rem;
+
+  /* these variables are duplicated in GameAlbumArea.module.css */
+  --albumImageRadius: 1rem;
   --allBorderTransitions: border-color 0.2s ease-in-out,
     border-width 0.2s ease-in-out;
 }
@@ -30,38 +32,6 @@
   align-self: flex-start;
   font-weight: bold;
   font-size: 1.6rem;
-}
-
-.albumCoverArea {
-  position: relative;
-  transition: var(--allBorderTransitions);
-}
-
-.albumCover {
-  position: relative;
-  min-width: 300px;
-  min-height: 300px;
-
-  width: 350px;
-  height: 350px;
-}
-
-.albumCover > img {
-  /* make image unselectable */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border-radius: var(--albumImageRadius);
-}
-
-.mainButtonArea {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
 }
 
 .gameButtonOrder1 {
@@ -116,14 +86,6 @@
   .gameplayArea {
     width: auto;
     max-width: 90%;
-  }
-
-  .gameButtonLabelSmall {
-    text-wrap: pretty;
-  }
-
-  .mainButtonArea {
-    justify-content: space-around;
   }
 }
 

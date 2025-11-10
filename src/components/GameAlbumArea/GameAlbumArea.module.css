@@ -1,0 +1,35 @@
+.albumCoverArea {
+  position: relative;
+  transition: var(--allBorderTransitions);
+
+  /* these variables are duplicated in Game.module.css */
+  --albumImageRadius: 1rem;
+  --allBorderTransitions: border-color 0.2s ease-in-out,
+    border-width 0.2s ease-in-out;
+}
+
+.albumCover {
+  position: relative;
+  min-width: 300px;
+  min-height: 300px;
+
+  width: 350px;
+  height: 350px;
+}
+
+.albumCover > img {
+  /* make image unselectable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-radius: var(--albumImageRadius);
+}
+
+/* Medium phones / large phones (portrait) */
+@media (max-width: 767px) {
+  .albumCover {
+    width: 75vw;
+    height: 75vw;
+  }
+}
