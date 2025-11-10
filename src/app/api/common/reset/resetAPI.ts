@@ -139,7 +139,40 @@ export async function performReset(
   };
   console.log("Writing this to the answer doc:", newDocContents);
 
-  await newAnswerDocRef.set(newDocContents);
+  const newAnswerSetResult = await newAnswerDocRef.set(newDocContents, {
+    merge: true,
+  });
+
+  console.log("Firestore .set() call completed successfully", {
+    docPath: newAnswerDocRef.path,
+    newAnswerSetResult,
+  });
+
+  // I have no idea why this is not writing the timestamp
+
+  try {
+    const snap = await newAnswerDocRef.get();
+    const savedData = snap.data();
+    console.log("[VERIFY] Firestore doc after write:", {
+      docPath: newAnswerDocRef.path,
+      createTime: snap.createTime?.toDate?.() ?? snap.createTime,
+      updateTime: snap.updateTime?.toDate?.() ?? snap.updateTime,
+      savedData,
+    });
+
+    // Optional: sanity check if timestamps are missing
+    if (!savedData?.startTimeStamp || !savedData?.endTimeStamp) {
+      console.warn("[WARN] Missing timestamp fields after write!", {
+        startTimeStamp: savedData?.startTimeStamp,
+        endTimeStamp: savedData?.endTimeStamp,
+      });
+    }
+  } catch (error) {
+    console.error("[ERROR] Failed to verify Firestore write", {
+      docPath: newAnswerDocRef.path,
+      error,
+    });
+  }
 
   // now increment the days the game has been alive
   // fetch the current number of days the game has been alive from the game-stats document
