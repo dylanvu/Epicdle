@@ -3,7 +3,7 @@ import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./LoseModal.module.css";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
-import ShareButton from "@/components/ShareButton.tsx/ShareButton";
+import ShareButton from "@/components/ShareButton/ShareButton";
 import ModalTitle from "../ModalTitle";
 import { Song } from "@/interfaces/interfaces";
 import ModalThanks from "../ModalThanks";
