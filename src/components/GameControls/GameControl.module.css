@@ -1,0 +1,19 @@
+.mainButtonArea {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Medium phones / large phones (portrait) */
+@media (max-width: 767px) {
+  .gameButtonLabelSmall {
+    text-wrap: pretty;
+  }
+
+  .mainButtonArea {
+    justify-content: space-around;
+  }
+}

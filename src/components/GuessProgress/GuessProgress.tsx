@@ -1,43 +1,36 @@
-import { Progress } from "@mantine/core";
-import React from "react";
-import { AnimationScope } from "motion";
+import { MAX_GUESSES } from "@/constants";
+import { Group } from "@mantine/core";
+import GuessProgressSection from "@/components/GuessProgress/GuessProgressSection/GuessProgressSection";
+import { Song } from "@/interfaces/interfaces";
+import { PRIMARY_COLOR, WRONG_COLOR } from "@/config/theme";
 
-/**
- *
- * @param guessIndex the index the guess array must be greater than to render the progress bar
- * @param guessesCount the array of guesses the user has made
- * @returns
- */
-function GuessProgress({
-  guessIndex,
-  guessesCount,
-  color,
-}: {
-  guessIndex: number;
-  guessesCount: number;
-  color: string;
-}) {
-  return (
-    <div
-      data-guess-index={guessIndex}
-      style={{
-        // pivot at the bottom so "jumping" animation looks natural
-        transformOrigin: "center bottom",
-        willChange: "transform",
-        display: "flex",
-        flex: 1,
-      }}
-    >
-      <Progress
-        size="lg"
-        color={color}
-        value={guessesCount >= guessIndex ? 100 : 0}
-        transitionDuration={200}
-        flex={1}
-      />
-    </div>
-  );
+interface GuessProgressProps {
+  guesses: Song[];
+  endGameProgressColorOverride: string | null;
 }
 
-// Memoize the component to prevent unnecessary re-renders
-export default React.memo(GuessProgress);
+export function GuessProgress({
+  guesses,
+  endGameProgressColorOverride,
+}: GuessProgressProps) {
+  return (
+    <Group grow wrap="nowrap" gap={5} w="100%" mt="md" mb="md">
+      {/* // Generate a Progress Bar segment for each possible guess */}
+      {[...Array(MAX_GUESSES)].map((_, index) => (
+        // change the color to be red for past guesses and cyan for the current guess
+        <GuessProgressSection
+          key={`guess-progress-${index}`}
+          guessIndex={index}
+          guessesCount={guesses.length}
+          color={
+            endGameProgressColorOverride
+              ? endGameProgressColorOverride
+              : index === guesses.length
+              ? PRIMARY_COLOR
+              : WRONG_COLOR
+          }
+        />
+      ))}
+    </Group>
+  );
+}

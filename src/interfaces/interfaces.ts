@@ -1,6 +1,7 @@
 export interface Song {
   name: string;
   album: string;
+  perfect_win_text: string;
 }
 
 export interface Player {

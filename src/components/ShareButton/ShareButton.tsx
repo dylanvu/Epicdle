@@ -81,7 +81,6 @@ ${GAME_URL}`;
       navigator.share({
         title: "Epicdle",
         text: text,
-        url: GAME_URL,
       });
     } else {
       // need to add 1 to the guesses length since winning guesses are not counted in the guess history array

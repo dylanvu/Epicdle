@@ -5,7 +5,13 @@ import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import { playAudioWithoutUseSound } from "@/hooks/audio/useGameAudio";
 
-export default function PerfectTextOverlay({ show }: { show: boolean }) {
+export default function PerfectTextOverlay({
+  show,
+  text,
+}: {
+  show: boolean;
+  text: string;
+}) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -28,7 +34,7 @@ export default function PerfectTextOverlay({ show }: { show: boolean }) {
           }}
           transition={{
             duration: 2.5,
-            times: [0, 0.15, 0.4, 0.8, 1], // timing of keyframes
+            times: [0, 0.1, 0.3, 0.9, 1], // timing of keyframes
             ease: "easeOut",
           }}
           aria-hidden={!visible}
@@ -46,7 +52,7 @@ export default function PerfectTextOverlay({ show }: { show: boolean }) {
             c={"#00C2FF"}
             fw={700}
           >
-            LEGENDARY
+            {text.toUpperCase()}
           </Text>
         </motion.div>
       )}
