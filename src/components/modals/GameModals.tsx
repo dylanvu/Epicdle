@@ -1,4 +1,4 @@
-import { Song } from "@/interfaces/interfaces";
+import { IYouTubeVideo, Song } from "@/interfaces/interfaces";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import { Dispatch, SetStateAction } from "react";
 import TutorialModal from "./TutorialModal/TutorialModal";
@@ -23,6 +23,7 @@ export default function GameModals({
   disclaimerModalHandler,
   setSelectedSong,
   guesses,
+  YouTubeVideo,
 }: {
   openedHelp: boolean;
   helpHandler: UseDisclosureHandlers;
@@ -36,6 +37,7 @@ export default function GameModals({
   disclaimerModalHandler: UseDisclosureHandlers;
   setSelectedSong: Dispatch<SetStateAction<Song | undefined>>;
   guesses: Song[];
+  YouTubeVideo: IYouTubeVideo | null;
 }) {
   return (
     <>
@@ -50,6 +52,7 @@ export default function GameModals({
         openState={openedWinModal}
         modalHandler={winModalHandler}
         guesses={guesses}
+        YouTubeVideo={YouTubeVideo}
       />
       <LoseModal
         openState={openedLoseModal}

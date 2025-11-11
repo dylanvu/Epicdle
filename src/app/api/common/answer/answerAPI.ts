@@ -19,6 +19,8 @@ export async function getGameAnswer(
       {
         message: `Missing answer in request body`,
         correct: false,
+        startTimeStamp: "",
+        endTimeStamp: "",
       },
       { status: 400 }
     );
@@ -46,6 +48,8 @@ export async function getGameAnswer(
       {
         message: `Answer not found in the database for date ${answerKey}`,
         correct: false,
+        startTimeStamp: "",
+        endTimeStamp: "",
       },
       { status: 500 }
     );
@@ -63,6 +67,8 @@ export async function getGameAnswer(
       {
         message: `Incorrect answer.`,
         correct: false,
+        startTimeStamp: "",
+        endTimeStamp: "",
       },
       { status: 200 }
     );
@@ -72,6 +78,9 @@ export async function getGameAnswer(
       {
         message: `Correct answer!`,
         correct: true,
+        song: answerDocData.song,
+        startTimeStamp: answerDocData.startTimeStamp,
+        endTimeStamp: answerDocData.endTimeStamp,
       },
       { status: 200 }
     );

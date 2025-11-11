@@ -2,6 +2,7 @@ export interface Song {
   name: string;
   album: string;
   perfect_win_text: string;
+  url: string;
 }
 
 export interface Player {
@@ -50,6 +51,14 @@ export interface IVolumeObject {
 export interface ICheckAnswerResult {
   message: string;
   correct: boolean;
+  startTimeStamp: string;
+  endTimeStamp: string;
+}
+
+export interface IYouTubeVideo {
+  url: string;
+  startTimeStamp: string;
+  endTimeStamp: string;
 }
 
 export function isICheckAnswerResult(v: unknown): v is ICheckAnswerResult {

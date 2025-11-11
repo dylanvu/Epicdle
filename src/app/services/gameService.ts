@@ -3,7 +3,7 @@ import { getNextResetTime } from "@/util/time";
 
 const GAME_API_BASE_ENDPOINT = "/api/game";
 
-export async function checkAnswer(guess: string): Promise<boolean> {
+export async function checkAnswer(guess: string): Promise<ICheckAnswerResult> {
   const response = await fetch(`${GAME_API_BASE_ENDPOINT}/answer`, {
     method: "PATCH",
     headers: {
@@ -24,7 +24,12 @@ export async function checkAnswer(guess: string): Promise<boolean> {
 
   const data: ICheckAnswerResult = await response.json();
 
-  return data.correct;
+  return {
+    message: data.message,
+    correct: data.correct,
+    startTimeStamp: data.startTimeStamp,
+    endTimeStamp: data.endTimeStamp,
+  };
 }
 
 export async function getDailySnippet(): Promise<Blob> {
