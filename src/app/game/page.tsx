@@ -16,6 +16,8 @@ import {
   GameState,
   IVolumeObject,
   HttpError,
+  ICheckAnswerResult,
+  IYouTubeVideo,
 } from "@/interfaces/interfaces";
 import AudioSlider from "@/components/AudioSlider/AudioSlider";
 
@@ -57,6 +59,7 @@ export default function Game() {
   const [gameState, setGameState] = useState<GameState>("initial_loading");
   const [showPerfectText, setShowPerfectText] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [YouTubeVideo, setYouTubeVideo] = useState<IYouTubeVideo | null>(null);
 
   const [volumeObject, setVolumeObject] = useState<IVolumeObject>({
     volume: 100,
@@ -294,8 +297,10 @@ export default function Game() {
     });
 
     let isCorrect: boolean = false;
+    let checkAnswerResult: ICheckAnswerResult | null = null;
     try {
-      isCorrect = await checkAnswer(selectedSong.name);
+      checkAnswerResult = await checkAnswer(selectedSong.name);
+      isCorrect = checkAnswerResult.correct;
     } catch (err) {
       console.error("Error checking answer:", err);
       if (err instanceof HttpError) {
@@ -337,6 +342,11 @@ export default function Game() {
       // correct
       // Note: this does not add the correct guess to the guesses array
       playSubmitWinSound();
+      setYouTubeVideo({
+        url: selectedSong.url,
+        startTimeStamp: checkAnswerResult.startTimeStamp,
+        endTimeStamp: checkAnswerResult.endTimeStamp,
+      });
     } else if (guesses.length + 1 >= MAX_GUESSES) {
       // player will have used up the allowed guesses => loss
       playSubmitLossSound();
@@ -448,6 +458,7 @@ export default function Game() {
               disclaimerModalHandler={disclaimerModalHandler}
               setSelectedSong={setSelectedSong}
               guesses={guesses}
+              YouTubeVideo={YouTubeVideo}
             />
 
             <motion.div
