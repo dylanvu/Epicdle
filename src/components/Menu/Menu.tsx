@@ -31,11 +31,11 @@ export default function Menu() {
         color={PRIMARY_COLOR}
         leftSection={<IconBow />}
       >
-        Play
+        Classic
       </Button>
       <Button
         onClick={() => {
-          playButtonSoundLegend();
+          // playButtonSoundLegend();
         }}
         size="lg"
         variant="filled"
@@ -44,7 +44,7 @@ export default function Menu() {
         leftSection={<IconSword />}
         disabled
       >
-        Legend Mode
+        Coming Soon: Legend (Instrumentals)
       </Button>
       <Button
         size="lg"
