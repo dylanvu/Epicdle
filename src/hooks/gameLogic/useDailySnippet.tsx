@@ -1,10 +1,9 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { getDailySnippet } from "@/app/services/gameService";
-import { notifications } from "@mantine/notifications";
-import { Text, Stack, Anchor } from "@mantine/core";
-import { SUPPORT_EMAIL } from "@/constants";
-import { WRONG_COLOR } from "@/config/theme";
-import { GameState } from "@/interfaces/interfaces";
+import { GameState, HttpError } from "@/interfaces/interfaces";
+import { createErrorNotification } from "@/components/Notifications/ErrorNotification";
 
 export default function useDailySnippet({
   setGameState,
@@ -12,7 +11,6 @@ export default function useDailySnippet({
   setGameState: React.Dispatch<React.SetStateAction<GameState>>;
 }) {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     getDailySnippet()
@@ -20,28 +18,14 @@ export default function useDailySnippet({
         if (blob) {
           setAudioUrl(URL.createObjectURL(blob));
           setGameState("play");
+        } else {
+          throw new HttpError("No snippet found.", 404);
         }
       })
       .catch((err) => {
-        setError(err);
-        notifications.show({
-          title: <Text size="xl">Something feels off here...</Text>,
-          message: (
-            <Stack>
-              <Text>{err.message}</Text>
-              <Text>
-                If the issue persists, email{" "}
-                <Anchor href={`mailto:${SUPPORT_EMAIL}`}>
-                  {SUPPORT_EMAIL}
-                </Anchor>
-              </Text>
-            </Stack>
-          ),
-          color: WRONG_COLOR,
-          autoClose: false,
-        });
+        createErrorNotification(err);
       });
   }, []);
 
-  return { audioUrl, error };
+  return { audioUrl };
 }
