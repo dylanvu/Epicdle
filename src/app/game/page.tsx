@@ -1,5 +1,5 @@
 "use client";
-import { Button, Text } from "@mantine/core";
+import { Anchor, Button, Text } from "@mantine/core";
 import { useDisclosure, UseDisclosureHandlers } from "@mantine/hooks";
 import { useEffect, useRef, useState } from "react";
 import styles from "./Game.module.css";
