@@ -59,13 +59,13 @@ export const SONG_LIST: Song[] = [
     name: "Open Arms",
     album: "The Troy Saga",
     perfect_win_text: "Amazing",
-    url: "https://youtube.com/embed/-oMZw8DQbaI?si=B7fnHC1mmBWqOLai",
+    url: "https://youtube.com/embed/-oMZw8DQbaI?si=qniHkigugIdEWqPL",
   },
   {
     name: "Warrior of the Mind",
     album: "The Troy Saga",
     perfect_win_text: "Warrior of the Mind",
-    url: "https://youtube.com/embed/-oMZw8DQbaI?si=Ycy5vrK0Mm7XOM2Q",
+    url: "https://youtube.com/embed/oB8lqgO9e24?si=BwgaxCbrlU80BfGe",
   },
   {
     name: "Polyphemus",
@@ -107,7 +107,7 @@ export const SONG_LIST: Song[] = [
     name: "Keep Your Friends Close",
     album: "The Ocean Saga",
     perfect_win_text: "Outplayed",
-    url: "https://youtube.com/embed/ZxQHl2fVJ-s?si=VMoIkZpksoxsPmvg",
+    url: "https://youtube.com/embed/Z-Y0iMmFzFE?si=Oi5RaOmZNEo6KK1g",
   },
   {
     name: "Ruthlessness",
@@ -119,13 +119,13 @@ export const SONG_LIST: Song[] = [
     name: "Puppeteer",
     album: "The Circe Saga",
     perfect_win_text: "Enchanting",
-    url: "https://youtube.com/embed/3dzBlSeCJNg?si=kDyLMe8dn1EURAKQ",
+    url: "https://youtube.com/embed/Mz2ASoe6OG0?si=vINfKxWwoUj03o-M",
   },
   {
     name: "Wouldn't You Like",
     album: "The Circe Saga",
     perfect_win_text: "Holy Moly",
-    url: "https://youtube.com/embed/Mz2ASoe6OG0?si=5fKthG8Nw8QlNoFs",
+    url: "https://youtube.com/embed/xkIBM71E0_w?si=IFap9YP5W69-80xS",
   },
   {
     name: "Done For",
@@ -137,13 +137,13 @@ export const SONG_LIST: Song[] = [
     name: "There Are Other Ways",
     album: "The Circe Saga",
     perfect_win_text: "Crew saved",
-    url: "https://youtube.com/embed/km6NITbLVHc?si=s6lxJD83cptFHZYg",
+    url: "https://youtube.com/embed/uXdLAOBANGE?si=DqWhGOo2XkIA3WeQ",
   },
   {
     name: "The Underworld",
     album: "The Underworld Saga",
     perfect_win_text: "Haunting",
-    url: "https://youtube.com/embed/uXdLAOBANGE?si=gx1LgC9443PjJRbK",
+    url: "https://youtube.com/embed/cyqul8pKHko?si=qkh9m7NFjKQGA1-v",
   },
   {
     name: "No Longer You",
@@ -155,14 +155,13 @@ export const SONG_LIST: Song[] = [
     name: "Monster",
     album: "The Underworld Saga",
     perfect_win_text: "Monstrous",
-    url: "https://youtube.com/embed/BZ8qL5P270Q?si=qixRJAA9Wjca0aM1",
+    url: "https://youtube.com/embed/4Q0Un9PQ0wk?si=6SouJEBM2mZa6rAE",
   },
-
   {
     name: "Suffering",
     album: "The Thunder Saga",
     perfect_win_text: "Enthralling",
-    url: "https://youtube.com/embed/4Q0Un9PQ0wk?si=I37u1R2_uvLjZKHi",
+    url: "https://youtube.com/embed/-u_-wpcpY-0?si=JP7iBTBblImD4ErM",
   },
   {
     name: "Different Beast",
@@ -205,26 +204,26 @@ export const SONG_LIST: Song[] = [
     name: "We'll Be Fine",
     album: "The Wisdom Saga",
     perfect_win_text: "Splendid",
-    url: "https://youtube.com/embed/-gqU2V1snnc?si=1zor1vXS0qHM_EIL",
+    url: "https://youtube.com/embed/3pIXn3zHkpc?si=9Z243u5zfi0MccRA",
   },
   {
     name: "Love in Paradise",
     album: "The Wisdom Saga",
     perfect_win_text: "Euphoric",
-    url: "https://youtube.com/embed/3pIXn3zHkpc?si=ndko90xYZEnEBFZq",
+    url: "https://youtube.com/embed/jWOpikivhbQ?si=IUYLH5802gP0TB9m",
   },
   {
     name: "God Games",
     album: "The Wisdom Saga",
     perfect_win_text: "Game Won",
-    url: "https://youtube.com/embed/jWOpikivhbQ?si=IUYLH5802gP0TB9m",
+    url: "https://youtube.com/embed/5m3Xe7iDivk?si=75PSTFJ6Z4H1OObB",
   },
 
   {
     name: "Not Sorry for Loving You",
     album: "The Vengeance Saga",
     perfect_win_text: "Escaped",
-    url: "https://youtube.com/embed/5m3Xe7iDivk?si=75PSTFJ6Z4H1OObB",
+    url: "https://youtube.com/embed/7M3gzo-hSCo?si=eoTcfRZW7BBVnHfy",
   },
   {
     name: "Dangerous",
@@ -248,38 +247,38 @@ export const SONG_LIST: Song[] = [
     name: "Six Hundred Strike",
     album: "The Vengeance Saga",
     perfect_win_text: "Crew avenged",
-    url: "https://youtube.com/embed/8njnTRKGdYw?si=JFGdh3zbyoh8tJjI",
+    url: "https://youtube.com/embed/T3rnBuSTNhY?si=dm-JNgBnSpOfg9e9",
   },
 
   {
     name: "The Challenge",
     album: "The Ithaca Saga",
     perfect_win_text: "Challenge won",
-    url: "https://youtube.com/embed/T3rnBuSTNhY?si=lCev1kC6m1TNrIKp",
+    url: "https://youtube.com/embed/Bb6ssHUxrNk?si=yUxEhoiL5lSDVmg7",
   },
   {
     name: "Hold Them Down",
     album: "The Ithaca Saga",
     perfect_win_text: "Plot Discovered",
-    url: "https://youtube.com/embed/Bb6ssHUxrNk?si=yUxEhoiL5lSDVmg7",
+    url: "https://youtube.com/embed/oeDDZNKHOVo?si=1eD3v6ZJLjfeOu4M",
   },
   {
     name: "Odysseus",
     album: "The Ithaca Saga",
     perfect_win_text: "No Mercy",
-    url: "https://youtube.com/embed/oeDDZNKHOVo?si=1eD3v6ZJLjfeOu4M",
+    url: "https://youtube.com/embed/UjcV3CYfCsM?si=8CRW-dJ4fh-T6Xz4",
   },
   {
     name: "I Can't Help but Wonder",
     album: "The Ithaca Saga",
     perfect_win_text: "Reunited",
-    url: "https://youtube.com/embed/UjcV3CYfCsM?si=TegweSAU-XDnPG6V",
+    url: "https://youtube.com/embed/FBfT0E6oF6I?si=bVCD4GbjTUQ78UYV",
   },
   {
     name: "Would You Fall in Love with Me Again",
     album: "The Ithaca Saga",
     perfect_win_text: "Penelope",
-    url: "https://youtube.com/embed/FBfT0E6oF6I?si=BLg9j4xvq5rDGMR0",
+    url: "https://youtube.com/embed/rF5tJ8xuaIc?si=ouNIUjujuJzhS33h",
   },
 ];
 
