@@ -1,7 +1,6 @@
 "use client";
-import { Button, Text, Stack, Anchor } from "@mantine/core";
+import { Button, Text } from "@mantine/core";
 import { useDisclosure, UseDisclosureHandlers } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
 import { useEffect, useRef, useState } from "react";
 import styles from "./Game.module.css";
 import {
@@ -21,7 +20,7 @@ import {
 } from "@/interfaces/interfaces";
 import AudioSlider from "@/components/AudioSlider/AudioSlider";
 
-import { MAX_GUESSES, SUPPORT_EMAIL } from "@/constants";
+import { MAX_GUESSES } from "@/constants";
 import { WIN_COLOR, WRONG_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useSubmitSound } from "@/hooks/audio/useSubmitSound";
@@ -38,7 +37,7 @@ import EpicdleTitle from "@/components/Text/Epicdle/EpicdleTitle";
 import ConfettiOverlay from "@/components/Confetti/ConfettiOverlay";
 import VolumeSlider from "@/components/VolumeSlider/VolumeSlider";
 import PerfectText from "@/components/Text/PerfectTextOverlay/PerfectTextOverlay";
-import { checkAnswer, getDailySnippet } from "@/app/services/gameService";
+import { checkAnswer } from "@/app/services/gameService";
 import GameControls from "@/components/GameControls/GameControls";
 
 import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
@@ -46,6 +45,8 @@ import { usePathname } from "next/navigation";
 import { GameLoading } from "@/components/GameLoading/GameLoading";
 import GameAlbumArea from "@/components/GameAlbumArea/GameAlbumArea";
 import { GuessProgress } from "@/components/GuessProgress/GuessProgress";
+import useDailySnippet from "@/hooks/gameLogic/useDailySnippet";
+import { createErrorNotification } from "@/components/Notifications/ErrorNotification";
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -58,7 +59,6 @@ export default function Game() {
   const [openedDisclaimerModal, disclaimerModalHandler] = useDisclosure(false);
   const [gameState, setGameState] = useState<GameState>("initial_loading");
   const [showPerfectText, setShowPerfectText] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [YouTubeVideo, setYouTubeVideo] = useState<IYouTubeVideo | null>(null);
 
   const [volumeObject, setVolumeObject] = useState<IVolumeObject>({
@@ -77,6 +77,8 @@ export default function Game() {
   const { logEvent } = useFirebaseAnalytics();
   const pathname = usePathname();
 
+  const { audioUrl } = useDailySnippet({ setGameState });
+
   useEffect(() => {
     guessesCountRef.current = guesses.length;
   }, [guesses]);
@@ -91,45 +93,6 @@ export default function Game() {
     if (volume) {
       setVolumeObject(JSON.parse(volume));
     }
-
-    // get the daily snippet
-    getDailySnippet()
-      .then((blob) => {
-        if (blob) {
-          const dailyAudioUrl = URL.createObjectURL(blob);
-          setAudioUrl(dailyAudioUrl);
-        }
-        setGameState("play");
-      })
-      .catch((error) => {
-        console.error("Error loading daily snippet:", error);
-        notifications.show({
-          title: (
-            <Text size="xl" fw={400}>
-              Something feels off here...
-            </Text>
-          ),
-          message: (
-            <Stack>
-              <Text>{error.message}</Text>
-              <Text>
-                If the issue persists, please email{" "}
-                <Anchor
-                  href={`mailto:${SUPPORT_EMAIL}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {SUPPORT_EMAIL}
-                </Anchor>{" "}
-                with the error message and screenshot!
-              </Text>
-            </Stack>
-          ),
-          position: "bottom-center",
-          color: WRONG_COLOR,
-          autoClose: false,
-        });
-      });
   }, []);
 
   // load the sounds
@@ -304,32 +267,7 @@ export default function Game() {
     } catch (err) {
       console.error("Error checking answer:", err);
       if (err instanceof HttpError) {
-        notifications.show({
-          title: (
-            <Text size="xl" fw={400}>
-              Something feels off here...
-            </Text>
-          ),
-          message: (
-            <Stack>
-              <Text>{err.message}</Text>
-              <Text>
-                If the issue persists, please email{" "}
-                <Anchor
-                  href={`mailto:${SUPPORT_EMAIL}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {SUPPORT_EMAIL}
-                </Anchor>{" "}
-                with the error message and screenshot!
-              </Text>
-            </Stack>
-          ),
-          position: "bottom-center",
-          color: WRONG_COLOR,
-          autoClose: false,
-        });
+        createErrorNotification(err);
       }
       return;
     }
