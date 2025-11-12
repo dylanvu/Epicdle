@@ -89,7 +89,7 @@ export const SONG_LIST: Song[] = [
     name: "My Goodbye",
     album: "The Cyclops Saga",
     perfect_win_text: "Farewell for Today",
-    url: "https://youtube.com/embed/NGxrhdgAg18?si=6ovb7hzE3KLQLQCV",
+    url: "https://youtube.com/embed/xrFaGilus6o?si=yjW0vozdWM-3_m19",
   },
   {
     name: "Storm",
