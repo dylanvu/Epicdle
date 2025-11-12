@@ -266,7 +266,7 @@ export const SONG_LIST: Song[] = [
   {
     name: "Odysseus",
     album: "The Ithaca Saga",
-    perfect_win_text: "Kingdom recovered",
+    perfect_win_text: "No Mercy",
     url: "https://youtube.com/embed/oeDDZNKHOVo?si=1eD3v6ZJLjfeOu4M",
   },
   {
