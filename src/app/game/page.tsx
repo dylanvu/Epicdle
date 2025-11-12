@@ -46,6 +46,7 @@ import { usePathname } from "next/navigation";
 import { GameLoading } from "@/components/GameLoading/GameLoading";
 import GameAlbumArea from "@/components/GameAlbumArea/GameAlbumArea";
 import { GuessProgress } from "@/components/GuessProgress/GuessProgress";
+import useDailySnippet from "@/hooks/gameLogic/useDailySnippet";
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -58,7 +59,6 @@ export default function Game() {
   const [openedDisclaimerModal, disclaimerModalHandler] = useDisclosure(false);
   const [gameState, setGameState] = useState<GameState>("initial_loading");
   const [showPerfectText, setShowPerfectText] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [YouTubeVideo, setYouTubeVideo] = useState<IYouTubeVideo | null>(null);
 
   const [volumeObject, setVolumeObject] = useState<IVolumeObject>({
@@ -77,6 +77,8 @@ export default function Game() {
   const { logEvent } = useFirebaseAnalytics();
   const pathname = usePathname();
 
+  const { audioUrl } = useDailySnippet({ setGameState });
+
   useEffect(() => {
     guessesCountRef.current = guesses.length;
   }, [guesses]);
@@ -91,45 +93,6 @@ export default function Game() {
     if (volume) {
       setVolumeObject(JSON.parse(volume));
     }
-
-    // get the daily snippet
-    getDailySnippet()
-      .then((blob) => {
-        if (blob) {
-          const dailyAudioUrl = URL.createObjectURL(blob);
-          setAudioUrl(dailyAudioUrl);
-        }
-        setGameState("play");
-      })
-      .catch((error) => {
-        console.error("Error loading daily snippet:", error);
-        notifications.show({
-          title: (
-            <Text size="xl" fw={400}>
-              Something feels off here...
-            </Text>
-          ),
-          message: (
-            <Stack>
-              <Text>{error.message}</Text>
-              <Text>
-                If the issue persists, please email{" "}
-                <Anchor
-                  href={`mailto:${SUPPORT_EMAIL}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {SUPPORT_EMAIL}
-                </Anchor>{" "}
-                with the error message and screenshot!
-              </Text>
-            </Stack>
-          ),
-          position: "bottom-center",
-          color: WRONG_COLOR,
-          autoClose: false,
-        });
-      });
   }, []);
 
   // load the sounds
