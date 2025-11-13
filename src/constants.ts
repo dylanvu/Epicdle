@@ -40,7 +40,7 @@ export const SONG_LIST: Song[] = [
   {
     name: "The Horse and the Infant",
     album: "The Troy Saga",
-    perfect_win_text: "Conquered",
+    perfect_win_text: "Troy Conquered",
     url: "https://youtube.com/embed/bWIgy-Ls-SU?si=h6Y18S42l3e7oJ1B",
   },
   {
@@ -52,7 +52,7 @@ export const SONG_LIST: Song[] = [
   {
     name: "Full Speed Ahead",
     album: "The Troy Saga",
-    perfect_win_text: "Sail On",
+    perfect_win_text: "Away you go",
     url: "https://youtube.com/embed/x3KOt-3T73c?si=vJ-0PnhUG9MammHo",
   },
   {
@@ -88,7 +88,7 @@ export const SONG_LIST: Song[] = [
   {
     name: "My Goodbye",
     album: "The Cyclops Saga",
-    perfect_win_text: "Farewell for Today",
+    perfect_win_text: "Goodbye for Today!",
     url: "https://youtube.com/embed/xrFaGilus6o?si=yjW0vozdWM-3_m19",
   },
   {
@@ -106,7 +106,7 @@ export const SONG_LIST: Song[] = [
   {
     name: "Keep Your Friends Close",
     album: "The Ocean Saga",
-    perfect_win_text: "Outplayed",
+    perfect_win_text: "Bag secured",
     url: "https://youtube.com/embed/Z-Y0iMmFzFE?si=Oi5RaOmZNEo6KK1g",
   },
   {
@@ -203,7 +203,7 @@ export const SONG_LIST: Song[] = [
   {
     name: "We'll Be Fine",
     album: "The Wisdom Saga",
-    perfect_win_text: "Splendid",
+    perfect_win_text: "You're a good fan",
     url: "https://youtube.com/embed/3pIXn3zHkpc?si=9Z243u5zfi0MccRA",
   },
   {
