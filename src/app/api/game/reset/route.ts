@@ -16,12 +16,24 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest): Promise<NextResponse> {
   // TODO: check for body for a debug mode to activate a specific reset
 
+  // DEBUG MODE: use a provided body for the date to override the date to create the snippet for that date
+  // I expect this to be in the format of YYYY-MM-DD
+  const debug_body = (await req.text()) ?? "";
+  let debug_tomorrow: null | Date = null;
+  if (debug_body && debug_body.length > 0) {
+    console.log("[DEBUG] Debug Body:", debug_body);
+    debug_tomorrow = new Date(debug_body);
+    debug_tomorrow.setUTCHours(8, 0, 0, 0);
+    console.log("[DEBUG] Overriding date to ", debug_tomorrow);
+  }
+
   // perform the reset for both normal mode and instrumental mode
   const normalResetResult = await performReset(
     req,
     FIREBASE_DATABASE_COLLECTION_NAME,
     FIREBASE_STORAGE_BUCKET_NAME,
-    SONG_LIST
+    SONG_LIST,
+    debug_tomorrow
   );
 
   const instrumentalResetResult = await performReset(
@@ -29,6 +41,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     FIREBASE_DATABASE_COLLECTION_NAME_INSTRUMENTAL_MODE,
     FIREBASE_STORAGE_BUCKET_NAME,
     SONG_LIST,
+    debug_tomorrow,
     "-instrumental"
   );
 
