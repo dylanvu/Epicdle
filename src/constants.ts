@@ -197,7 +197,7 @@ export const SONG_LIST: Song[] = [
   {
     name: "Little Wolf",
     album: "The Wisdom Saga",
-    perfect_win_text: "Little Wolf",
+    perfect_win_text: "Young Wolf",
     url: "https://youtube.com/embed/-gqU2V1snnc?si=a7MJzTiG4KNt_HBq",
   },
   {
@@ -302,4 +302,9 @@ export const RESET_HOUR_UTC = 7;
 
 export const GAME_URL = "https://epicdle.com";
 
-export const GAME_API_BASE_ENDPOINT = "/api/game";
+export const CLASSIC_GAME_API_BASE_ENDPOINT = "/api/game";
+export const INSTRUMENTAL_GAME_API_BASE_ENDPOINT = "/api/instrumental";
+
+export type ValidAPIBaseEndpoint =
+  | typeof CLASSIC_GAME_API_BASE_ENDPOINT
+  | typeof INSTRUMENTAL_GAME_API_BASE_ENDPOINT;

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: "Epicdle",
   description: "Guess the daily Epic: The Musical song!",
   keywords:
-    "epic the musical, wordle, heardle, musical, music, song, guessing game",
+    "epic the musical, wordle, heardle, musical, music, song, guessing game, epic: the musical",
   openGraph: {
     title: "Epicdle",
     description: "Guess the daily Epic: The Musical song!",
