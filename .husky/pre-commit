@@ -1,2 +1,2 @@
 #!/bin/sh
-pnpm test
+FORCE_COLOR=1 pnpm test
