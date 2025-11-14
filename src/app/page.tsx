@@ -5,8 +5,8 @@ import Menu from "@/components/Menu/Menu";
 import EpicdleTitle from "@/components/Text/Epicdle/EpicdleTitle";
 import CountdownTimer from "@/components/CountdownTimer/CountdownTimer";
 import { useEffect, useState } from "react";
-import { getNextResetTime } from "@/util/time";
-import { Center, Loader, Title } from "@mantine/core";
+import { getNextResetTime, getYearMonthDay } from "@/util/time";
+import { Center, Loader, Title, Text } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { AnimatePresence, motion } from "motion/react";
 import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
@@ -73,6 +73,13 @@ export default function Home() {
               Guess today's <strong>Epic: The Musical</strong> song!
             </div>
             <CountdownTimer time={now} remainingMs={remainingMs} />
+            {getYearMonthDay(now) === "2025-11-14" ? (
+              <Text>
+                There was an issue today! If you are having problems, try
+                running the game in Incognito mode!
+              </Text>
+            ) : null}
+
             <Menu />
           </motion.div>
         ) : null}

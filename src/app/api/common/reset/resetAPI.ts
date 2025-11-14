@@ -22,6 +22,7 @@ export async function performReset(
   database_collection_name: string,
   storage_bucket_name: string,
   song_list: Song[],
+  debug_tomorrow: Date | null = null,
   seedSalt: string = ""
 ) {
   // this function is not guaranteed to run at the exact time of the cron job
@@ -54,19 +55,10 @@ export async function performReset(
 
   // the clients have already shifted to the premade snippet, so we need to generate tomorrow's snippet
 
-  let tomorrow = new Date(now);
+  let tomorrow = debug_tomorrow ?? new Date(now);
   tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
 
   console.log("Tomorrow is ", tomorrow);
-
-  // DEBUG MODE: use a provided body for the date to override the date to create the snippet
-  // I expect this to be in the format of YYYY-MM-DD
-  const debug_body = await req.text();
-  if (debug_body) {
-    console.log("[DEBUG] Debug Body:", debug_body);
-    tomorrow = new Date(debug_body);
-    console.log("[DEBUG] Overriding date to ", tomorrow);
-  }
 
   // create the snippet
   const tomorrowSnippetResult = await createAudioSnippet(
@@ -174,28 +166,33 @@ export async function performReset(
     });
   }
 
-  // now increment the days the game has been alive
-  // fetch the current number of days the game has been alive from the game-stats document
-  const gameStatsDocRef = firestore
-    .collection(database_collection_name)
-    .doc("game-stats");
+  if (!debug_tomorrow) {
+    // now increment the days the game has been alive
+    // fetch the current number of days the game has been alive from the game-stats document
+    const gameStatsDocRef = firestore
+      .collection(database_collection_name)
+      .doc("game-stats");
 
-  let gameStatsDocData = (await gameStatsDocRef.get()).data();
+    let gameStatsDocData = (await gameStatsDocRef.get()).data();
 
-  if (!gameStatsDocData) {
-    gameStatsDocData = {
-      lifetime_day_count: 0,
-    };
+    if (!gameStatsDocData) {
+      gameStatsDocData = {
+        lifetime_day_count: 0,
+      };
+    }
+
+    gameStatsDocData["lifetime_day_count"]++;
+    await gameStatsDocRef.set(gameStatsDocData);
+
+    console.log(
+      "Successfully incremented the totalDaysAlive in the game-stats document to be",
+      gameStatsDocData.lifetime_day_count
+    );
+  } else {
+    console.log(
+      "[DEBUG] Skipping incrementing the totalDaysAlive in the game-stats document"
+    );
   }
-
-  gameStatsDocData["lifetime_day_count"]++;
-
-  await gameStatsDocRef.set(gameStatsDocData);
-
-  console.log(
-    "Successfully incremented the totalDaysAlive in the game-stats document to be",
-    gameStatsDocData.lifetime_day_count
-  );
 
   return NextResponse.json(
     {
