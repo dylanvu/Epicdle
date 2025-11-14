@@ -37,7 +37,7 @@ export default function TutorialModal({
         modalHandler.close();
         playButtonSound();
       }}
-      title={<ModalTitle>Thunder...</ModalTitle>}
+      title={<ModalTitle>{isLegendary ? "Ouch!" : "Thunder..."}</ModalTitle>}
       className={styles.game}
       lockScroll={false}
     >
