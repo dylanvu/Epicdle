@@ -55,7 +55,11 @@ import { GameLoading } from "@/components/GameLoading/GameLoading";
 import GameAlbumArea from "@/components/GameAlbumArea/GameAlbumArea";
 import { GuessProgress } from "@/components/GuessProgress/GuessProgress";
 import useDailySnippet from "@/hooks/gameLogic/useDailySnippet";
-import { createErrorNotification } from "@/components/Notifications/ErrorNotification";
+import {
+  createErrorNotification,
+  createSystemNotification,
+} from "@/components/Notifications/ErrorNotification";
+import { getYearMonthDay } from "@/util/time";
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -105,6 +109,12 @@ export default function Game({
     logEvent("page_view", {
       page_path: pathname,
     });
+
+    if (getYearMonthDay(new Date()) === "2025-11-14") {
+      createSystemNotification(
+        "Something broke earlier today! The song did not update properly. If you are having problems guessing the song, try running the game in Incognito mode!"
+      );
+    }
 
     // if we are in legend mode, add a gradient to the background
     const root = document.documentElement;

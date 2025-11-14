@@ -31,3 +31,17 @@ export function createErrorNotification(err: Error) {
     autoClose: false,
   });
 }
+
+export function createSystemNotification(message: string) {
+  notifications.show({
+    title: (
+      <Text size="xl" fw={400}>
+        Hey there!
+      </Text>
+    ),
+    message: <Text>{message}</Text>,
+    position: "top-center",
+    color: WRONG_COLOR,
+    autoClose: false,
+  });
+}
