@@ -18,9 +18,11 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 export default function TutorialModal({
   openState,
   modalHandler,
+  isLegendary,
 }: {
   openState: boolean;
   modalHandler: UseDisclosureHandlers;
+  isLegendary: boolean;
 }) {
   const playButtonSound = useButtonSound();
   const isMobile = useIsMobile();
@@ -37,21 +39,37 @@ export default function TutorialModal({
     >
       <Stack gap="xs">
         <ModalGif
-          fileName="Boar"
-          alt="Warrior of the Mind Animatic - Boar Scene"
+          fileName={isLegendary ? "Legend" : "Boar"}
+          alt={
+            isLegendary
+              ? "Legendary - Telemachus Animatic"
+              : "Warrior of the Mind Animatic - Boar Scene"
+          }
         />
+
         <SongLyrics>
-          <Text>You have a challenge, a test of skill</Text>
-          <Text>A song to name that will assess your will</Text>
-          <Text>
-            There are
-            <Text fw={700} span>
-              {" "}
-              {MAX_GUESSES.toString()} tries{" "}
-            </Text>
-            to reach win's thrill
-          </Text>
-          <Text>A mistold guess allows the song to fill</Text>
+          {isLegendary ? (
+            <>
+              <Text>Give me rhythms and a drumbeat</Text>
+              <Text>Give me tempos and a motif</Text>
+              <Text>Without the lyrics songs are scary</Text>
+              <Text>But I wanna be legendary</Text>
+            </>
+          ) : (
+            <>
+              <Text>You have a challenge, a test of skill</Text>
+              <Text>A song to name that will assess your will</Text>
+              <Text>
+                There are
+                <Text fw={700} span>
+                  {" "}
+                  {MAX_GUESSES.toString()} tries{" "}
+                </Text>
+                to reach win's thrill
+              </Text>
+              <Text>A mistold guess allows the song to fill</Text>
+            </>
+          )}
         </SongLyrics>
         <List type="ordered" mt="md">
           <List.Item>

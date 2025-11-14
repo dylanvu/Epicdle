@@ -66,6 +66,23 @@
   z-index: 202;
 }
 
+.titleContainer {
+  position: relative; /* makes absolute children relative to this */
+  display: inline-block; /* shrink-wraps content to title size */
+  text-align: center; /* optional: centers inline children */
+  margin: 0 auto; /* centers container in page */
+}
+
+.legendText {
+  position: absolute;
+  top: 2.4rem;
+  left: 12rem;
+  transform: rotate(-15deg);
+  font-size: 2.2em;
+  z-index: 1;
+  pointer-events: none;
+}
+
 /* Medium phones / large phones (portrait) */
 @media (max-width: 767px) {
   .gamePage {

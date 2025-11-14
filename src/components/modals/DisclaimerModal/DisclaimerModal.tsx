@@ -84,6 +84,33 @@ export default function DisclaimerModal({
               Neal Illustrator's "Thunder Bringer" Animatic
             </Anchor>
           </List.Item>
+          <List.Item>
+            <Anchor
+              href="https://www.youtube.com/watch?v=7-PXMTzbEys"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Duvetbox's "Legendary" Animatic
+            </Anchor>
+          </List.Item>
+          <List.Item>
+            <Anchor
+              href="https://www.youtube.com/watch?v=BPiJF7rceiA"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Duvetbox's "Little Wolf" Animatic
+            </Anchor>
+          </List.Item>
+          <List.Item>
+            <Anchor
+              href="https://www.youtube.com/watch?v=TBfp__LH554"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Duvetbox's "Odysseus" Animatic
+            </Anchor>
+          </List.Item>
         </List>
         <Title order={5}>Sound Effects</Title>
         <List>

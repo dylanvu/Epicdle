@@ -1,10 +1,12 @@
+import { ValidAPIBaseEndpoint } from "@/constants";
 import { HttpError, ICheckAnswerResult } from "@/interfaces/interfaces";
 import { getNextResetTime } from "@/util/time";
 
-const GAME_API_BASE_ENDPOINT = "/api/game";
-
-export async function checkAnswer(guess: string): Promise<ICheckAnswerResult> {
-  const response = await fetch(`${GAME_API_BASE_ENDPOINT}/answer`, {
+export async function checkAnswer(
+  guess: string,
+  base_endpoint: ValidAPIBaseEndpoint
+): Promise<ICheckAnswerResult> {
+  const response = await fetch(`${base_endpoint}/answer`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -32,14 +34,16 @@ export async function checkAnswer(guess: string): Promise<ICheckAnswerResult> {
   };
 }
 
-export async function getDailySnippet(): Promise<Blob> {
+export async function getDailySnippet(
+  base_endpoint: ValidAPIBaseEndpoint
+): Promise<Blob> {
   // calculate the number of seconds left until the next central time midnight for caching
   const now = new Date();
   const nextMidnight = getNextResetTime(now);
   const remainingMs = nextMidnight.getTime() - now.getTime();
   // something is nagging at me... like what if something happens, the seconds are too close, and then you fetch audio and then like, you are behind an ENTIRE DAY
   const remainingSeconds = Math.floor(remainingMs / 1000);
-  const response = await fetch(`${GAME_API_BASE_ENDPOINT}`, {
+  const response = await fetch(`${base_endpoint}`, {
     method: "GET",
     next: {
       revalidate: remainingSeconds,
@@ -56,8 +60,10 @@ export async function getDailySnippet(): Promise<Blob> {
   return blob;
 }
 
-export async function getLifetimeGameDay(): Promise<number> {
-  const response = await fetch(`${GAME_API_BASE_ENDPOINT}/lifetime-game-day`, {
+export async function getLifetimeGameDay(
+  base_endpoint: ValidAPIBaseEndpoint
+): Promise<number> {
+  const response = await fetch(`${base_endpoint}/lifetime-game-day`, {
     method: "GET",
   });
 

@@ -9,6 +9,10 @@ import { IYouTubeVideo, Song } from "@/interfaces/interfaces";
 import ModalThanks from "../ModalThanks";
 import SongLyrics from "../SongLyrics";
 import ModalGif from "../ModalGif/ModalGif";
+import {
+  INSTRUMENTAL_GAME_API_BASE_ENDPOINT,
+  ValidAPIBaseEndpoint,
+} from "@/constants";
 
 function timestampToSeconds(timestamp: string): number {
   const parts = timestamp.split(":").map(Number);
@@ -60,16 +64,23 @@ export default function WinModal({
   modalHandler,
   guesses,
   YouTubeVideo,
+  base_endpoint,
 }: {
   openState: boolean;
   modalHandler: UseDisclosureHandlers;
   guesses: Song[];
   YouTubeVideo: IYouTubeVideo | null;
+  base_endpoint: ValidAPIBaseEndpoint;
 }) {
   const playButtonSound = useButtonSound();
   let songTime: number | null = null;
   if (YouTubeVideo) {
     songTime = timestampToSeconds(YouTubeVideo.startTimeStamp);
+  }
+
+  let isLegendary = false;
+  if (base_endpoint === INSTRUMENTAL_GAME_API_BASE_ENDPOINT) {
+    isLegendary = true;
   }
 
   return (
@@ -84,17 +95,33 @@ export default function WinModal({
       lockScroll={false}
     >
       <ModalGif
-        fileName="WarriorOfTheMind"
-        alt="Warrior of the Mind Animatic"
+        fileName={isLegendary ? "LegendaryWin" : "WarriorOfTheMind"}
+        alt={
+          isLegendary
+            ? "Telemachus slaying suitors"
+            : "Warrior of the Mind Animatic"
+        }
       />
       <SongLyrics>
-        <Text>
-          You are a{" "}
-          <Text fw={700} span>
-            warrior of the mind
+        {isLegendary ? (
+          <>
+            <Text>
+              You came{" "}
+              <Text fw={700} span>
+                prepared
+              </Text>
+              !
+            </Text>
+          </>
+        ) : (
+          <Text>
+            You are a{" "}
+            <Text fw={700} span>
+              warrior of the mind
+            </Text>
+            !
           </Text>
-          !
-        </Text>
+        )}
       </SongLyrics>
       <Text mt="lg" mb="lg">
         You guessed today's song!
@@ -111,7 +138,7 @@ export default function WinModal({
         </div>
       )}
       <ModalThanks />
-      <ShareButton guesses={guesses} win={true} />
+      <ShareButton guesses={guesses} win={true} base_endpoint={base_endpoint} />
       <Button
         onClick={() => {
           modalHandler.close();

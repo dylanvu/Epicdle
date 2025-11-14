@@ -6,6 +6,10 @@ import SongListModal from "./SongListModal/SongListModal";
 import WinModal from "./WinModal/WinModal";
 import LoseModal from "./LoseModal/LoseModal";
 import DisclaimerModal from "./DisclaimerModal/DisclaimerModal";
+import {
+  INSTRUMENTAL_GAME_API_BASE_ENDPOINT,
+  ValidAPIBaseEndpoint,
+} from "@/constants";
 
 /**
  * Wrapper for all the game modals
@@ -24,6 +28,7 @@ export default function GameModals({
   setSelectedSong,
   guesses,
   YouTubeVideo,
+  base_endpoint,
 }: {
   openedHelp: boolean;
   helpHandler: UseDisclosureHandlers;
@@ -38,10 +43,17 @@ export default function GameModals({
   setSelectedSong: Dispatch<SetStateAction<Song | undefined>>;
   guesses: Song[];
   YouTubeVideo: IYouTubeVideo | null;
+  base_endpoint: ValidAPIBaseEndpoint;
 }) {
+  const isInstrumentalMode =
+    base_endpoint === INSTRUMENTAL_GAME_API_BASE_ENDPOINT;
   return (
     <>
-      <TutorialModal openState={openedHelp} modalHandler={helpHandler} />
+      <TutorialModal
+        openState={openedHelp}
+        modalHandler={helpHandler}
+        isLegendary={isInstrumentalMode}
+      />
       <SongListModal
         openState={openedSearchModal}
         modalHandler={searchModalHandler}
@@ -53,11 +65,13 @@ export default function GameModals({
         modalHandler={winModalHandler}
         guesses={guesses}
         YouTubeVideo={YouTubeVideo}
+        base_endpoint={base_endpoint}
       />
       <LoseModal
         openState={openedLoseModal}
         modalHandler={loseModalHandler}
         guesses={guesses}
+        base_endpoint={base_endpoint}
       />
       <DisclaimerModal
         openState={openedDisclaimerModal}

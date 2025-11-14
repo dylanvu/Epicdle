@@ -9,17 +9,27 @@ import { Song } from "@/interfaces/interfaces";
 import ModalThanks from "../ModalThanks";
 import SongLyrics from "../SongLyrics";
 import ModalGif from "../ModalGif/ModalGif";
+import {
+  INSTRUMENTAL_GAME_API_BASE_ENDPOINT,
+  ValidAPIBaseEndpoint,
+} from "@/constants";
 
 export default function TutorialModal({
   openState,
   modalHandler,
   guesses,
+  base_endpoint,
 }: {
   openState: boolean;
   modalHandler: UseDisclosureHandlers;
   guesses: Song[];
+  base_endpoint: ValidAPIBaseEndpoint;
 }) {
   const playButtonSound = useButtonSound();
+  let isLegendary = false;
+  if (base_endpoint === INSTRUMENTAL_GAME_API_BASE_ENDPOINT) {
+    isLegendary = true;
+  }
   return (
     <Modal
       opened={openState}
@@ -27,19 +37,34 @@ export default function TutorialModal({
         modalHandler.close();
         playButtonSound();
       }}
-      title={<ModalTitle>Thunder...</ModalTitle>}
+      title={<ModalTitle>{isLegendary ? "Ouch!" : "Thunder..."}</ModalTitle>}
       className={styles.game}
       lockScroll={false}
     >
-      <ModalGif fileName={"ThunderBringer"} alt="Thunder" />
+      <ModalGif
+        fileName={isLegendary ? "LegendModeLoss" : "ThunderBringer"}
+        alt={
+          isLegendary
+            ? "Telemachus getting beat up by Antonius"
+            : "Zeus ending Odysseus' crew"
+        }
+      />
       <SongLyrics>
-        <Text>Thunder, bring her through the wringer!</Text>
+        {isLegendary ? (
+          <Text>Ooooh, maybe today's song was a bit too hard...</Text>
+        ) : (
+          <Text>Thunder, bring her through the wringer!</Text>
+        )}
       </SongLyrics>
       <Text mt="lg">You didn't guess today's song...</Text>
 
       <ModalThanks />
 
-      <ShareButton guesses={guesses} win={false} />
+      <ShareButton
+        guesses={guesses}
+        win={false}
+        base_endpoint={base_endpoint}
+      />
       <Button
         onClick={() => {
           modalHandler.close();
