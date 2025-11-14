@@ -55,8 +55,12 @@ export async function performReset(
 
   // the clients have already shifted to the premade snippet, so we need to generate tomorrow's snippet
 
-  let tomorrow = debug_tomorrow ?? new Date(now);
+  let tomorrow = new Date(now);
   tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+
+  if (debug_tomorrow) {
+    tomorrow = debug_tomorrow;
+  }
 
   console.log("Tomorrow is ", tomorrow);
 
