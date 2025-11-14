@@ -11,7 +11,13 @@ interface ModalGifProps {
    * name of the file, you do not need the .gif extension in the name
    * example: "Boar"
    */
-  fileName: "Boar" | "ThunderBringer" | "WarriorOfTheMind";
+  fileName:
+    | "Boar"
+    | "ThunderBringer"
+    | "WarriorOfTheMind"
+    | "Legend"
+    | "LegendaryWin"
+    | "LegendModeLoss";
   alt: string;
 }
 

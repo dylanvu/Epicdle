@@ -1,6 +1,11 @@
 "use client";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
-import { GAME_URL, MAX_GUESSES } from "@/constants";
+import {
+  GAME_URL,
+  INSTRUMENTAL_GAME_API_BASE_ENDPOINT,
+  MAX_GUESSES,
+  ValidAPIBaseEndpoint,
+} from "@/constants";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -37,12 +42,14 @@ function CommonShareButton({
 export default function ShareButton({
   guesses,
   win,
+  base_endpoint,
 }: {
   guesses: Song[];
   win: boolean;
+  base_endpoint: ValidAPIBaseEndpoint;
 }) {
   useEffect(() => {
-    getLifetimeGameDay().then(setLifetimeGameDay);
+    getLifetimeGameDay(base_endpoint).then(setLifetimeGameDay);
   }, []);
 
   const { logEvent } = useFirebaseAnalytics();
@@ -50,6 +57,12 @@ export default function ShareButton({
   const [lifetimeGameDay, setLifetimeGameDay] = useState(0);
 
   const playButtonSound = useButtonSound();
+
+  let isLegendary = false;
+
+  if (base_endpoint === INSTRUMENTAL_GAME_API_BASE_ENDPOINT) {
+    isLegendary = true;
+  }
 
   const guessEmoji = "🎵";
   const winEmoji = "🏆";
@@ -72,7 +85,9 @@ export default function ShareButton({
 
   const guessCount = win ? (guesses.length + 1).toString() : "X";
 
-  const shareText = `Epicdle #${lifetimeGameDay} ${guessCount}/${MAX_GUESSES}
+  const shareText = `Epicdle ${
+    isLegendary ? "Legend Mode" : ""
+  } #${lifetimeGameDay} ${guessCount}/${MAX_GUESSES}
 ${guessesString}
 ${GAME_URL}`;
 

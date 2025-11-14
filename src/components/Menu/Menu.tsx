@@ -1,5 +1,5 @@
 "use client";
-import { Box, Button, Flex, Stack, Text } from "@mantine/core";
+import { Button, Stack, Text } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useDisclosure } from "@mantine/hooks";
@@ -31,7 +31,7 @@ export default function Menu() {
         color={PRIMARY_COLOR}
         leftSection={<IconBow />}
       >
-        Classic
+        Classic (Original)
       </Button>
       <Button
         onClick={() => {

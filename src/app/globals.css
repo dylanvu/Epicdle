@@ -1,6 +1,14 @@
 :root {
   --background: #1a2428;
   --foreground: #ededed;
+
+  /* gradient value stored in a custom property so you can change it from JS */
+  --overlay-gradient: linear-gradient(
+    120deg,
+    rgba(255, 107, 129, 0.9),
+    rgba(255, 179, 0, 0.9)
+  );
+  --overlay-opacity: 1;
 }
 
 html,
@@ -19,6 +27,24 @@ body {
   grid-template-rows: 1fr auto;
   min-height: 100vh; /* Fallback for older browsers */
   min-height: 100dvh; /* Use dynamic viewport height */
+}
+
+/* overlay placed above base background but behind content */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0; /* behind page content (body z-index is 1) */
+  background: var(--overlay-gradient);
+  opacity: 0; /* hidden by default */
+  transition: opacity 600ms ease;
+  will-change: opacity;
+}
+
+/* when a component requests the gradient, add this class to body */
+body.gradient-active::before {
+  opacity: var(--overlay-opacity, 1);
 }
 
 * {
