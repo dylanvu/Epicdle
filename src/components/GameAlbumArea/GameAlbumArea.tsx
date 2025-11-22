@@ -42,6 +42,7 @@ export default function GameAlbumArea({
           style={{ opacity: gameState === "perfect_win" ? 1 : 0.5 }}
           fill={true}
           priority
+          unoptimized
         />
       </div>
       <GuessHistoryOverlay guesses={guesses} />

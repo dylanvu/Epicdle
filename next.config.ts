@@ -59,6 +59,24 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/:path*.webm",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
+        source: "/:path*.opus",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, stale-while-revalidate=604800",
+          },
+        ],
+      },
     ];
   },
   experimental: {

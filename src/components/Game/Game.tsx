@@ -237,7 +237,7 @@ export default function Game({
    */
   function handleWin() {
     // play the win sound
-    playAudioWithoutUseSound("/sfx/triumphant_orchestra.mp3");
+    playAudioWithoutUseSound("/sfx/triumphant_orchestra.opus");
     // progress the UI (record the guess)
     if (guessesCountRef.current === 0) {
       // guessed in 1 try!
@@ -250,7 +250,7 @@ export default function Game({
 
   function handleLose() {
     // play the lose sound
-    playAudioWithoutUseSound("/sfx/thunder_loss.mp3");
+    playAudioWithoutUseSound("/sfx/thunder_loss.opus");
     // progress the UI
     progressGuessUI();
     // progress the UI state
@@ -290,7 +290,7 @@ export default function Game({
 
   function handleWrong() {
     // play the wrong sound
-    playAudioWithoutUseSound("/sfx/thunder_wrong_guess.mp3");
+    playAudioWithoutUseSound("/sfx/thunder_wrong_guess.opus");
     // progress the UI
     progressGuessUI();
     setGameState("play");
