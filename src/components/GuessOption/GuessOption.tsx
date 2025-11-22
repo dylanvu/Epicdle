@@ -41,6 +41,8 @@ export default function GuessOption({
         alt={song.album}
         width={100}
         height={100}
+        style={{ objectFit: "cover" }}
+        unoptimized
       />
       <IconChevronRight className={styles.chevron} />
     </div>
