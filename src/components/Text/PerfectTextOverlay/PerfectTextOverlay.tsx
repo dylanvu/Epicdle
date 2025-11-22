@@ -16,7 +16,7 @@ export default function PerfectTextOverlay({
 
   useEffect(() => {
     if (show) {
-      playAudioWithoutUseSound("/sfx/sword_slash_and_swing.mp3");
+      playAudioWithoutUseSound("/sfx/sword_slash_and_swing.opus");
       setVisible(true);
       const timeout = setTimeout(() => setVisible(false), 2500);
       return () => clearTimeout(timeout);

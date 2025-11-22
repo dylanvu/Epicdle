@@ -2,7 +2,7 @@
 import useSound from "use-sound";
 
 export function useButtonSound(onend?: () => void) {
-  const [play] = useSound("/sfx/button_click.mp3", {
+  const [play] = useSound("/sfx/button_click.opus", {
     onend,
     playbackRate: 1.1,
     volume: 0.025,
