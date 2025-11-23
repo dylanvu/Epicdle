@@ -4,10 +4,6 @@
     {
       "path": "/api/game/reset",
       "schedule": "0 7 * * *"
-    },
-    {
-      "path": "/api/game/verify",
-      "schedule": "0 19 * * *"
     }
   ]
 }
