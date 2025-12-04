@@ -25,10 +25,10 @@
     "firebase-admin": "^13.5.0",
     "motion": "^12.23.24",
     "mp3-parser": "^0.3.0",
-    "next": "15.5.2",
-    "react": "19.1.0",
+    "next": "15.5.7",
+    "react": "19.1.2",
     "react-confetti-boom": "^2.0.1",
-    "react-dom": "19.1.0",
+    "react-dom": "19.1.2",
     "seedrandom": "^3.0.5",
     "use-sound": "^5.0.0"
   },
