@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.913.0",
-    "@clerk/nextjs": "^6.33.7",
+    "@clerk/nextjs": "^6.36.2",
     "@mantine/core": "^8.3.5",
     "@mantine/hooks": "^8.3.5",
     "@mantine/notifications": "^8.3.5",
@@ -25,7 +25,7 @@
     "firebase-admin": "^13.5.0",
     "motion": "^12.23.24",
     "mp3-parser": "^0.3.0",
-    "next": "15.5.7",
+    "next": "15.5.8",
     "react": "19.1.2",
     "react-confetti-boom": "^2.0.1",
     "react-dom": "19.1.2",
