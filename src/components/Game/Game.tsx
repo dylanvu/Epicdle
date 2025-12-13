@@ -7,6 +7,7 @@ import {
   IconQuestionMark,
   IconChartBarPopular,
   IconInfoCircle,
+  IconArrowLeft
 } from "@tabler/icons-react";
 
 import {
@@ -50,7 +51,6 @@ import { checkAnswer } from "@/app/services/gameService";
 import GameControls from "@/components/GameControls/GameControls";
 
 import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
-import { usePathname } from "next/navigation";
 import { GameLoading } from "@/components/GameLoading/GameLoading";
 import GameAlbumArea from "@/components/GameAlbumArea/GameAlbumArea";
 import { GuessProgress } from "@/components/GuessProgress/GuessProgress";
@@ -58,8 +58,10 @@ import useDailySnippet from "@/hooks/gameLogic/useDailySnippet";
 import {
   createErrorNotification,
   createSystemNotification,
-} from "@/components/Notifications/ErrorNotification";
+  createInformationalNotification
+} from "@/components/Notifications/Notification";
 import { getYearMonthDay } from "@/util/time";
+import Link from 'next/link'
 
 const WIN_LOSS_TIMEOUT = 800;
 
@@ -92,7 +94,6 @@ export default function Game({
   const guessesCountRef = useRef<number>(0);
 
   const { logEvent } = useFirebaseAnalytics();
-  const pathname = usePathname();
 
   const { audioUrl } = useDailySnippet({ setGameState, base_endpoint });
 
@@ -106,9 +107,7 @@ export default function Game({
   }, [guesses]);
 
   useEffect(() => {
-    logEvent("page_view", {
-      page_path: pathname,
-    });
+    logEvent("page_view");
 
     if (getYearMonthDay(new Date()) === "2025-11-14") {
       createSystemNotification(
@@ -120,18 +119,18 @@ export default function Game({
     const root = document.documentElement;
     const body = document.body;
     if (isInstrumentalMode) {
-      console.log("adding gradient");
       const nextGradient = `linear-gradient(to top left, ${LEGENDARY_BOTTOM_GRADIENT_COLOR} 2%, ${LEGENDARY_TOP_GRADIENT_COLOR} 45%)`;
       root.style.setProperty("--overlay-gradient", nextGradient);
 
       // add the class to <body> (your CSS listens for body.gradient-active::before)
       body.classList.add("gradient-active");
     } else {
-      console.log("removing gradient");
       body.classList.remove("gradient-active");
 
       // optional cleanup of CSS vars
       root.style.removeProperty("--overlay-gradient");
+      // advertise legend mode
+      createInformationalNotification("Legend mode is out! Go to the main menu and check it out!", "Great news!")
     }
 
     // load volume from localStorage
@@ -143,10 +142,7 @@ export default function Game({
     return () => {
       if (isInstrumentalMode) {
         // remove on unmount (fades out)
-        document.documentElement.classList.remove("gradient-active");
-
-        // optional: restore default gradient or remove property
-        document.documentElement.style.removeProperty("--overlay-gradient");
+        document.body.classList.remove("gradient-active");
       }
     };
   }, []);
@@ -553,6 +549,17 @@ export default function Game({
                 mt="md"
               >
                 Credits & Disclaimer
+              </Button>
+              <Button
+                leftSection={<IconArrowLeft />}
+                variant="default"
+                aria-label="Back to Home Button"
+                w="100%"
+                mt="md"
+                component={Link}
+                href="/"
+              >
+                Back to Home
               </Button>
             </motion.div>
           </div>

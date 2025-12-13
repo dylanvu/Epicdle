@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getDailySnippet } from "@/app/services/gameService";
 import { GameState, HttpError } from "@/interfaces/interfaces";
-import { createErrorNotification } from "@/components/Notifications/ErrorNotification";
+import { createErrorNotification } from "@/components/Notifications/Notification";
 import { ValidAPIBaseEndpoint } from "@/constants";
 
 export default function useDailySnippet({
