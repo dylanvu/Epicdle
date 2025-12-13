@@ -49,7 +49,7 @@ export default function Menu() {
         color={PRIMARY_COLOR}
         leftSection={<IconSword />}
       >
-        Legend (Instrumental)
+        Legend (Instrumentals)
       </Button>
       <Button
         size="lg"
