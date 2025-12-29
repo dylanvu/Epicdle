@@ -56,7 +56,7 @@ export default function TutorialModal({
           <Text>Thunder, bring her through the wringer!</Text>
         )}
       </SongLyrics>
-      <Text mt="lg">You didn't guess today's song...</Text>
+      <Text mt="lg">You didn't guess today's song... but feel free to try again though!</Text>
 
       <ModalThanks />
 
