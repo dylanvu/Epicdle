@@ -40,7 +40,7 @@ export default function Menu() {
       </Button>
       <Button
         onClick={() => {
-            playButtonSoundLegend();
+            // playButtonSoundLegend();
         }}
         size="lg"
         w={buttonWidth}
@@ -48,6 +48,7 @@ export default function Menu() {
         component="a"
         color={PRIMARY_COLOR}
         leftSection={<IconSword />}
+        disabled={true}
       >
         Legend (Instrumentals)
       </Button>

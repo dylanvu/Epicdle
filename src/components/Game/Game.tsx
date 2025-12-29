@@ -130,7 +130,7 @@ export default function Game({
       // optional cleanup of CSS vars
       root.style.removeProperty("--overlay-gradient");
       // advertise legend mode
-      createInformationalNotification("Legend mode is out! Go to the main menu and check it out!", "Great news!")
+      // createInformationalNotification("Legend mode is out! Go to the main menu and check it out!", "Great news!")
     }
 
     // load volume from localStorage
