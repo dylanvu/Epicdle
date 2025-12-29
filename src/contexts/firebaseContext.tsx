@@ -3,6 +3,7 @@ import { createContext, useContext, ReactNode, useEffect, useRef } from "react";
 import { getFirebaseAnalytics } from "../config/firebase";
 import type { Analytics } from "firebase/analytics";
 import { logEvent as firebaseLogEvent } from "firebase/analytics";
+import { usePathname } from "next/navigation";
 
 const FirebaseAnalyticsContext =
   createContext<React.MutableRefObject<Analytics | null> | null>(null);
@@ -37,6 +38,7 @@ export function FirebaseAnalyticsProvider({
  */
 export function useFirebaseAnalytics() {
   const analyticsRef = useContext(FirebaseAnalyticsContext);
+  const pathname = usePathname();
   if (!analyticsRef) {
     throw new Error(
       "useFirebaseAnalytics must be used within a FirebaseAnalyticsProvider"
@@ -50,7 +52,7 @@ export function useFirebaseAnalytics() {
    */
   function logEvent(eventName: string, params?: Record<string, any>) {
     if (analyticsRef && analyticsRef.current) {
-      firebaseLogEvent(analyticsRef.current, eventName, params);
+      firebaseLogEvent(analyticsRef.current, eventName, {...params, page_path: pathname});
     } else {
       console.warn(`Analytics not ready yet. Event "${eventName}" not logged.`);
     }

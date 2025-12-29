@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAudioSnippet } from "./util";
+import { createAudioSnippet, AudioDurationMethod } from "./util";
 import { firestore } from "@/app/api/firebase";
 import { S3 } from "@/app/api/cloudflare";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
@@ -12,6 +12,8 @@ interface StepResult {
   success: boolean;
   durationMs: number;
   error?: string;
+  /** Which method was used to determine audio duration (only for snippetGeneration step) */
+  durationMethod?: AudioDurationMethod | null;
 }
 
 interface ExecutionLog {
@@ -129,6 +131,7 @@ export async function performReset(
     if (!tomorrowSnippetResult.result) {
       executionLog.steps.snippetGeneration.success = false;
       executionLog.steps.snippetGeneration.error = tomorrowSnippetResult.message;
+      executionLog.steps.snippetGeneration.durationMethod = tomorrowSnippetResult.durationMethod;
       executionLog.status = "failed";
       executionLog.error = tomorrowSnippetResult.message;
       executionLog.totalDurationMs = Date.now() - executionStartTime;
@@ -142,6 +145,7 @@ export async function performReset(
     }
     
     executionLog.steps.snippetGeneration.success = true;
+    executionLog.steps.snippetGeneration.durationMethod = tomorrowSnippetResult.durationMethod;
     executionLog.songName = tomorrowSnippetResult.songName;
   } catch (error) {
     executionLog.steps.snippetGeneration.durationMs = Date.now() - snippetStartTime;

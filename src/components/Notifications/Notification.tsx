@@ -1,7 +1,7 @@
 import { notifications } from "@mantine/notifications";
 import { Text, Stack, Anchor } from "@mantine/core";
 import { SUPPORT_EMAIL } from "@/constants";
-import { WRONG_COLOR } from "@/config/theme";
+import { PRIMARY_COLOR, WRONG_COLOR } from "@/config/theme";
 
 export function createErrorNotification(err: Error) {
   notifications.show({
@@ -43,5 +43,19 @@ export function createSystemNotification(message: string) {
     position: "top-center",
     color: WRONG_COLOR,
     autoClose: false,
+  });
+}
+
+export function createInformationalNotification(message: string, title: string) {
+  notifications.show({
+    title: (
+      <Text size="xl" fw={400}>
+        {title}
+      </Text>
+    ),
+    message: <Text>{message}</Text>,
+    position: "top-center",
+    color: PRIMARY_COLOR,
+    autoClose: 5000,
   });
 }

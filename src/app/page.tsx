@@ -10,7 +10,6 @@ import { Center, Loader, Title, Text } from "@mantine/core";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { AnimatePresence, motion } from "motion/react";
 import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
-import { usePathname } from "next/navigation";
 
 export default function Home() {
   const [now, setNow] = useState<Date | null>(null);
@@ -18,13 +17,10 @@ export default function Home() {
   const [remainingMs, setRemainingMs] = useState(0);
 
   const { logEvent } = useFirebaseAnalytics();
-  const pathname = usePathname();
 
   useEffect(() => {
     // log that someone visited the page
-    logEvent("page_view", {
-      page_path: pathname,
-    });
+    logEvent("page_view");
 
     // set up the interval to update the remaining time for the day
     const tick = () => {

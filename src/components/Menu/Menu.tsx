@@ -5,9 +5,13 @@ import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import { useDisclosure } from "@mantine/hooks";
 import DisclaimerModal from "@/components/modals/DisclaimerModal/DisclaimerModal";
 import { IconBow, IconSword } from "@tabler/icons-react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function Menu() {
   const [openedAbout, aboutHandler] = useDisclosure(false);
+  const isMobile = useIsMobile();
+
+  const buttonWidth = isMobile ? "80%" : "50%"
 
   const playButtonSound = useButtonSound(() => {
     // navigate to the game page
@@ -26,6 +30,7 @@ export default function Menu() {
       <Button
         onClick={() => playButtonSound()}
         size="lg"
+        w={buttonWidth}
         variant="filled"
         component="a"
         color={PRIMARY_COLOR}
@@ -35,19 +40,21 @@ export default function Menu() {
       </Button>
       <Button
         onClick={() => {
-          // playButtonSoundLegend();
+            // playButtonSoundLegend();
         }}
         size="lg"
+        w={buttonWidth}
         variant="filled"
         component="a"
         color={PRIMARY_COLOR}
         leftSection={<IconSword />}
-        disabled
+        disabled={true}
       >
-        Coming Soon: Legend (Instrumentals)
+        Legend (Instrumentals)
       </Button>
       <Button
         size="lg"
+        w={buttonWidth}
         variant="outline"
         onClick={() => {
           playAboutButtonSound();
