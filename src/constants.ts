@@ -253,7 +253,7 @@ export const SONG_LIST: Song[] = [
   {
     name: "The Challenge",
     album: "The Ithaca Saga",
-    perfect_win_text: "Challenge won",
+    perfect_win_text: "Bullseye",
     url: "https://youtube.com/embed/Bb6ssHUxrNk?si=yUxEhoiL5lSDVmg7",
   },
   {
