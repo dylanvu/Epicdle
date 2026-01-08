@@ -1,7 +1,8 @@
-import { Button, Modal, Text } from "@mantine/core";
+import { useState, useRef } from "react";
+import { Button, Modal, Text, Loader } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./LoseModal.module.css";
-import { PRIMARY_COLOR } from "@/config/theme";
+import { PRIMARY_COLOR, WRONG_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ShareButton from "@/components/ShareButton/ShareButton";
 import ModalTitle from "../ModalTitle";
@@ -13,10 +14,12 @@ import {
   INSTRUMENTAL_GAME_API_BASE_ENDPOINT,
   ValidAPIBaseEndpoint,
 } from "@/constants";
-import { IconReload } from "@tabler/icons-react";
+import { IconReload, IconBulb } from "@tabler/icons-react";
+import { getAnswer } from "@/app/services/gameService";
+import { useFirebaseAnalytics } from "@/contexts/firebaseContext";
 
 
-export default function TutorialModal({
+export default function LoseModal({
   openState,
   modalHandler,
   guesses,
@@ -28,10 +31,15 @@ export default function TutorialModal({
   base_endpoint: ValidAPIBaseEndpoint;
 }) {
   const playButtonSound = useButtonSound();
+  const [answer, setAnswer] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [confirmingReveal, setConfirmingReveal] = useState(false);
+  const confirmTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   let isLegendary = false;
   if (base_endpoint === INSTRUMENTAL_GAME_API_BASE_ENDPOINT) {
     isLegendary = true;
   }
+  const { logEvent } = useFirebaseAnalytics();
   return (
     <Modal
       opened={openState}
@@ -60,6 +68,67 @@ export default function TutorialModal({
       </SongLyrics>
       <Text mt="lg">You didn't guess today's song...</Text>
 
+      <Button
+        leftSection={<IconReload/>}
+        mt="md"
+        w="100%"
+        color={PRIMARY_COLOR}
+        variant="light"
+        onClick={() => {
+          playButtonSound();
+          logEvent("retry_click")
+          window.location.reload()
+        }}
+      >
+        Try Again
+      </Button>
+      <Button
+        className={styles.revealButton}
+        leftSection={<IconBulb/>}
+        rightSection={isLoading ? <Loader size="xs" color={confirmingReveal ? WRONG_COLOR : PRIMARY_COLOR} /> : null}
+        mt="md"
+        w="100%"
+        color={confirmingReveal ? WRONG_COLOR : PRIMARY_COLOR}
+        variant={confirmingReveal ? "filled" : "light"}
+        disabled={!!answer || isLoading}
+        onClick={() => {
+          playButtonSound();
+          if (!confirmingReveal) {
+            // First click - enter confirmation mode
+            setConfirmingReveal(true);
+            // Clear any existing timeout
+            if (confirmTimeoutRef.current) {
+              clearTimeout(confirmTimeoutRef.current);
+            }
+            // Auto-reset after 3 seconds
+            confirmTimeoutRef.current = setTimeout(() => {
+              setConfirmingReveal(false);
+            }, 3000);
+          } else {
+            // Second click - actually reveal the answer
+            if (confirmTimeoutRef.current) {
+              clearTimeout(confirmTimeoutRef.current);
+            }
+            setIsLoading(true);
+            logEvent("reveal_answer")
+            getAnswer(base_endpoint).then((response) => {
+              setAnswer(response.song);
+            }).finally(() => {
+              setIsLoading(false);
+              setConfirmingReveal(false);
+            })
+          }
+        }}
+      >
+        {confirmingReveal ? "Are you sure?" : "Reveal Answer"}
+      </Button>
+
+      {answer && (
+        <Text mt="md" fw={600} ta="center" c={PRIMARY_COLOR}>
+          The answer was: {answer}
+        </Text>
+      )}
+
       <ModalThanks />
 
       <ShareButton
@@ -67,18 +136,6 @@ export default function TutorialModal({
         win={false}
         base_endpoint={base_endpoint}
       />
-      <Button
-        leftSection={<IconReload/>}
-        mt="md"
-        w="100%"
-        color={PRIMARY_COLOR}
-        variant="filled"
-        onClick={() => {
-          window.location.reload()
-        }}
-      >
-        Try Again
-      </Button>
       <Button
         onClick={() => {
           modalHandler.close();
