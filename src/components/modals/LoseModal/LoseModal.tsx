@@ -13,6 +13,8 @@ import {
   INSTRUMENTAL_GAME_API_BASE_ENDPOINT,
   ValidAPIBaseEndpoint,
 } from "@/constants";
+import { IconReload } from "@tabler/icons-react";
+
 
 export default function TutorialModal({
   openState,
@@ -56,7 +58,7 @@ export default function TutorialModal({
           <Text>Thunder, bring her through the wringer!</Text>
         )}
       </SongLyrics>
-      <Text mt="lg">You didn't guess today's song... but feel free to try again though!</Text>
+      <Text mt="lg">You didn't guess today's song...</Text>
 
       <ModalThanks />
 
@@ -65,6 +67,18 @@ export default function TutorialModal({
         win={false}
         base_endpoint={base_endpoint}
       />
+      <Button
+        leftSection={<IconReload/>}
+        mt="md"
+        w="100%"
+        color={PRIMARY_COLOR}
+        variant="filled"
+        onClick={() => {
+          window.location.reload()
+        }}
+      >
+        Try Again
+      </Button>
       <Button
         onClick={() => {
           modalHandler.close();

@@ -105,7 +105,7 @@ export default function TutorialModal({
             </Text>
           </List.Item>
           <List.Item>
-            <Text>Repeat until you get it!</Text>
+            <Text>Repeat until you get it! Each attempt reveals more of the song.</Text>
           </List.Item>
         </List>
         <Text mt="md">
@@ -113,7 +113,7 @@ export default function TutorialModal({
           <Text fw={700} span>
             {MAX_GUESSES.toString()} or fewer tries
           </Text>
-          . Each attempt will reveal more of the song.
+          . You can always also refresh the page to try again.
         </Text>
         <Text>Good luck!</Text>
       </Stack>
