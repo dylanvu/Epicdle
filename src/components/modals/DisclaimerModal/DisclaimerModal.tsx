@@ -58,6 +58,29 @@ export default function DisclaimerModal({
 
         <Title order={5}>Music</Title>
         <Text>Jorge Rivera-Herrans, Winion Entertainment LLC</Text>
+        <List>
+          <List.Item>
+            <Anchor
+              href="https://www.youtube.com/@JayHerrans"
+              target="_blank"
+              rel="noreferrer"
+            >
+              YouTube
+            </Anchor>
+          </List.Item>
+        </List>
+        <Text>SIM Instrumentals</Text>
+        <List>
+          <List.Item>
+            <Anchor
+              href="https://www.youtube.com/watch?v=3lagxsoGf8I&list=PLtzLG85ydSlh-Fx231WzUUR5mHWqDNdfg"
+              target="_blank"
+              rel="noreferrer"
+            >
+              YouTube Playlist
+            </Anchor>
+          </List.Item>
+        </List>
         <Title order={5}>Album Art</Title>
         <Text>
           <Anchor
