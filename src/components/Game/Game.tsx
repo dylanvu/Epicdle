@@ -109,12 +109,6 @@ export default function Game({
   useEffect(() => {
     logEvent("page_view");
 
-    if (getYearMonthDay(new Date()) === "2025-11-14") {
-      createSystemNotification(
-        "Something broke earlier today! The song did not update properly. If you are having problems guessing the song, try running the game in Incognito mode!"
-      );
-    }
-
     // if we are in legend mode, add a gradient to the background
     const root = document.documentElement;
     const body = document.body;
@@ -130,7 +124,7 @@ export default function Game({
       // optional cleanup of CSS vars
       root.style.removeProperty("--overlay-gradient");
       // advertise legend mode
-      // createInformationalNotification("Legend mode is out! Go to the main menu and check it out!", "Great news!")
+      createInformationalNotification("Legend mode is out! Go to the main menu and check it out!", "Great news!")
     }
 
     // load volume from localStorage

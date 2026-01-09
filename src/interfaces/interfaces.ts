@@ -55,6 +55,13 @@ export interface ICheckAnswerResult {
   endTimeStamp: string;
 }
 
+export interface IGetAnswerResult {
+  message: string;
+  song: string;
+  startTimeStamp: string;
+  endTimeStamp: string;
+}
+
 export interface IYouTubeVideo {
   url: string;
   startTimeStamp: string;

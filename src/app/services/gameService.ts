@@ -1,6 +1,34 @@
 import { ValidAPIBaseEndpoint } from "@/constants";
-import { HttpError, ICheckAnswerResult } from "@/interfaces/interfaces";
+import { HttpError, ICheckAnswerResult, IGetAnswerResult } from "@/interfaces/interfaces";
 import { getNextResetTime } from "@/util/time";
+
+export async function getAnswer(
+  base_endpoint: ValidAPIBaseEndpoint
+): Promise<IGetAnswerResult> {
+    const response = await fetch(`${base_endpoint}/answer`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    let errorMessage = await response.text();
+    if (response.status === 429) {
+      errorMessage = "Try again in a minute.";
+    }
+    throw new HttpError(errorMessage, response.status);
+  }
+
+  const data: IGetAnswerResult = await response.json();
+
+  return {
+    message: data.message,
+    song: data.song,
+    startTimeStamp: data.startTimeStamp,
+    endTimeStamp: data.endTimeStamp,
+  };
+}
 
 export async function checkAnswer(
   guess: string,

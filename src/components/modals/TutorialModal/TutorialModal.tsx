@@ -1,8 +1,8 @@
 "use client";
-import { Button, List, Modal, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Anchor, Button, List, Modal, Stack, Text, ThemeIcon } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
 import styles from "./TutorialModal.module.css";
-import { MAX_GUESSES } from "@/constants";
+import { MAX_GUESSES, SUPPORT_EMAIL } from "@/constants";
 import { PRIMARY_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ModalTitle from "../ModalTitle";
@@ -52,8 +52,8 @@ export default function TutorialModal({
             <>
               <Text>Give me rhythms and a drumbeat</Text>
               <Text>Give me tempos and a motif</Text>
-              <Text>Without the lyrics songs are scary</Text>
-              <Text>But I wanna be legendary</Text>
+              <Text>Without the lyrics, songs are scary</Text>
+              <Text>But I wanna be legendary!</Text>
             </>
           ) : (
             <>
@@ -105,7 +105,7 @@ export default function TutorialModal({
             </Text>
           </List.Item>
           <List.Item>
-            <Text>Repeat until you get it!</Text>
+            <Text>Repeat until you get it! Each attempt reveals more of the song.</Text>
           </List.Item>
         </List>
         <Text mt="md">
@@ -113,7 +113,7 @@ export default function TutorialModal({
           <Text fw={700} span>
             {MAX_GUESSES.toString()} or fewer tries
           </Text>
-          . Each attempt will reveal more of the song.
+          . You can always also refresh the page to try again.
         </Text>
         <Text>Good luck!</Text>
       </Stack>

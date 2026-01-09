@@ -14,6 +14,7 @@ import { PRIMARY_COLOR } from "@/config/theme";
 import { useButtonSound } from "@/hooks/audio/useButtonSound";
 import ModalTitle from "../ModalTitle";
 import { SUPPORT_EMAIL } from "@/constants";
+import SongLyrics from "../SongLyrics";
 
 export default function DisclaimerModal({
   openState,
@@ -41,8 +42,11 @@ export default function DisclaimerModal({
         <Title order={4}>Attribution / Credits</Title>
         <Title order={5}>Game/Coding</Title>
         <Text>Yours Truly: Dylan</Text>
+        <SongLyrics mtOverride={null}>
+          <Text>I'm super honored that you're playing and enjoying Epicdle! If you enjoyed the game, the best way to support me is to share it with your friends and let me know how much you enjoy the game! </Text>
+        </SongLyrics>
         <Text>
-          Got any problems or questions? Shoot me an email:{" "}
+          Got any problems, questions, or suggestions? Please shoot me an email:{" "}
           <Anchor
             href={`mailto:${SUPPORT_EMAIL}`}
             target="_blank"
@@ -54,6 +58,29 @@ export default function DisclaimerModal({
 
         <Title order={5}>Music</Title>
         <Text>Jorge Rivera-Herrans, Winion Entertainment LLC</Text>
+        <List>
+          <List.Item>
+            <Anchor
+              href="https://www.youtube.com/@JayHerrans"
+              target="_blank"
+              rel="noreferrer"
+            >
+              YouTube
+            </Anchor>
+          </List.Item>
+        </List>
+        <Text>SIM Instrumentals</Text>
+        <List>
+          <List.Item>
+            <Anchor
+              href="https://www.youtube.com/watch?v=3lagxsoGf8I&list=PLtzLG85ydSlh-Fx231WzUUR5mHWqDNdfg"
+              target="_blank"
+              rel="noreferrer"
+            >
+              YouTube Playlist
+            </Anchor>
+          </List.Item>
+        </List>
         <Title order={5}>Album Art</Title>
         <Text>
           <Anchor
@@ -173,12 +200,12 @@ export default function DisclaimerModal({
         {/* --- Footer Content --- */}
         <Title order={4}>Disclaimer</Title>
         <Text>
-          I'm just a humble developer who codes for fun. This is a completely
+          I'm just a humble developer who codes fun things. I will never paywall any features, add ads, or otherwise seek to actively monetize Epicdle. Epicdle is a completely
           free, fan-made project created out of love for the musical.
         </Text>
         <Text>
-          If you enjoy the game and would like to support me to help cover the
-          game server maintenance and other costs coming out of my own pocket,
+          Still, if you enjoy the game and would like to support me to help cover the
+          game server maintenance and other related costs coming out of my own pocket,
           you can do so{" "}
           <Anchor
             href="https://buymeacoffee.com/dylanvu"
