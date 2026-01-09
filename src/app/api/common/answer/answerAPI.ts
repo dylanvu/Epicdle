@@ -21,10 +21,10 @@ export async function getGameAnswer(
   req: NextRequest,
   database_collection_name: string
 ): Promise<NextResponse<IGetAnswerResult>> {
-  console.log("Fetching today's answer from the database");
-  const now = new Date();
-  console.log("Today is ", now);
-  const answerKey = getDailyKey(now);
+  // Support optional date query parameter for replay mode
+  const dateParam = req.nextUrl.searchParams.get("date");
+  const answerKey = dateParam || getDailyKey(new Date());
+  console.log("Fetching answer from the database for date:", answerKey);
   const answerDocData = await getGameAnswerDataFromDatabase(database_collection_name, answerKey)
 
   // if the answer is not in the database, return an error
@@ -78,10 +78,9 @@ export async function checkGameAnswer(
     );
   }
 
-  console.log("Fetching today's answer from the database");
-  const now = new Date();
-  console.log("Today is ", now);
-  const answerKey = getDailyKey(now);
+  // Support optional date in request body for replay mode
+  const answerKey = reqJSON.date || getDailyKey(new Date());
+  console.log("Fetching answer from the database for date:", answerKey);
   const answerDocData = await getGameAnswerDataFromDatabase(database_collection_name, answerKey)
 
   // if the answer is not in the database, return an error
