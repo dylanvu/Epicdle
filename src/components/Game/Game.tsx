@@ -27,6 +27,7 @@ import {
   ValidAPIBaseEndpoint,
 } from "@/constants";
 import {
+  LEGACY_TOP_GRADIENT_COLOR,
   LEGENDARY_BOTTOM_GRADIENT_COLOR,
   LEGENDARY_TOP_GRADIENT_COLOR,
   WIN_COLOR,
@@ -65,8 +66,10 @@ const WIN_LOSS_TIMEOUT = 800;
 
 export default function Game({
   base_endpoint,
+  isLegacy = false
 }: {
   base_endpoint: ValidAPIBaseEndpoint;
+  isLegacy?: boolean
 }) {
   const [showGame, setShowGame] = useState(false);
   const [openedHelp, helpHandler] = useDisclosure(false);
@@ -107,19 +110,31 @@ export default function Game({
   useEffect(() => {
     logEvent("page_view");
 
-    // if we are in legend mode, add a gradient to the background
+    // Configure gradient based on mode combinations
+    // isLegacy adds gold on top-left, isInstrumentalMode adds red on bottom-right
     const root = document.documentElement;
     const body = document.body;
-    if (isInstrumentalMode) {
-      const nextGradient = `linear-gradient(to top left, ${LEGENDARY_BOTTOM_GRADIENT_COLOR} 2%, ${LEGENDARY_TOP_GRADIENT_COLOR} 45%)`;
+    
+    let nextGradient: string | null = null;
+    
+    if (isLegacy && isInstrumentalMode) {
+      // Both flags: 3-stop gradient (gold → dark → red)
+      // Red transition zone (55% to 98% = 43%) matches standalone instrumental (2% to 45% = 43%)
+      nextGradient = `linear-gradient(to bottom right, ${LEGACY_TOP_GRADIENT_COLOR} 2%, ${LEGENDARY_TOP_GRADIENT_COLOR} 55%, ${LEGENDARY_BOTTOM_GRADIENT_COLOR} 98%)`;
+    } else if (isLegacy) {
+      // Legacy only: 2-stop gradient (gold → dark)
+      nextGradient = `linear-gradient(to bottom right, ${LEGACY_TOP_GRADIENT_COLOR} 2%, ${LEGENDARY_TOP_GRADIENT_COLOR} 45%)`;
+    } else if (isInstrumentalMode) {
+      // Instrumental only: 2-stop gradient (dark → red)
+      nextGradient = `linear-gradient(to top left, ${LEGENDARY_BOTTOM_GRADIENT_COLOR} 2%, ${LEGENDARY_TOP_GRADIENT_COLOR} 45%)`;
+    }
+    
+    if (nextGradient) {
       root.style.setProperty("--overlay-gradient", nextGradient);
-
-      // add the class to <body> (your CSS listens for body.gradient-active::before)
       body.classList.add("gradient-active");
     } else {
+      // No gradient (neither flag is set)
       body.classList.remove("gradient-active");
-
-      // optional cleanup of CSS vars
       root.style.removeProperty("--overlay-gradient");
       // advertise legend mode
       createInformationalNotification("Legend mode is out! Go to the main menu and check it out!", "Great news!")
@@ -132,7 +147,7 @@ export default function Game({
     }
 
     return () => {
-      if (isInstrumentalMode) {
+      if (isLegacy || isInstrumentalMode) {
         // remove on unmount (fades out)
         document.body.classList.remove("gradient-active");
       }

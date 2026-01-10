@@ -16,6 +16,8 @@ export const LEGENDARY_BOTTOM_GRADIENT_COLOR = "#b61e18";
  */
 export const LEGENDARY_TOP_GRADIENT_COLOR = "#1a2428";
 
+export const LEGACY_TOP_GRADIENT_COLOR = "#C9A066"
+
 export const theme = createTheme({
   /* Put your mantine theme override here */
   fontFamily: "'Cinzel', sans-serif",
