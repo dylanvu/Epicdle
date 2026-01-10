@@ -57,10 +57,8 @@ import { GuessProgress } from "@/components/GuessProgress/GuessProgress";
 import useDailySnippet from "@/hooks/gameLogic/useDailySnippet";
 import {
   createErrorNotification,
-  createSystemNotification,
   createInformationalNotification
 } from "@/components/Notifications/Notification";
-import { getYearMonthDay } from "@/util/time";
 import Link from 'next/link'
 
 const WIN_LOSS_TIMEOUT = 800;
